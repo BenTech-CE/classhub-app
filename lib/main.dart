@@ -1,8 +1,12 @@
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/views/auth/login/LoginView.dart';
 import 'package:flutter/material.dart';
+import 'package:mmkv/mmkv.dart';
 
-void main() {
+void main() async {
+  final rootDir = await MMKV.initialize();
+  print('MMKV for flutter with rootDir = $rootDir');
+
   runApp(const MyApp());
 }
 
