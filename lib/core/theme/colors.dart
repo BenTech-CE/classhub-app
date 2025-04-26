@@ -16,6 +16,7 @@ const cColorGray3 = Color.fromARGB(255, 191, 196, 198);
 const cColorGray4 = Color.fromARGB(255, 230, 231, 232);
 
 const cColorTextWhite = Color(0xFFFFFFFF);
+const cColorTextBlack = Color.fromARGB(255, 0, 0, 0);
 const cColorText1 = Color.fromARGB(255, 22, 31, 24);
 const cColorText2 = Color.fromARGB(255, 40, 49, 43);
 const cColorText3 = Color.fromARGB(255, 66, 72, 68);

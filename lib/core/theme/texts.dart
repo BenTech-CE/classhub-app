@@ -46,8 +46,8 @@ class AppTextTheme {
       fontWeight: FontWeight.w400,
     ),
     bodyLarge: TextStyle(
-      fontSize: 14,
-      color: cColorGray2,
+      fontSize: 16,
+      color: cColorTextBlack,
       fontWeight: FontWeight.w400,
     ),
     labelMedium: TextStyle(

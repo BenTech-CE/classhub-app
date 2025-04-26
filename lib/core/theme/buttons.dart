@@ -34,6 +34,7 @@ class AppButtonsTheme {
 
   static TextButtonThemeData textButtonTheme = TextButtonThemeData(
     style: OutlinedButton.styleFrom(
+      splashFactory: NoSplash.splashFactory,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(sBorderRadius))),
       foregroundColor: cColorPrimary,

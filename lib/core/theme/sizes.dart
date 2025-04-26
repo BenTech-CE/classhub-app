@@ -1,4 +1,4 @@
-const sPadding = 30.0;
+const sPadding = 18.0;
 const sPadding2 = 24.0;
 const sBorderRadius = 12.0;
 const sButtonHeight = 15.0;

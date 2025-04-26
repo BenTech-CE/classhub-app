@@ -1,5 +1,5 @@
 import 'package:classhub/core/theme/theme.dart';
-import 'package:classhub/views/auth/login/LoginView.dart';
+import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mmkv/mmkv.dart';
 
