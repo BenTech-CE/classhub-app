@@ -1,7 +1,12 @@
+import 'dart:convert';
+
+import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/auth/user_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
+import 'package:http/http.dart';
 
 class SessionService {
+  final http = Client();
   final AuthService authService;
 
   SessionService(this.authService);
@@ -10,13 +15,24 @@ class SessionService {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
-    await Future.delayed(const Duration(seconds: 2));
-
-    return UserModel(
-      id: "12345",
-      nome: "Ismael Nascimento",
-      email: "ismael.nascimento@gmail.com",
-      turmas: [],
+    final response = await http.post(
+      Uri.parse("${Api.baseUrl}${Api.sessionEndpoint}"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
     );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 201) {
+      return UserModel.fromJson(jsonResponse);
+    } else {
+      throw Exception(
+          "Erro ao coletar as informações do usuário: ${jsonResponse["error"]}");
+    }
   }
 }

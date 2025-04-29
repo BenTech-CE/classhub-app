@@ -15,7 +15,8 @@ class AuthViewModel extends ChangeNotifier {
     try {
       return await authService.login(email, password);
     } catch (e) {
-      error = e.toString();
+      print(e);
+      error = e.toString().replaceAll("Exception:", "");
       return false;
     } finally {
       isLoading = false;
