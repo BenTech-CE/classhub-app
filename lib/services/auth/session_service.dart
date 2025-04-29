@@ -1,12 +1,12 @@
-import 'package:classhub/models/auth/User.dart';
-import 'package:classhub/services/auth/auth.dart';
+import 'package:classhub/models/auth/user_model.dart';
+import 'package:classhub/services/auth/auth_service.dart';
 
 class SessionService {
   final AuthService authService;
 
   SessionService(this.authService);
 
-  Future<UserModel> getUser() async {
+  Future<UserModel?> getUser() async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
