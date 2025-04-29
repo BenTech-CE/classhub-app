@@ -15,7 +15,7 @@ class SessionService {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
-    final response = await http.post(
+    final response = await http.get(
       Uri.parse("${Api.baseUrl}${Api.sessionEndpoint}"),
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +28,7 @@ class SessionService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return UserModel.fromJson(jsonResponse);
     } else {
       throw Exception(

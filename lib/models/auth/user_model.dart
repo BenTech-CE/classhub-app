@@ -1,14 +1,14 @@
 class UserModel {
-  final String? id;
-  final String? name;
-  final String? email;
-  final List<Map<String, dynamic>>? classes;
+  final String id;
+  final String name;
+  final String email;
+  final List<Map<String, dynamic>> classes;
 
   UserModel({
-    this.id,
-    this.name,
-    this.email,
-    this.classes,
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.classes,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
