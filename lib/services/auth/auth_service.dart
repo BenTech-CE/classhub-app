@@ -1,4 +1,4 @@
-// import 'package:classhub/core/utils/api.dart';
+import 'package:classhub/core/utils/api.dart';
 import 'package:http/http.dart';
 import 'package:mmkv/mmkv.dart';
 
@@ -9,13 +9,22 @@ class AuthService {
   Future<bool> login(String email, String password) async {
     Future.delayed(const Duration(seconds: 2));
 
-    // final response = await http.post(
-    //   Uri.parse("${Api.baseUrl}${Api.loginEndpoint}"),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // );
-    mmkv.encodeString("classhub-user-token", "123");
+    final response = await http.post(
+      Uri.parse("${Api.baseUrl}${Api.loginEndpoint}"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {
+        "email": email,
+        "password": password,
+      },
+    );
+
+    print(response.statusCode);
+    print(response.body);
+    if (response.statusCode == 200) {
+      // mmkv.encodeString("classhub-user-token", "123");
+    } else {}
 
     return true;
   }
