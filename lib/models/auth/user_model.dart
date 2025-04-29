@@ -12,7 +12,7 @@ class UserModel {
     required this.classes,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {//
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'], // Acessando o valor cuja chave é 'id'!
       name: json['name'],
