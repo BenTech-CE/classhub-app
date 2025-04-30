@@ -33,6 +33,32 @@ class AuthService {
     return true;
   }
 
+  Future<bool> register(String name, String email, String password) async {
+    final response = await http.post(
+      Uri.parse("${Api.baseUrl}${Api.registerEndpoint}"),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "name": name,
+        "email": email,
+        "password": password,
+      }),
+    );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    if (response.statusCode == 201) {
+      mmkv.encodeString("classhub-user-token", jsonResponse["token"]);
+    } else {
+      throw Exception("Erro ao fazer o cadastro: ${jsonResponse["error"]}");
+    }
+
+    return true;
+  }
+
   Future<String?> getToken() async {
     return mmkv.decodeString("classhub-user-token");
   }

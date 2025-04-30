@@ -36,7 +36,8 @@ class MyApp extends StatelessWidget {
         home: Container(
           color: Colors.white,
           child: const Center(
-            child: RegisterView(),
+            child: LoginView(),
+            // child: RegisterView(),
           ), 
         ),
       ),
