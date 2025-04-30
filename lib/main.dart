@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final authService = AuthService();
     final sessionService = SessionService(authService);
-
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserViewModel(sessionService)),
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         home: Container(
           color: Colors.white,
           child: const Center(
-            child: LoginView(),
+            child: RegisterView(),
             // child: RegisterView(),
           ), 
         ),

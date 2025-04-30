@@ -1,6 +1,7 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/views/auth/login/register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +14,15 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final _emailTF = TextEditingController();
+  final _senhaTF = TextEditingController();
+
   Future<void> login(BuildContext context) async {
     final authViewModel = context.read<AuthViewModel>();
     final userViewModel = context.read<UserViewModel>();
 
     // trocar esses valores pelos campos do textField
-    final result = await authViewModel.login("joão@gmail.com", "joão123");
+    final result = await authViewModel.login(_emailTF.text, _senhaTF.text);
 
     if (result) {
       // colocar o fetchUser no main geral
@@ -77,8 +81,9 @@ class _LoginViewState extends State<LoginView> {
                 "E-mail:",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _emailTF,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Digite seu e-mail..."),
               ),
@@ -87,8 +92,10 @@ class _LoginViewState extends State<LoginView> {
                 "Senha:",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _senhaTF,
+                obscureText: true,
+                decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     hintText: "Digite sua senha..."),
               ),
@@ -131,7 +138,9 @@ class _LoginViewState extends State<LoginView> {
                   Text("Não tem uma conta?",
                       style: Theme.of(context).textTheme.bodyLarge),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const RegisterView()));
+                      },
                       child: Text("Registre-se",
                           style: Theme.of(context)
                               .textTheme

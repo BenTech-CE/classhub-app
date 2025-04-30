@@ -1,6 +1,7 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:provider/provider.dart';
@@ -13,13 +14,17 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+  final _nomeTF = TextEditingController();
+  final _emailTF = TextEditingController();
+  final _senhaTF = TextEditingController();
+
   Future<void> register(BuildContext context) async {
     final authViewModel = context.read<AuthViewModel>();
     final userViewModel = context.read<UserViewModel>();
 
     // trocar esses valores pelos campos do textField
     final result =
-        await authViewModel.register("João", "joão@gmail.com", "joão123");
+        await authViewModel.register(_nomeTF.text, _emailTF.text, _senhaTF.text);
 
     if (result) {
       // colocar o fetchUser no main geral
@@ -45,6 +50,14 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   @override
+  void dispose() {
+    _nomeTF.dispose();
+    _emailTF.dispose();
+    _senhaTF.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.of(context).size.height;
 
@@ -67,7 +80,7 @@ class _RegisterViewState extends State<RegisterView> {
                     radius: 60),
                 const SizedBox(height: 24),
                 Text(
-                  "Bem-vindo(a)\nde volta!",
+                  "Bem-vindo(a)!",
                   style: Theme.of(context)
                       .textTheme
                       .headlineLarge
@@ -78,8 +91,9 @@ class _RegisterViewState extends State<RegisterView> {
                   "Nome:",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _nomeTF,
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: "Digite seu nome..."),
                 ),
@@ -88,8 +102,9 @@ class _RegisterViewState extends State<RegisterView> {
                   "E-mail:",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _emailTF,
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: "Digite seu e-mail..."),
                 ),
@@ -98,8 +113,10 @@ class _RegisterViewState extends State<RegisterView> {
                   "Senha:",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                const TextField(
-                  decoration: InputDecoration(
+                TextField(
+                  controller: _senhaTF,
+                  obscureText: true,
+                  decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: "Digite sua senha..."),
                 ),
@@ -127,7 +144,9 @@ class _RegisterViewState extends State<RegisterView> {
                     Text("Já tem uma conta?",
                         style: Theme.of(context).textTheme.bodyLarge),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginView()));
+                        },
                         child: Text("Entrar",
                             style: Theme.of(context)
                                 .textTheme
