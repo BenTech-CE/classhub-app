@@ -4,12 +4,13 @@ import 'package:classhub/services/auth/session_service.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
+import 'package:classhub/views/auth/login/register_view.dart';
 import 'package:flutter/material.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  final rootDir = await MMKV.initialize();
+  final rootDir = await MMKV.initialize(); // Inicializando o banco de dados
   print('MMKV for flutter with rootDir = $rootDir');
 
   runApp(const MyApp());
@@ -35,8 +36,8 @@ class MyApp extends StatelessWidget {
         home: Container(
           color: Colors.white,
           child: const Center(
-            child: LoginView(),
-          ),
+            child: RegisterView(),
+          ), 
         ),
       ),
     );
