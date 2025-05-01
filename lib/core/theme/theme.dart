@@ -7,13 +7,13 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData theme = ThemeData(
-    primarySwatch: Colors.green,
+    primarySwatch: Colors.indigo,
     scaffoldBackgroundColor: cBackground,
     colorScheme: const ColorScheme.light()
         .copyWith(primary: cColorPrimary, shadow: Colors.transparent),
     primaryColor: cColorPrimary,
     // fontFamily: 'EuclidSquare',
-    fontFamily: 'Poppins',
+    fontFamily: 'Onest',
     appBarTheme: const AppBarTheme(
       backgroundColor: cBackground,
       centerTitle: true,
@@ -25,7 +25,7 @@ class AppTheme {
         backgroundColor: cColorGray4,
         contentTextStyle: TextStyle(
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: "Onest",
             color: cColorText1)),
     iconTheme: const IconThemeData(color: cColorGray2),
     bottomAppBarTheme: const BottomAppBarTheme(

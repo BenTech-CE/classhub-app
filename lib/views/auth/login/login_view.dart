@@ -1,7 +1,10 @@
 import 'package:classhub/core/theme/colors.dart';
+import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/register_view.dart';
+import 'package:classhub/views/user/home_view.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:provider/provider.dart';
@@ -17,24 +20,42 @@ class _LoginViewState extends State<LoginView> {
   final _emailTF = TextEditingController();
   final _senhaTF = TextEditingController();
 
+  final _emailFocus = FocusNode();
+  final _senhaFocus = FocusNode();
+
   Future<void> login(BuildContext context) async {
+    // Fecha o teclado
+    FocusScope.of(context).unfocus();
+
     final authViewModel = context.read<AuthViewModel>();
-    final userViewModel = context.read<UserViewModel>();
+
+    if (!EmailValidator.validate(_emailTF.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Insira um e-mail válido.",
+          style:
+              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+
+      return;
+    }
 
     // trocar esses valores pelos campos do textField
     final result = await authViewModel.login(_emailTF.text, _senhaTF.text);
 
     if (result) {
-      // colocar o fetchUser no main geral
-      userViewModel.fetchUser();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Login feito com sucesso!",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: cColorPrimary,
+        backgroundColor: cColorSuccess,
       ));
-      // Navigator.pushReplacementNamed(context, "/home");
+      
+      // navegando para a tela de início (a que aparece as turmas do usuário)
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeView()));
     } else if (authViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -42,9 +63,20 @@ class _LoginViewState extends State<LoginView> {
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.redAccent,
+        backgroundColor: cColorError,
       ));
     }
+  }
+
+  @override
+  void dispose() {
+    _emailTF.dispose();
+    _senhaTF.dispose();
+
+    _emailFocus.dispose();
+    _senhaFocus.dispose();
+    
+    super.dispose();
   }
 
   @override
@@ -83,8 +115,12 @@ class _LoginViewState extends State<LoginView> {
               ),
               TextField(
                 controller: _emailTF,
+                keyboardType: TextInputType.emailAddress,
+                focusNode: _emailFocus,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (_) { FocusScope.of(context).requestFocus(_senhaFocus); },
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: RoundedInputBorder(),
                     hintText: "Digite seu e-mail..."),
               ),
               const SizedBox(height: 12),
@@ -94,9 +130,11 @@ class _LoginViewState extends State<LoginView> {
               ),
               TextField(
                 controller: _senhaTF,
+                focusNode: _senhaFocus,
+                textInputAction: TextInputAction.done,
                 obscureText: true,
                 decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
+                    border: RoundedInputBorder(),
                     hintText: "Digite sua senha..."),
               ),
               SizedBox(
@@ -110,7 +148,7 @@ class _LoginViewState extends State<LoginView> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
-                                ?.copyWith(color: cColorSecond)))
+                                ?.copyWith(color: cColorText2)))
                   ],
                 ),
               ),
@@ -128,7 +166,10 @@ class _LoginViewState extends State<LoginView> {
                             color: Colors.white,
                             strokeWidth: 1.5,
                           ))
-                      : const Text("Entrar"),
+                      : Text("Entrar", style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: cColorTextWhite)),
                 ),
               ),
               const Spacer(),
@@ -145,7 +186,7 @@ class _LoginViewState extends State<LoginView> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
-                              ?.copyWith(color: cColorSecond)))
+                              ?.copyWith(color: cColorPrimary)))
                 ],
               )
             ],

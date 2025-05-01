@@ -38,17 +38,17 @@ class AppTextTheme {
     bodyMedium: TextStyle(
       fontSize: 14,
       color: cColorGray2,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     ),
     bodySmall: TextStyle(
       fontSize: 12,
       color: cColorGray1,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     ),
     bodyLarge: TextStyle(
       fontSize: 16,
       color: cColorTextBlack,
-      fontWeight: FontWeight.w400,
+      fontWeight: FontWeight.w500,
     ),
     labelMedium: TextStyle(
       fontSize: 12,
@@ -60,5 +60,10 @@ class AppTextTheme {
       color: cColorText3,
       fontWeight: FontWeight.w500,
     ),
+    labelLarge: TextStyle(
+      fontSize: 16,
+      color: cColorText1,
+      fontWeight: FontWeight.w600
+    )
   );
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 // const cColorPrimary = Color(0xFF000000);
-const cColorPrimary = Color(0xFF336740);
-const cColorSecond = Color(0xFF5DB261);
-const cColorThird = Color(0xFF53B8B9);
+const cColorPrimary = Color(0xFF024D94);
+const cColorSecond = Color.fromARGB(255, 42, 122, 196);
+const cColorThird = Color(0xFFA3E2FF);
+
+const cColorSuccess = Colors.green;
+const cColorError = Colors.redAccent;
 
 const cColorPrimary1 = Color.fromARGB(255, 217, 241, 222);
 const cColorPrimary2 = Color.fromARGB(51, 51, 103, 64);
