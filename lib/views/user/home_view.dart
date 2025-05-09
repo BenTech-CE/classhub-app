@@ -53,7 +53,9 @@ class _HomeViewState extends State<HomeView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Bem-vindo, ${userViewModel.user?.name}!", style: Theme.of(context).textTheme.labelLarge),
-              Text("Você está em ${userViewModel.user?.classes.length} turmas.", style: Theme.of(context).textTheme.labelLarge)
+              Text("Você está em ${userViewModel.user?.classes.length} turmas.", style: Theme.of(context).textTheme.labelLarge),
+              Text("${0xFF024D94}"),
+              CircleAvatar(backgroundColor: Color(0xFF024D94))
             ]
           )
         )

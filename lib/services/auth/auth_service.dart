@@ -24,7 +24,7 @@ class AuthService {
     print(response.body);
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       mmkv.encodeString("classhub-user-token", jsonResponse["token"]);
     } else {
       throw Exception("Erro ao fazer login: ${jsonResponse["error"]}");
