@@ -1,0 +1,39 @@
+import 'package:classhub/models/class/class_owner_model.dart';
+
+class ClassModel {
+  final String? id;
+  final String name;
+  final String? inviteCode;
+  final int? color;
+  final String school;
+  final ClassOwnerModel owner;
+
+  ClassModel({
+    this.id,
+    required this.name,
+    this.inviteCode,
+    this.color,
+    required this.school,
+    required this.owner,
+  });
+
+  factory ClassModel.fromJson(Map<String, dynamic> json) {
+    return ClassModel(
+      id: json['id'],
+      name: json['name'],
+      inviteCode: json['invite_code'],
+      color: json['color'],
+      school: json['school'],
+      owner: ClassOwnerModel.fromJson(json['owner']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      if (color != null) 'color': color,
+      'school': school,
+      'owner': owner.toJson(),
+    };
+  }
+}

@@ -13,6 +13,7 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      error = null;
       return await authService.login(email, password);
     } catch (e) {
       print(e);
@@ -29,6 +30,7 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      error = null;
       return await authService.register(name, email, password);
     } catch (e) {
       print(e);

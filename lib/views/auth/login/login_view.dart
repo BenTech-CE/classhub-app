@@ -4,6 +4,7 @@ import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/register_view.dart';
 import 'package:classhub/views/user/home_view.dart';
+import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/sizes.dart';
@@ -33,8 +34,7 @@ class _LoginViewState extends State<LoginView> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Insira um e-mail válido.",
-          style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: cColorError,
       ));
@@ -53,9 +53,10 @@ class _LoginViewState extends State<LoginView> {
         ),
         backgroundColor: cColorSuccess,
       ));
-      
+
       // navegando para a tela de início (a que aparece as turmas do usuário)
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeView()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeView()));
     } else if (authViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -75,7 +76,7 @@ class _LoginViewState extends State<LoginView> {
 
     _emailFocus.dispose();
     _senhaFocus.dispose();
-    
+
     super.dispose();
   }
 
@@ -118,7 +119,9 @@ class _LoginViewState extends State<LoginView> {
                 keyboardType: TextInputType.emailAddress,
                 focusNode: _emailFocus,
                 textInputAction: TextInputAction.next,
-                onSubmitted: (_) { FocusScope.of(context).requestFocus(_senhaFocus); },
+                onSubmitted: (_) {
+                  FocusScope.of(context).requestFocus(_senhaFocus);
+                },
                 decoration: const InputDecoration(
                     border: RoundedInputBorder(),
                     hintText: "Digite seu e-mail..."),
@@ -159,17 +162,12 @@ class _LoginViewState extends State<LoginView> {
                 child: ElevatedButton(
                   onPressed: () => login(context),
                   child: loading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 1.5,
-                          ))
-                      : Text("Entrar", style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(color: cColorTextWhite)),
+                      ? const LoadingWidget()
+                      : Text("Entrar",
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge
+                              ?.copyWith(color: cColorTextWhite)),
                 ),
               ),
               const Spacer(),
@@ -180,7 +178,8 @@ class _LoginViewState extends State<LoginView> {
                       style: Theme.of(context).textTheme.bodyLarge),
                   TextButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const RegisterView()));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (context) => const RegisterView()));
                       },
                       child: Text("Registre-se",
                           style: Theme.of(context)

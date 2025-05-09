@@ -3,7 +3,7 @@ class UserModel {
   final String name;
   final String email;
   final List<Map<String, dynamic>>
-      classes; // É uma lista de um mapa em que as chaves são string e os valores são dinâmicos. Agora o porquê de ser lista nem eu entendi.
+      classes;
 
   UserModel({
     required this.id,

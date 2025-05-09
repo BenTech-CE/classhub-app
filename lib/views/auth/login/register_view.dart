@@ -4,6 +4,7 @@ import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/user/home_view.dart';
+import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/sizes.dart';
@@ -35,8 +36,7 @@ class _RegisterViewState extends State<RegisterView> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Insira um e-mail válido.",
-          style:
-              TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: cColorError,
       ));
@@ -45,8 +45,8 @@ class _RegisterViewState extends State<RegisterView> {
     }
 
     // trocar esses valores pelos campos do textField
-    final result =
-        await authViewModel.register(_nomeTF.text, _emailTF.text, _senhaTF.text);
+    final result = await authViewModel.register(
+        _nomeTF.text, _emailTF.text, _senhaTF.text);
 
     if (result) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -58,7 +58,8 @@ class _RegisterViewState extends State<RegisterView> {
       ));
 
       // navegando para a tela de início (a que aparece as turmas do usuário)
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const HomeView()));
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const HomeView()));
     } else if (authViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -80,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
     _nomeFocus.dispose();
     _emailFocus.dispose();
     _senhaFocus.dispose();
-    
+
     super.dispose();
   }
 
@@ -122,7 +123,9 @@ class _RegisterViewState extends State<RegisterView> {
                   controller: _nomeTF,
                   focusNode: _nomeFocus,
                   textInputAction: TextInputAction.next,
-                  onSubmitted: (_) { FocusScope.of(context).requestFocus(_emailFocus); },
+                  onSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(_emailFocus);
+                  },
                   decoration: const InputDecoration(
                       border: RoundedInputBorder(),
                       hintText: "Digite seu nome..."),
@@ -137,7 +140,9 @@ class _RegisterViewState extends State<RegisterView> {
                   keyboardType: TextInputType.emailAddress,
                   focusNode: _emailFocus,
                   textInputAction: TextInputAction.next,
-                  onSubmitted: (_) { FocusScope.of(context).requestFocus(_senhaFocus); },
+                  onSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(_senhaFocus);
+                  },
                   decoration: const InputDecoration(
                       border: RoundedInputBorder(),
                       hintText: "Digite seu e-mail..."),
@@ -163,14 +168,9 @@ class _RegisterViewState extends State<RegisterView> {
                   child: ElevatedButton(
                     onPressed: () => register(context),
                     child: loading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 1.5,
-                            ))
-                        : Text("Cadastrar", style: Theme.of(context)
+                        ? const LoadingWidget()
+                        : Text("Cadastrar",
+                            style: Theme.of(context)
                                 .textTheme
                                 .labelLarge
                                 ?.copyWith(color: cColorTextWhite)),
@@ -184,7 +184,9 @@ class _RegisterViewState extends State<RegisterView> {
                         style: Theme.of(context).textTheme.bodyLarge),
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const LoginView()));
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginView()));
                         },
                         child: Text("Entrar",
                             style: Theme.of(context)

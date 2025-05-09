@@ -16,7 +16,6 @@ class UserViewModel extends ChangeNotifier {
 
     try {
       user = await sessionService.getUser();
-      print(user!.name);
       error = null;
     } catch (e) {
       error = e.toString();
