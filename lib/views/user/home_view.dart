@@ -1,5 +1,6 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/models/class/class_model.dart';
 import 'package:classhub/models/class/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
@@ -50,12 +51,21 @@ class _HomeViewState extends State<HomeView> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Suas Turmas"),
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          shape: const CircleBorder(),
+          backgroundColor: cColorPrimary,
+          child: const Icon(Icons.add)
+      ),
       body: SingleChildScrollView(
         physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
         child: Container(
-          height: height,
           padding: const EdgeInsets.fromLTRB(
-              sPadding, sPadding * 4, sPadding, sPadding),
+              sPadding, sPadding, sPadding, sPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -63,11 +73,32 @@ class _HomeViewState extends State<HomeView> {
                   style: Theme.of(context).textTheme.labelLarge),
               Text("Você está em ${userViewModel.user?.classes.length} turmas.",
                   style: Theme.of(context).textTheme.labelLarge),
-              Text("${0xFF024D94}"),
-              CircleAvatar(backgroundColor: Color(0xFF024D94)),
-              Container(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
+              (userViewModel.user != null && userViewModel.user!.classes.isNotEmpty)
+                  ? Column(
+                      spacing: 30,
+                      children: userViewModel.user!.classes.map((turma) {
+                        return SizedBox(
+                          width: double.maxFinite,
+                          height: 80,
+                          child: ElevatedButton(
+                            style: AppTheme.theme.elevatedButtonTheme.style?.copyWith(backgroundColor: WidgetStatePropertyAll(Color(turma.color))),
+                            onPressed: () {},
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(turma.name),
+                                Text(turma.school)
+                              ]
+                            )
+                          )
+                        );
+                      }).toList(),
+                    )
+                  : const Text("Sem turmas para mostrar."),
+
+              const SizedBox(height: 20),
               // TESTANDO A CRIAÇÃO DE TURMAS
               OutlinedButton(
                   onPressed: () async {
@@ -84,6 +115,9 @@ class _HomeViewState extends State<HomeView> {
                         await classManagementViewModel.createClass(classModel);
 
                     if (classCreated != null) {
+                      // sync alterações
+                      await _userInfo(context);
+
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                           "Turma criada com sucesso!",
@@ -116,10 +150,10 @@ class _HomeViewState extends State<HomeView> {
                 onPressed: () async {
                   if (userViewModel.user!.classes.isNotEmpty) {
                     final ClassModel? classGet = await classManagementViewModel
-                        .getClass(userViewModel.user!.classes[0]["id"]!);
+                        .getClass(userViewModel.user!.classes[0].id);
 
                     if (classGet != null) {
-                      print(classGet.toJson());
+                      print(classGet.inviteCode);
                     }
 
                     if (classManagementViewModel.error != null) {

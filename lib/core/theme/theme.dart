@@ -15,9 +15,9 @@ class AppTheme {
     // fontFamily: 'EuclidSquare',
     fontFamily: 'Onest',
     appBarTheme: const AppBarTheme(
-      backgroundColor: cBackground,
+      backgroundColor: cColorPrimary,
       centerTitle: true,
-      foregroundColor: cColorPrimary,
+      foregroundColor: cColorTextWhite,
       surfaceTintColor: cBackground,
       scrolledUnderElevation: 12,
     ),

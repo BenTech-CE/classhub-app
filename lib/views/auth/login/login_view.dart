@@ -1,7 +1,6 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
-import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/register_view.dart';
 import 'package:classhub/views/user/home_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';

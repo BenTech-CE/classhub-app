@@ -1,8 +1,10 @@
+import 'package:classhub/models/class/minimal_class_model.dart';
+
 class UserModel {
   final String id;
   final String name;
   final String email;
-  final List<Map<String, dynamic>>
+  final List<MinimalClassModel>
       classes;
 
   UserModel({
@@ -17,7 +19,9 @@ class UserModel {
       id: json['id'], // Acessando o valor cuja chave é 'id'!
       name: json['name'],
       email: json['email'] ?? "",
-      classes: List<Map<String, dynamic>>.from(json['classes']),
+      classes: (json['classes'] as List<dynamic>)
+          .map((e) => MinimalClassModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

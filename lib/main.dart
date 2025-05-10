@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Classhub',
+        debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
         home: const Center(
           child: LoginView(),
