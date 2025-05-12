@@ -1,11 +1,10 @@
-import 'package:classhub/models/class/minimal_class_model.dart';
+import 'package:classhub/models/class/management/minimal_class_model.dart';
 
 class UserModel {
   final String id;
   final String name;
   final String email;
-  final List<MinimalClassModel>
-      classes;
+  final List<MinimalClassModel> classes;
 
   UserModel({
     required this.id,

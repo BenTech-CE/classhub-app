@@ -7,4 +7,6 @@ class Api {
   static const String createClassEndpoint = '/api/turmas';
   static const String getClassEndpoint = '/api/turmas';
   static const String joinClassEndpoint = '/join';
+
+  static const String createSubjectEndpoint = '/materias';
 }

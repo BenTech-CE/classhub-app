@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:classhub/core/utils/api.dart';
-import 'package:classhub/models/class/class_model.dart';
+import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:http/http.dart';
 

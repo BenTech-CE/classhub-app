@@ -1,4 +1,4 @@
-import 'package:classhub/models/class/class_owner_model.dart';
+import 'package:classhub/models/class/management/class_owner_model.dart';
 
 class ClassModel {
   final String? id;

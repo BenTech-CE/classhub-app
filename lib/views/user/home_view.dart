@@ -1,8 +1,8 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/theme.dart';
-import 'package:classhub/models/class/class_model.dart';
-import 'package:classhub/models/class/class_owner_model.dart';
+import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
