@@ -41,4 +41,8 @@ class AuthViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> signOut() async {
+    return authService.signOut();
+  }
 }

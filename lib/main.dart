@@ -6,6 +6,7 @@ import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
+import 'package:classhub/views/user/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mmkv/mmkv.dart';
@@ -48,10 +49,7 @@ class MyApp extends StatelessWidget {
         title: 'Classhub',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const Center(
-          child: LoginView(),
-          // child: RegisterView(),
-        ),
+        home: const SplashView(),
       ),
     );
   }

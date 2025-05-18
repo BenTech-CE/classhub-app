@@ -33,6 +33,15 @@ class AppTheme {
       elevation: 0,
       height: 70,
     ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      dragHandleColor: cColorSecond,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+    ),
     textTheme: AppTextTheme.textTheme,
     elevatedButtonTheme: AppButtonsTheme.elevatedButtonTheme,
     outlinedButtonTheme: AppButtonsTheme.outlinedButtonTheme,

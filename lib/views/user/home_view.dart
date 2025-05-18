@@ -3,9 +3,11 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/class_owner_model.dart';
+import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
+import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,6 +33,36 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  void _sheetCreateOrJoinClass(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 150,
+          child: Center(
+            child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20.0), child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 16.0,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                OutlinedButton(
+                  child: const Text('Entrar em turma existente'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                ElevatedButton(
+                  child: const Text('Criar nova turma'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            )),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,8 +76,9 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
+    //final double height = MediaQuery.of(context).size.height;
 
+    final authViewModel = context.watch<AuthViewModel>();
     final userViewModel = context.watch<UserViewModel>();
     final classManagementViewModel = context.watch<ClassManagementViewModel>();
 
@@ -56,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
         title: const Text("Suas Turmas"),
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () { _sheetCreateOrJoinClass(context); },
           shape: const CircleBorder(),
           backgroundColor: cColorPrimary,
           child: const Icon(Icons.add)
@@ -68,37 +101,116 @@ class _HomeViewState extends State<HomeView> {
               sPadding, sPadding, sPadding, sPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 20.0,
             children: [
-              Text("Bem-vindo, ${userViewModel.user?.name}!",
-                  style: Theme.of(context).textTheme.labelLarge),
-              Text("Você está em ${userViewModel.user?.classes.length} turmas.",
-                  style: Theme.of(context).textTheme.labelLarge),
-              const SizedBox(height: 20),
+              // Verificamos se o usuário tem turmas ai mapeamos cada turma para uma instância de Card de Turma (figma)
               (userViewModel.user != null && userViewModel.user!.classes.isNotEmpty)
                   ? Column(
-                      spacing: 30,
+                      spacing: 20.0,
                       children: userViewModel.user!.classes.map((turma) {
                         return SizedBox(
                           width: double.maxFinite,
-                          height: 80,
+                          height: 150,
                           child: ElevatedButton(
-                            style: AppTheme.theme.elevatedButtonTheme.style?.copyWith(backgroundColor: WidgetStatePropertyAll(Color(turma.color))),
-                            onPressed: () {},
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(turma.name),
-                                Text(turma.school)
-                              ]
+                            style: AppTheme.theme.elevatedButtonTheme.style?.copyWith(
+                              padding: const WidgetStatePropertyAll(EdgeInsets.all(0.0)),
+                              backgroundColor: WidgetStatePropertyAll(Color(turma.color)),
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => ClassView(classObj: turma))
+                              );
+                            },
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(sBorderRadius)),
+                              child: Stack(
+                                children: [
+                                  Image.network(
+                                    "https://classhub.b-cdn.net/fematec.jpg", 
+                                    width: double.maxFinite, 
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Container(
+                                    width: double.maxFinite,
+                                    height: 150,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Color(turma.color),
+                                          Colors.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            PopupMenuButton<String>(
+                                              icon: const Icon(Icons.more_vert, size: 24.0),
+                                              onSelected: (String value) {
+                                                if (value == 'edit') {
+                                                  // Edit action
+                                                } else if (value == 'leave') {
+                                                  // Leave action
+                                                }
+                                              },
+                                              itemBuilder: (BuildContext context) => [
+                                                const PopupMenuItem<String>(
+                                                  value: 'edit',
+                                                  child: Text('Editar'),
+                                                ),
+                                                const PopupMenuItem<String>(
+                                                  value: 'leave',
+                                                  child: Text('Sair'),
+                                                ),
+                                              ],
+                                              // atention: Offset de onde irá aparecer o menu (x, y)
+                                              offset: const Offset(-24, 24),
+                                            )
+                                          ]
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 24.0), 
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                turma.name,
+                                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                  fontSize: 24.0,
+                                                  color: cColorTextWhite
+                                                )
+                                              ),
+                                              Text(
+                                                turma.school,
+                                                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                                  fontSize: 16.0,
+                                                  color: cColorTextWhite
+                                                )
+                                              ),
+                                            ]
+                                          )
+                                        ),
+                                      ],
+                                    )
+                                  )
+                                ]
+                              )
                             )
                           )
                         );
                       }).toList(),
                     )
                   : const Text("Sem turmas para mostrar."),
-
-              const SizedBox(height: 20),
               // TESTANDO A CRIAÇÃO DE TURMAS
               OutlinedButton(
                   onPressed: () async {
@@ -211,6 +323,23 @@ class _HomeViewState extends State<HomeView> {
                         child: Text("Inscrever-se em uma turma"),
                       ),
               ),
+              // Botão Sair da Conta (sign out)
+              OutlinedButton(
+                onPressed: () {
+                  authViewModel.signOut();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const LoginView())
+                  );
+                }, 
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0), 
+                  child: Text("Sair da Conta")
+                )
+              ),
+              Text("Bem-vindo, ${userViewModel.user?.name}!",
+                  style: Theme.of(context).textTheme.labelLarge),
+              Text("Você está em ${userViewModel.user?.classes.length} turmas.",
+                  style: Theme.of(context).textTheme.labelLarge),
             ],
           ),
         ),

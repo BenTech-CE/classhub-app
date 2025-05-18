@@ -62,4 +62,9 @@ class AuthService {
   Future<String?> getToken() async {
     return mmkv.decodeString("classhub-user-token");
   }
+
+  Future<bool> signOut() async {
+    mmkv.removeValue("classhub-user-token");
+    return true;
+  }
 }

@@ -16,7 +16,7 @@ class AppButtonsTheme {
       elevation: 0,
       shadowColor: Colors.transparent,
       textStyle: const TextStyle(
-          fontWeight: FontWeight.w600, fontFamily: "Poppins", fontSize: 15),
+          fontWeight: FontWeight.w600, fontFamily: "Onest", fontSize: 15),
     ),
   );
 
@@ -28,7 +28,7 @@ class AppButtonsTheme {
       side: const BorderSide(color: cColorPrimary),
       padding: const EdgeInsets.symmetric(vertical: sButtonHeight),
       textStyle: const TextStyle(
-          fontWeight: FontWeight.w600, fontFamily: "Poppins", fontSize: 15),
+          fontWeight: FontWeight.w600, fontFamily: "Onest", fontSize: 15),
     ),
   );
 
