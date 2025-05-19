@@ -56,12 +56,12 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      minChildSize: 0.53,
-      initialChildSize: 0.53,
+      minChildSize: 0.56,
+      initialChildSize: 0.56,
       maxChildSize: 0.9,
       expand: false,
       snap: true,
-      snapSizes: const [0.53, 0.9],
+      snapSizes: const [0.56, 0.9],
       shouldCloseOnMinExtent: false,
       builder: (_, controller) => AnimatedPadding(
           padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3, MediaQuery.of(context).viewInsets.bottom),

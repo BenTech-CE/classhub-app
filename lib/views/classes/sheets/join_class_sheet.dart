@@ -22,12 +22,17 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      minChildSize: 0.25,
-      initialChildSize: 0.25,
-      maxChildSize: 0.25,
+      minChildSize: 0.28,
+      initialChildSize: 0.28,
+      maxChildSize: 0.35,
       expand: false,
-      builder: (_, controller) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+      snap: true,
+      snapSizes: const [0.28, 0.35],
+      shouldCloseOnMinExtent: false,
+      builder: (_, controller) => AnimatedPadding(
+          padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3, MediaQuery.of(context).viewInsets.bottom),
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.decelerate,
           child: ListView(
             controller: controller,
             children: <Widget>[

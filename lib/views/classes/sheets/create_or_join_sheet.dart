@@ -32,9 +32,9 @@ class _CreateOrJoinSheetState extends State<CreateOrJoinSheet> {
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      minChildSize: 0.16,
-      initialChildSize: 0.16,
-      maxChildSize: 0.16,
+      minChildSize: 0.18,
+      initialChildSize: 0.18,
+      maxChildSize: 0.25,
       expand: false,
       builder: (_, controller) => Container(
           padding: const EdgeInsets.symmetric(horizontal: sPadding3),
