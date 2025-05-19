@@ -1,5 +1,7 @@
 const sPadding = 18.0;
 const sPadding2 = 24.0;
+const sPadding3 = 16.0;
+const sSpacing = 20.0;
 const sBorderRadius = 12.0;
 const sButtonHeight = 15.0;
 const sBottomAppBar = 60.0;

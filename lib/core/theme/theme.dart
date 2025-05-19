@@ -34,7 +34,9 @@ class AppTheme {
       height: 70,
     ),
     bottomSheetTheme: const BottomSheetThemeData(
-      dragHandleColor: cColorSecond,
+      dragHandleColor: cColorAzulSecondary,
+      backgroundColor: cColorTertiary,
+      surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(30.0),

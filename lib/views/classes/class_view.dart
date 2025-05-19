@@ -2,8 +2,9 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
-import 'package:classhub/views/classes/class_mural_view.dart';
+import 'package:classhub/views/classes/routes/class_mural_view.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class ClassView extends StatefulWidget {
   final MinimalClassModel classObj;
@@ -15,7 +16,7 @@ class ClassView extends StatefulWidget {
 }
 
 class _ClassViewState extends State<ClassView> {
-  
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +26,14 @@ class _ClassViewState extends State<ClassView> {
         centerTitle: true,
         title: Text(widget.classObj.name),
         backgroundColor: Colors.transparent,
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+        flexibleSpace: widget.classObj.bannerUrl != null ? Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(16),
               bottomRight: Radius.circular(16),
             ),
             image: DecorationImage(
-              image: NetworkImage(Api.dummyImage),
+              image: NetworkImage(widget.classObj.bannerUrl!),
             fit: BoxFit.cover,
             ),
           ),
@@ -60,6 +61,14 @@ class _ClassViewState extends State<ClassView> {
               ),
             ),
           )
+        ) : Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+            ),
+            color: Color(widget.classObj.color)
+          ),
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(180),
@@ -77,11 +86,29 @@ class _ClassViewState extends State<ClassView> {
           child: ClassMuralView(classObj: widget.classObj)
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Mural"),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), label: "Calendário"),
-        BottomNavigationBarItem(icon: Icon(Icons.book_outlined), label: "Matérias"),
-      ]),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        indicatorColor: cColorAzulSecondary,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedCanvas, color: Colors.black),
+            label: "Mural",
+          ),
+          NavigationDestination(
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedCalendar03, color: Colors.black),
+            label: "Calendário",
+          ),
+          NavigationDestination(
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedBookBookmark02, color: Colors.black),
+            label: "Matérias",
+          ),
+        ],
+      ),
     );
   }
 }

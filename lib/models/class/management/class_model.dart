@@ -5,6 +5,7 @@ class ClassModel {
   final String name;
   final String? inviteCode;
   final int? color;
+  final String? bannerUrl;
   final String school;
   final ClassOwnerModel owner;
 
@@ -13,6 +14,7 @@ class ClassModel {
     required this.name,
     this.inviteCode,
     this.color,
+    this.bannerUrl,
     required this.school,
     required this.owner,
   });
@@ -23,6 +25,7 @@ class ClassModel {
       name: json['name'],
       inviteCode: json['invite_code'],
       color: json['color'],
+      bannerUrl: json['banner_url'],
       school: json['school'],
       owner: ClassOwnerModel.fromJson(json['owner']),
     );

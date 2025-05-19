@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 class AppTextTheme {
   AppTextTheme._();
 
+  static TextStyle placeholder = const TextStyle(
+    fontFamily: "Onest",
+    fontWeight: FontWeight.w400,
+    fontSize: 16.0,
+    color: cColorText2Azul,
+    height: 1.2
+  );
+
   static TextTheme textTheme = const TextTheme(
     headlineLarge: TextStyle(
       fontSize: 26,

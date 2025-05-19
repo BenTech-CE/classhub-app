@@ -1,16 +1,20 @@
+import 'package:classhub/core/utils/role.dart';
+
 class MinimalClassModel {
   final String id;
   final String name;
   final int color;
+  final String? bannerUrl;
   final String school;
-  final bool canEdit;
+  final Role role;
 
   MinimalClassModel({
     required this.id,
     required this.name,
     required this.color,
+    this.bannerUrl,
     required this.school,
-    required this.canEdit
+    required this.role
   });
 
   factory MinimalClassModel.fromJson(Map<String, dynamic> json) {
@@ -18,8 +22,9 @@ class MinimalClassModel {
       id: json['id'],
       name: json['name'],
       color: json['color'],
+      bannerUrl: json['banner_url'],
       school: json['school'],
-      canEdit: json['can_edit']
+      role: Role.fromInt(json['role']) ?? Role.colega
     );
   }
 }

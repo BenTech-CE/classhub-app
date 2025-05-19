@@ -66,7 +66,7 @@ class ClassManagementService {
 
     final response = await http.post(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass/${Api.joinClassEndpoint}"),
+          "${Api.baseUrl}${Api.getClassEndpoint}${Api.joinClassEndpoint}"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"

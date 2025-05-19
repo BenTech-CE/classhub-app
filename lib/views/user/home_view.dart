@@ -1,5 +1,7 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/theme/textfields.dart';
+import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/class_owner_model.dart';
@@ -8,8 +10,12 @@ import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/classes/class_view.dart';
+import 'package:classhub/views/classes/sheets/create_class_sheet.dart';
+import 'package:classhub/views/classes/sheets/create_or_join_sheet.dart';
+import 'package:classhub/views/classes/sheets/join_class_sheet.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -37,37 +43,14 @@ class _HomeViewState extends State<HomeView> {
     showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 150,
-          child: Center(
-            child: Padding(padding: const EdgeInsets.symmetric(horizontal: 20.0), child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 16.0,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                OutlinedButton(
-                  child: const Text('Entrar em turma existente'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-                ElevatedButton(
-                  child: const Text('Criar nova turma'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            )),
-          ),
-        );
-      },
+      isScrollControlled: true,
+      builder: (BuildContext context) => const CreateOrJoinSheet()
     );
   }
 
   @override
   void initState() {
     super.initState();
-
-    print("init state..");
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _userInfo(context);
@@ -125,26 +108,32 @@ class _HomeViewState extends State<HomeView> {
                               borderRadius: const BorderRadius.all(Radius.circular(sBorderRadius)),
                               child: Stack(
                                 children: [
-                                  Image.network(
-                                    "https://classhub.b-cdn.net/fematec.jpg", 
-                                    width: double.maxFinite, 
-                                    height: 150,
-                                    fit: BoxFit.cover,
-                                  ),
-                                  Container(
-                                    width: double.maxFinite,
-                                    height: 150,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Color(turma.color),
-                                          Colors.transparent,
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                  turma.bannerUrl != null ?
+                                    Stack(
+                                      children: [
+                                        Image.network(
+                                          "https://classhub.b-cdn.net/fematec.jpg", 
+                                          width: double.maxFinite, 
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        Container(
+                                          width: double.maxFinite,
+                                          height: 150,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter,
+                                              colors: [
+                                                Color(turma.color),
+                                                Colors.transparent,
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container(width: double.maxFinite, height: 150, color: Color(turma.color)),
                                   Padding(
                                     padding: const EdgeInsets.only(bottom: 10.0),
                                     child: Column(
