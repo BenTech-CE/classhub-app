@@ -62,6 +62,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
         await classManagementViewModel.createClass(classModel);
 
     if (classCreated != null) {
+      await userViewModel.fetchUser();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
           "Turma criada com sucesso!",

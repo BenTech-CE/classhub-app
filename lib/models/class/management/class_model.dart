@@ -6,7 +6,7 @@ class ClassModel {
   final String? id;
   final String name;
   final String? inviteCode;
-  final String? color;
+  final int? color;
   final String? bannerUrl;
   final Uint8List? banner;
   final String school;
@@ -38,7 +38,7 @@ class ClassModel {
   Map<String, String> toJson() {
     return {
       'name': name,
-      if (color != null) 'color': color!,
+      if (color != null) 'color': color.toString(),
       'school': school,
     };
   }
