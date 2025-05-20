@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_model.dart';
@@ -24,8 +25,9 @@ class ClassManagementService {
     Map<String, String> headers = <String, String>{
       "Authorization": "Bearer $token"
     };
+    final Uint8List fileBytes =  await classModel.banner!.readAsBytes();
     final multipartFileBanner =
-        http.MultipartFile.fromBytes('banner', classModel.banner!);
+      await  http.MultipartFile.fromBytes('banner',  fileBytes, filename: classModel.banner!.name);
 
     var request = http.MultipartRequest('POST', uri)
       ..headers.addAll(headers)
@@ -49,7 +51,7 @@ class ClassManagementService {
     print(response.statusCode);
     print(jsonResponse);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print('Uploaded sucess!');
       return ClassModel.fromJson(jsonResponse);
     } else {

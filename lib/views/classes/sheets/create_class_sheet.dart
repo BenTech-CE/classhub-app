@@ -31,6 +31,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
 
   // Essa variável guarda a imagem que a pessoa escolheu para ser o banner. É null se o banner não for escolhido.
   Uint8List? selectedBanner;
+  XFile? selectedBannerFile;
 
   // Ação de quando clicar no botão de escolher banner da turma
   void _btnBanner() async {
@@ -38,6 +39,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     if (newImg != null) {
       final bytes = await newImg.readAsBytes();
       setState(() {
+        selectedBannerFile = newImg;
         selectedBanner = bytes;
       });
     }
@@ -51,11 +53,8 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     final classModel = ClassModel(
       name: _titleTF.text,
       school: _schoolTF.text,
-      owner: ClassOwnerModel(
-        id: userViewModel.user?.id ?? "",
-        name: userViewModel.user?.name ?? "",
-      ),
-      banner: selectedBanner,
+      color: 4280521466,
+      banner: selectedBannerFile,
     );
 
     final ClassModel? classCreated =

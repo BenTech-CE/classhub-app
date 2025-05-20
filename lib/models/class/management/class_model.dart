@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:classhub/models/class/management/class_owner_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ClassModel {
   final String? id;
@@ -8,9 +9,9 @@ class ClassModel {
   final String? inviteCode;
   final int? color;
   final String? bannerUrl;
-  final Uint8List? banner;
+  final XFile? banner;
   final String school;
-  final ClassOwnerModel owner;
+  final ClassOwnerModel? owner;
 
   ClassModel({
     this.id,
@@ -20,7 +21,7 @@ class ClassModel {
     this.bannerUrl,
     this.banner,
     required this.school,
-    required this.owner,
+     this.owner,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) {
