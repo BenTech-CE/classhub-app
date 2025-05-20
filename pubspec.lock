@@ -77,10 +77,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "16ed7b077ef01ad6170a3d0c57caa4a112a38d7a2ed5602e0aca9ca6f3d98da6"
+      sha256: "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   file_selector_linux:
     dependency: transitive
     description:
@@ -148,18 +148,18 @@ packages:
     dependency: "direct main"
     description:
       name: http
-      sha256: fe7ab022b76f3034adc518fb6ea04a82387620e19977665ea18d30a1cf43442f
+      sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "1.4.0"
   http_parser:
     dependency: transitive
     description:
       name: http_parser
-      sha256: "2aa08ce0341cc9b354a498388e30986515406668dbcc4f7c950c3e715496693b"
+      sha256: "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.2"
+    version: "4.1.2"
   hugeicons:
     dependency: "direct main"
     description:
@@ -300,42 +300,42 @@ packages:
     dependency: "direct main"
     description:
       name: mmkv
-      sha256: "8bc9afa73488f398cbea9b0b6d5a5a3c51fd8c069f334b0f7b3cf745fa6ae5e1"
+      sha256: "2cd899fe1d59c2ffd8c552202fde7a8701c85f290480daa9838a78f82c4de0fa"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   mmkv_android:
     dependency: transitive
     description:
       name: mmkv_android
-      sha256: "4f3956cfe0fac70a8712fc10025f7470c31a88762f749fa075c9eb14f8917246"
+      sha256: "0407d7a0338a56c20e9281363009fafa2c20b4e524d0058f9a614c6d482b123f"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   mmkv_ios:
     dependency: transitive
     description:
       name: mmkv_ios
-      sha256: "1327472ffbb87702dc409e55e97aaf60662c267dd45645121cbdd75fb4a6e813"
+      sha256: "79868842d886fc4f9a38fa75ab0f3ac03068a65405f6cb125ffa8bb427989ee7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   mmkv_ohos:
     dependency: transitive
     description:
       name: mmkv_ohos
-      sha256: "13674c035edc1ee26c8392515ba282a94a1450c607490812836312ac5f1ffd31"
+      sha256: a4e96832f9ecb0adb13e9f65ecd81a18945c044d844d077c896ab90365166b28
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   mmkv_platform_interface:
     dependency: transitive
     description:
       name: mmkv_platform_interface
-      sha256: "57b6a04488037bd79f60d901966fc50a68ee27a694e2c91288a95f4defbe9994"
+      sha256: "65d5c1a2c43ad5d064bbf956eed45bb62e89c4fe8ccac40de829959e16ba62d1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   nested:
     dependency: transitive
     description:
@@ -345,7 +345,7 @@ packages:
     source: hosted
     version: "1.0.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: "75cca69d1490965be98c73ceaea117e8a04dd21217b37b292c9ddbec0d955bc5"
@@ -364,10 +364,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "4adf4fd5423ec60a29506c76581bc05854c55e3a0b72d35bb28d661c9686edf2"
+      sha256: d0d310befe2c8ab9e7f393288ccbb11b60c019c6b5afc21973eeee4dda2b35e9
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.15"
+    version: "2.2.17"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -420,10 +420,10 @@ packages:
     dependency: "direct main"
     description:
       name: provider
-      sha256: "489024f942069c2920c844ee18bb3d467c69e48955a4f32d1677f71be103e310"
+      sha256: "4abbd070a04e9ddc287673bf5a030c7ca8b685ff70218720abab8b092f53dd84"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.4"
+    version: "6.1.5"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -518,5 +518,5 @@ packages:
     source: hosted
     version: "1.1.0"
 sdks:
-  dart: ">=3.7.0-0 <4.0.0"
+  dart: ">=3.7.0 <4.0.0"
   flutter: ">=3.27.0"

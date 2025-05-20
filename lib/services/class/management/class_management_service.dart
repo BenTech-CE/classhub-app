@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class ClassManagementService {
-  final http = Client();
+  // final http = Client();
   final AuthService authService;
 
   ClassManagementService(this.authService);
@@ -15,21 +18,39 @@ class ClassManagementService {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
-    final response = await http.post(
-      Uri.parse("${Api.baseUrl}${Api.createClassEndpoint}"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: jsonEncode(classModel.toJson()),
-    );
+    var uri = Uri.parse("${Api.baseUrl}${Api.createClassEndpoint}");
+
+    Map<String, String> requestBody = classModel.toJson();
+    Map<String, String> headers = <String, String>{
+      "Authorization": "Bearer $token"
+    };
+    final multipartFileBanner =
+        http.MultipartFile.fromBytes('banner', classModel.banner!);
+
+    var request = http.MultipartRequest('POST', uri)
+      ..headers.addAll(headers)
+      ..fields.addAll(requestBody)
+      ..files.add(multipartFileBanner);
+    var response = await request.send();
+
+    final respStr = await response.stream.bytesToString();
+    // final response = await http.post(
+    //   Uri.parse("${Api.baseUrl}${Api.createClassEndpoint}"),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Bearer $token"
+    //   },
+    //   body: jsonEncode(classModel.toJson()),
+    // );
+
+    Map<String, dynamic> jsonResponse = jsonDecode(respStr);
+    // Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
     print(response.statusCode);
-    print(response.body);
+    print(jsonResponse);
 
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
+      print('Uploaded sucess!');
       return ClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao criar a turma: ${jsonResponse["error"]}");

@@ -4,9 +4,14 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
+import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/models/class/management/class_owner_model.dart';
+import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class CreateClassSheet extends StatefulWidget {
   const CreateClassSheet({super.key});
@@ -23,14 +28,13 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
   final _schoolFocus = FocusNode();
 
   final ImagePicker picker = ImagePicker();
-  
+
   // Essa variável guarda a imagem que a pessoa escolheu para ser o banner. É null se o banner não for escolhido.
   Uint8List? selectedBanner;
 
   // Ação de quando clicar no botão de escolher banner da turma
   void _btnBanner() async {
     XFile? newImg = await picker.pickImage(source: ImageSource.gallery);
-
     if (newImg != null) {
       final bytes = await newImg.readAsBytes();
       setState(() {
@@ -40,7 +44,42 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
   }
 
   // Ação de quando clicar no botão de criar turma
-  void _btnCreate() async {
+  void _btnCreate(BuildContext ctx) async {
+    final userViewModel = ctx.read<UserViewModel>();
+    final classManagementViewModel = ctx.read<ClassManagementViewModel>();
+
+    final classModel = ClassModel(
+      name: _titleTF.text,
+      school: _schoolTF.text,
+      owner: ClassOwnerModel(
+        id: userViewModel.user?.id ?? "",
+        name: userViewModel.user?.name ?? "",
+      ),
+      banner: selectedBanner,
+    );
+
+    final ClassModel? classCreated =
+        await classManagementViewModel.createClass(classModel);
+
+    if (classCreated != null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Turma criada com sucesso!",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorSuccess,
+      ));
+    } else if (classManagementViewModel.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          classManagementViewModel.error!,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    }
+
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
@@ -64,7 +103,8 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
       snapSizes: const [0.56, 0.9],
       shouldCloseOnMinExtent: false,
       builder: (_, controller) => AnimatedPadding(
-          padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3, MediaQuery.of(context).viewInsets.bottom),
+          padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3,
+              MediaQuery.of(context).viewInsets.bottom),
           duration: const Duration(milliseconds: 100),
           curve: Curves.decelerate,
           child: ListView(
@@ -149,26 +189,28 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                     child: AspectRatio(
                       aspectRatio: 2 / 1,
                       child: ElevatedButton(
-                        onPressed: () { _btnBanner(); },
+                        onPressed: () {
+                          _btnBanner();
+                        },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: cColorAzulSecondary,
-                          side: const BorderSide(color: cColorPrimary, width: 1.0),
-                          padding: const EdgeInsets.all(0.0)
-                        ),
-                        child: selectedBanner != null ? 
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                              image: DecorationImage(
-                                image: MemoryImage(selectedBanner!),
-                              fit: BoxFit.cover,
-                              ),
-                            ),
-                          ) 
-                        : const HugeIcon(
-                            icon: HugeIcons.strokeRoundedAlbum02,
-                            color: cColorPrimary
-                          ),
+                            backgroundColor: cColorAzulSecondary,
+                            side: const BorderSide(
+                                color: cColorPrimary, width: 1.0),
+                            padding: const EdgeInsets.all(0.0)),
+                        child: selectedBanner != null
+                            ? Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12.0)),
+                                  image: DecorationImage(
+                                    image: MemoryImage(selectedBanner!),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            : const HugeIcon(
+                                icon: HugeIcons.strokeRoundedAlbum02,
+                                color: cColorPrimary),
                       ),
                     ),
                   )
@@ -177,7 +219,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
               const SizedBox(height: sSpacing),
               ElevatedButton(
                 child: const Text("Criar Turma"),
-                onPressed: () => _btnCreate(),
+                onPressed: () => _btnCreate(context),
               ),
             ],
           )),
