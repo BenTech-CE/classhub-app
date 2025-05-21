@@ -88,6 +88,9 @@ class ClassManagementService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
       },
+      body: jsonEncode({
+        "invite_code": idClass
+      })
     );
 
     print(response.statusCode);
