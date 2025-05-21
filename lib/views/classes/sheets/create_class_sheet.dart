@@ -74,6 +74,9 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
         ),
         backgroundColor: cColorSuccess,
       ));
+
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ClassView(classObj: classCreated)));
     } else if (classManagementViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -86,7 +89,6 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     }
 
     Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
   }
 
   void _colorPicker() {
@@ -285,9 +287,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                     ]),
                 ElevatedButton(
                   child: classManagementViewModel.isLoading
-                      ? const LoadingWidget(
-                          color: cColorPrimary,
-                        )
+                      ? const LoadingWidget()
                       : const Text("Criar Turma"),
                   onPressed: () => _btnCreate(context),
                 ),

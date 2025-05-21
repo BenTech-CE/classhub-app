@@ -1,6 +1,7 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
+import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
@@ -17,13 +18,14 @@ class JoinClassSheet extends StatefulWidget {
 class _JoinClassSheetState extends State<JoinClassSheet> {
   final _inviteCodeTF = TextEditingController();
 
-  void _btnEntrar(ctx) async {
-    final classManagementViewModel = ctx.read<ClassManagementViewModel>();
+  void _btnEntrar() async {
+    final userViewModel = context.read<UserViewModel>();
+    final classManagementViewModel = context.read<ClassManagementViewModel>();
 
     if (_inviteCodeTF.text.isNotEmpty) {
       final result = await classManagementViewModel.joinClass(_inviteCodeTF.text);
 
-      if (result) {
+      if (result != null) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Você entrou na turma com sucesso!",
@@ -31,6 +33,9 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
           ),
           backgroundColor: cColorSuccess,
         ));
+
+        await userViewModel.fetchUser();
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
       } else if (classManagementViewModel.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -43,7 +48,6 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
       }
 
       Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
     }
   }
 
@@ -98,11 +102,9 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
               ]),
               ElevatedButton(
                 child: classManagementViewModel.isLoading
-                    ? const LoadingWidget(
-                        color: cColorPrimary,
-                      )
+                    ? const LoadingWidget()
                     : const Text("Entrar na Turma"),
-                onPressed: () => _btnEntrar(context),
+                onPressed: () => _btnEntrar(),
               ),
             ],
           ),
