@@ -25,14 +25,17 @@ class ClassManagementService {
     Map<String, String> headers = <String, String>{
       "Authorization": "Bearer $token"
     };
-    final Uint8List fileBytes =  await classModel.banner!.readAsBytes();
-    final multipartFileBanner =
-      await  http.MultipartFile.fromBytes('banner',  fileBytes, filename: classModel.banner!.name);
 
     var request = http.MultipartRequest('POST', uri)
       ..headers.addAll(headers)
-      ..fields.addAll(requestBody)
-      ..files.add(multipartFileBanner);
+      ..fields.addAll(requestBody);
+
+    if (classModel.banner != null) {
+      final Uint8List fileBytes =  await classModel.banner!.readAsBytes();
+      final multipartFileBanner = http.MultipartFile.fromBytes('banner',  fileBytes, filename: classModel.banner!.name);
+      request.files.add(multipartFileBanner);
+    }
+
     var response = await request.send();
 
     final respStr = await response.stream.bytesToString();

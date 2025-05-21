@@ -13,6 +13,12 @@ class JoinClassSheet extends StatefulWidget {
 class _JoinClassSheetState extends State<JoinClassSheet> {
   final _inviteCodeTF = TextEditingController();
 
+  void _btnEntrar() {
+    if (_inviteCodeTF.text.isNotEmpty) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -21,56 +27,51 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      minChildSize: 0.28,
-      initialChildSize: 0.28,
-      maxChildSize: 0.35,
-      expand: false,
-      snap: true,
-      snapSizes: const [0.28, 0.35],
-      shouldCloseOnMinExtent: false,
-      builder: (_, controller) => AnimatedPadding(
-          padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3, MediaQuery.of(context).viewInsets.bottom),
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.decelerate,
-          child: ListView(
-            controller: controller,
-            children: <Widget>[
-              Text("Entrar em turma existente",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: cColorPrimary),
-                  textAlign: TextAlign.center),
-              const SizedBox(height: sSpacing),
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Text("Código da Turma",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: cColorTextAzul),
-                    textAlign: TextAlign.start),
-                TextField(
-                  controller: _inviteCodeTF,
-                  decoration: const InputDecoration(
-                      border: RoundedColoredInputBorder(),
-                      enabledBorder: RoundedColoredInputBorder(),
-                      hintText: "Ex.: 123456",
-                      hintStyle: TextStyle(
-                          fontFamily: "Onest",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.0,
-                          color: cColorText2Azul)),
-                ),
-              ]),
-              const SizedBox(height: sSpacing),
-              ElevatedButton(
-                child: const Text('Entrar na Turma'),
-                onPressed: () =>
-                    Navigator.popUntil(context, (route) => route.isFirst),
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          height: 210,
+              padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: sSpacing,
+                children: [
+                  Text("Entrar em turma existente",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: cColorPrimary),
+                      textAlign: TextAlign.center),
+                  Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+                    Text("Código da Turma",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: cColorTextAzul),
+                        textAlign: TextAlign.start),
+                    TextField(
+                      controller: _inviteCodeTF,
+                      keyboardType: const TextInputType.numberWithOptions(),
+                      decoration: const InputDecoration(
+                          border: RoundedColoredInputBorder(),
+                          enabledBorder: RoundedColoredInputBorder(),
+                          hintText: "Ex.: 123456",
+                          hintStyle: TextStyle(
+                              fontFamily: "Onest",
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.0,
+                              color: cColorText2Azul)),
+                    ),
+                  ]),
+                  ElevatedButton(
+                    child: const Text('Entrar na Turma'),
+                    onPressed: () => _btnEntrar(),
+                  ),
+                ],
               ),
-            ],
-          )),
+        ),
+      ),
     );
   }
 }

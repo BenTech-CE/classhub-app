@@ -9,6 +9,7 @@ import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
   // Essa variável guarda a imagem que a pessoa escolheu para ser o banner. É null se o banner não for escolhido.
   Uint8List? selectedBanner;
   XFile? selectedBannerFile;
+  Color currentColor = Color(4280521466);
 
   // Ação de quando clicar no botão de escolher banner da turma
   void _btnBanner() async {
@@ -53,7 +55,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     final classModel = ClassModel(
       name: _titleTF.text,
       school: _schoolTF.text,
-      color: 4280521466,
+      color: currentColor.toARGB32(),
       banner: selectedBannerFile,
     );
 
@@ -83,6 +85,28 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
+  void _colorPicker() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Selecione uma cor'),
+        content: SingleChildScrollView(
+          child: BlockPicker(
+            pickerColor: currentColor,
+            availableColors: listOfClassColors,
+            onColorChanged: (color) {
+              setState(() {
+                currentColor = color;
+              });
+
+              Navigator.of(ctx).pop();
+            },
+          ),
+        )
+      ),
+    );
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -94,135 +118,177 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      minChildSize: 0.56,
-      initialChildSize: 0.56,
-      maxChildSize: 0.9,
-      expand: false,
-      snap: true,
-      snapSizes: const [0.56, 0.9],
-      shouldCloseOnMinExtent: false,
-      builder: (_, controller) => AnimatedPadding(
-          padding: EdgeInsets.fromLTRB(sPadding3, 0, sPadding3,
-              MediaQuery.of(context).viewInsets.bottom),
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.decelerate,
-          child: ListView(
-            controller: controller,
-            children: <Widget>[
-              Text("Criar Turma",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: cColorPrimary),
-                  textAlign: TextAlign.center),
-              const SizedBox(height: sSpacing),
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Text("Título",
+    return SafeArea(
+      child: Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+            height: 510,
+            padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: sSpacing,
+              children: [
+                Text("Criar Turma",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: cColorTextAzul),
-                    textAlign: TextAlign.start),
-                TextField(
-                  controller: _titleTF,
-                  focusNode: _titleFocus,
-                  onSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_schoolFocus);
-                  },
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                      border: RoundedColoredInputBorder(),
-                      enabledBorder: RoundedColoredInputBorder(),
-                      hintText: "Ex.: USP - Medicina",
-                      hintStyle: TextStyle(
-                          fontFamily: "Onest",
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.0,
-                          color: cColorText2Azul)),
-                ),
-              ]),
-              const SizedBox(height: sSpacing),
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Text("Local de Encontro",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: cColorTextAzul),
-                    textAlign: TextAlign.start),
-                TextField(
-                  controller: _schoolTF,
-                  focusNode: _schoolFocus,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                      border: const RoundedColoredInputBorder(),
-                      enabledBorder: const RoundedColoredInputBorder(),
-                      hintText: "Ex.: USP - R. da Reitoria, 374",
-                      hintStyle: AppTextTheme.placeholder),
-                ),
-              ]),
-              const SizedBox(height: sSpacing),
-              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-                Text("Banner da Turma",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: cColorTextAzul),
-                    textAlign: TextAlign.start),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  const HugeIcon(
-                      icon: HugeIcons.strokeRoundedIdea01,
-                      color: cColorPrimary),
-                  const SizedBox(width: 5.0),
-                  Expanded(
-                    child: Text(
-                      "Dica: Clique no botão ao lado para selecionar a foto da turma!",
-                      style: AppTextTheme.placeholder,
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                    ),
-                  ),
-                  const SizedBox(width: 10.0),
-                  // Botão de Selecionar o Banner da Turma
-                  SizedBox(
-                    height: 90.0,
-                    child: AspectRatio(
-                      aspectRatio: 2 / 1,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _btnBanner();
+                        .titleLarge
+                        ?.copyWith(color: cColorPrimary),
+                    textAlign: TextAlign.center),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("Título",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: cColorTextAzul),
+                          textAlign: TextAlign.start),
+                      TextField(
+                        controller: _titleTF,
+                        focusNode: _titleFocus,
+                        onSubmitted: (_) {
+                          FocusScope.of(context).requestFocus(_schoolFocus);
                         },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: cColorAzulSecondary,
-                            side: const BorderSide(
-                                color: cColorPrimary, width: 1.0),
-                            padding: const EdgeInsets.all(0.0)),
-                        child: selectedBanner != null
-                            ? Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(12.0)),
-                                  image: DecorationImage(
-                                    image: MemoryImage(selectedBanner!),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              )
-                            : const HugeIcon(
-                                icon: HugeIcons.strokeRoundedAlbum02,
-                                color: cColorPrimary),
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                            border: RoundedColoredInputBorder(),
+                            enabledBorder: RoundedColoredInputBorder(),
+                            hintText: "Ex.: USP - Medicina",
+                            hintStyle: TextStyle(
+                                fontFamily: "Onest",
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.0,
+                                color: cColorText2Azul)),
                       ),
+                    ]),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("Local de Encontro",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: cColorTextAzul),
+                          textAlign: TextAlign.start),
+                      TextField(
+                        controller: _schoolTF,
+                        focusNode: _schoolFocus,
+                        textInputAction: TextInputAction.done,
+                        decoration: InputDecoration(
+                            border: const RoundedColoredInputBorder(),
+                            enabledBorder: const RoundedColoredInputBorder(),
+                            hintText: "Ex.: USP - R. da Reitoria, 374",
+                            hintStyle: AppTextTheme.placeholder),
+                      ),
+                    ]),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("Banner da Turma",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: cColorTextAzul),
+                          textAlign: TextAlign.start),
+                      Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const HugeIcon(
+                                icon: HugeIcons.strokeRoundedIdea01,
+                                color: cColorPrimary),
+                            const SizedBox(width: 5.0),
+                            Expanded(
+                              child: Text(
+                                "Dica: Clique no botão ao lado para selecionar a foto da turma!",
+                                style: AppTextTheme.placeholder,
+                                softWrap: true,
+                                overflow: TextOverflow.visible,
+                              ),
+                            ),
+                            const SizedBox(width: 10.0),
+                            // Botão de Selecionar o Banner da Turma
+                            SizedBox(
+                              height: 90.0,
+                              child: AspectRatio(
+                                aspectRatio: 2 / 1,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    _btnBanner();
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: cColorAzulSecondary,
+                                      side: const BorderSide(
+                                          color: cColorPrimary, width: 1.0),
+                                      padding: const EdgeInsets.all(0.0)),
+                                  child: selectedBanner != null
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(12.0)),
+                                            image: DecorationImage(
+                                              image:
+                                                  MemoryImage(selectedBanner!),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        )
+                                      : const HugeIcon(
+                                          icon: HugeIcons.strokeRoundedAlbum02,
+                                          color: cColorPrimary),
+                                ),
+                              ),
+                            )
+                          ])
+                    ]
+                ),
+                
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Cor de destaque",
+                      style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.copyWith(color: cColorTextAzul),
+                      textAlign: TextAlign.start
                     ),
-                  )
-                ])
-              ]),
-              const SizedBox(height: sSpacing),
-              ElevatedButton(
-                child: const Text("Criar Turma"),
-                onPressed: () => _btnCreate(context),
-              ),
-            ],
-          )),
+                    GestureDetector(
+                      onTap: () => _colorPicker(),
+                      child: Stack(
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Image.asset(
+                            "assets/images/rainbow.png",
+                            width: 45, height: 45
+                          ),
+                          Container(
+                            width: 37, height: 37,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: currentColor,
+                            ),
+                          ),
+                          const HugeIcon(
+                            icon: HugeIcons.strokeRoundedPaintBoard, 
+                            color: Colors.white,
+                            size: 29,
+                          )
+                        ]
+                      ),
+                    )
+                  ]
+                ),
+                
+                ElevatedButton(
+                  child: const Text("Criar Turma"),
+                  onPressed: () => _btnCreate(context),
+                ),
+              ],
+            )),
+      ),
     );
   }
 }

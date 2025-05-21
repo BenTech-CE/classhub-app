@@ -31,27 +31,24 @@ class _CreateOrJoinSheetState extends State<CreateOrJoinSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      minChildSize: 0.18,
-      initialChildSize: 0.18,
-      maxChildSize: 0.25,
-      expand: false,
-      builder: (_, controller) => Container(
-          padding: const EdgeInsets.symmetric(horizontal: sPadding3),
-          child: ListView(
-            controller: controller,
-            children: <Widget>[
-              OutlinedButton(
-                child: const Text('Entrar em turma existente'),
-                onPressed: () => _sheetJoinClass(context),
-              ),
-              const SizedBox(height: sSpacing),
-              ElevatedButton(
-                child: const Text('Criar nova turma'),
-                onPressed: () => _sheetCreateClass(context),
-              ),
-            ],
-          )),
+    return SafeArea(
+        child: Container(
+          height: 135,
+            padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: sSpacing,
+              children: [
+                OutlinedButton(
+                  child: const Text('Entrar em turma existente'),
+                  onPressed: () => _sheetJoinClass(context),
+                ),
+                ElevatedButton(
+                  child: const Text('Criar nova turma'),
+                  onPressed: () => _sheetCreateClass(context),
+                ),
+              ],
+            )),
     );
   }
 }

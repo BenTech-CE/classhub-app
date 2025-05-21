@@ -2,7 +2,9 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/views/classes/routes/class_calendar_view.dart';
 import 'package:classhub/views/classes/routes/class_mural_view.dart';
+import 'package:classhub/views/classes/routes/class_subjects_view.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 
@@ -18,6 +20,19 @@ class ClassView extends StatefulWidget {
 class _ClassViewState extends State<ClassView> {
   int _selectedIndex = 0;
 
+  late final List<Widget> widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+
+    widgetOptions = [
+      ClassMuralView(classObj: widget.classObj),
+      ClassCalendarView(),
+      ClassSubjectsView(),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,28 +43,28 @@ class _ClassViewState extends State<ClassView> {
         backgroundColor: Colors.transparent,
         flexibleSpace: widget.classObj.bannerUrl != null ? Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
+            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
               bottomLeft: Radius.circular(16),
               bottomRight: Radius.circular(16),
-            ),
+            ) : null,
             image: DecorationImage(
               image: NetworkImage(widget.classObj.bannerUrl!),
             fit: BoxFit.cover,
             ),
           ),
-          foregroundDecoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          foregroundDecoration: BoxDecoration(
+            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
               bottomLeft: Radius.circular(16),
               bottomRight: Radius.circular(16),
-            ),
-            color: Color.fromARGB(127, 0, 0, 0)
+            ) : null,
+            color: const Color.fromARGB(127, 0, 0, 0)
           ),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
+              borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
                 bottomLeft: Radius.circular(16),
                 bottomRight: Radius.circular(16),
-              ),
+              ) : null,
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -63,29 +78,22 @@ class _ClassViewState extends State<ClassView> {
           )
         ) : Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
+            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
               bottomLeft: Radius.circular(16),
               bottomRight: Radius.circular(16),
-            ),
+            ) : null,
             color: Color(widget.classObj.color)
           ),
         ),
-        bottom: PreferredSize(
+        bottom: _selectedIndex == 0 ? PreferredSize(
           preferredSize: const Size.fromHeight(180),
           child: Container(
             width: double.maxFinite,
             height: 180,
           )
-        )
+        ) : null
       ),
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
-        child: Container(
-          width: double.maxFinite,
-          padding: const EdgeInsets.fromLTRB(sPadding, sPadding, sPadding, sPadding),
-          child: ClassMuralView(classObj: widget.classObj)
-        ),
-      ),
+      body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         indicatorColor: cColorAzulSecondary,

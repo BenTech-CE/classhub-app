@@ -31,3 +31,12 @@ const cColorText2Azul = Color(0xFF8098AF);
 const cBackground = Color(0xFFFFFFFF);
 const cBackground2 = Color(0xFFFEFCFE);
 const cBackground3 = Color(0xFFF1F2F3);
+
+const listOfClassColors = [
+  Color(0xff2392fa),
+  cColorSuccess,
+  cColorError,
+  Colors.black,
+  cColorText2,
+  cColorTextAzul,
+];
