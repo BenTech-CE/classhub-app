@@ -3,6 +3,7 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/core/theme/theme.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
@@ -64,6 +65,32 @@ class _HomeViewState extends State<HomeView> {
     final userViewModel = context.watch<UserViewModel>();
     final classManagementViewModel = context.watch<ClassManagementViewModel>();
 
+    final popupMenuItemsOwner = [
+      const PopupMenuItem<String>(
+        value: 'edit',
+        child: Text('Editar turma'),
+      ),
+      const PopupMenuItem<String>(value: 'delete', child: Text('Deletar turma'))
+    ];
+
+    final popupMenuItemsLeader = [
+      const PopupMenuItem<String>(
+        value: 'edit',
+        child: Text('Editar turma'),
+      ),
+      const PopupMenuItem<String>(
+        value: 'leave',
+        child: Text('Sair da turma'),
+      )
+    ];
+
+    final popupMenuItemsMember = [
+      const PopupMenuItem<String>(
+        value: 'leave',
+        child: Text('Sair da turma'),
+      )
+    ];
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -81,8 +108,8 @@ class _HomeViewState extends State<HomeView> {
         child: SingleChildScrollView(
           physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
           child: Container(
-            padding:
-                const EdgeInsets.fromLTRB(sPadding, sPadding, sPadding, sPadding),
+            padding: const EdgeInsets.fromLTRB(
+                sPadding, sPadding, sPadding, sPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 20.0,
@@ -97,7 +124,8 @@ class _HomeViewState extends State<HomeView> {
                               width: double.maxFinite,
                               height: 150,
                               child: ElevatedButton(
-                                  style: AppTheme.theme.elevatedButtonTheme.style
+                                  style: AppTheme
+                                      .theme.elevatedButtonTheme.style
                                       ?.copyWith(
                                     padding: const WidgetStatePropertyAll(
                                         EdgeInsets.all(0.0)),
@@ -105,90 +133,115 @@ class _HomeViewState extends State<HomeView> {
                                         Color(turma.color)),
                                   ),
                                   onPressed: () {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            ClassView(classObj: turma)));
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ClassView(classObj: turma)));
                                   },
                                   child: ClipRRect(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(sBorderRadius)),
-                                      child: Stack(children: [
-                                        turma.bannerUrl != null
-                                            ? Stack(
-                                                children: [
-                                                  Image.network(
-                                                    turma.bannerUrl!,
-                                                    width: double.maxFinite,
-                                                    height: 150,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                  Container(
-                                                    width: double.maxFinite,
-                                                    height: 150,
-                                                    decoration: BoxDecoration(
-                                                      gradient: LinearGradient(
-                                                        begin: Alignment
-                                                            .bottomCenter,
-                                                        end: Alignment.topCenter,
-                                                        colors: [
-                                                          Color(turma.color),
-                                                          Colors.transparent,
-                                                        ],
+                                      child: Stack(
+                                        children: [
+                                          turma.bannerUrl != null
+                                              ? Stack(
+                                                  children: [
+                                                    Image.network(
+                                                      turma.bannerUrl!,
+                                                      width: double.maxFinite,
+                                                      height: 150,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                    Container(
+                                                      width: double.maxFinite,
+                                                      height: 150,
+                                                      decoration: BoxDecoration(
+                                                        gradient:
+                                                            LinearGradient(
+                                                          begin: Alignment
+                                                              .bottomCenter,
+                                                          end: Alignment
+                                                              .topCenter,
+                                                          colors: [
+                                                            Color(turma.color),
+                                                            Colors.transparent,
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(
-                                                width: double.maxFinite,
-                                                height: 150,
-                                                color: Color(turma.color)),
-                                        Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 10.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      PopupMenuButton<String>(
-                                                        icon: const Icon(
-                                                            Icons.more_vert,
-                                                            size: 24.0),
-                                                        onSelected:
-                                                            (String value) {
-                                                          if (value == 'edit') {
-                                                            // Edit action
-                                                          } else if (value ==
-                                                              'leave') {
-                                                            // Leave action
-                                                          }
-                                                        },
-                                                        itemBuilder: (BuildContext
-                                                                context) =>
-                                                            [
-                                                          const PopupMenuItem<
-                                                              String>(
-                                                            value: 'edit',
-                                                            child: Text('Editar'),
-                                                          ),
-                                                          const PopupMenuItem<
-                                                              String>(
-                                                            value: 'leave',
-                                                            child: Text('Sair'),
-                                                          ),
-                                                        ],
-                                                        // atention: Offset de onde irá aparecer o menu (x, y)
-                                                        offset:
-                                                            const Offset(-24, 24),
-                                                      )
-                                                    ]),
-                                                Padding(
+                                                  ],
+                                                )
+                                              : Container(
+                                                  width: double.maxFinite,
+                                                  height: 150,
+                                                  color: Color(turma.color)),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 10.0),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.stretch,
+                                                children: [
+                                                  Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        PopupMenuButton<String>(
+                                                          icon: const Icon(
+                                                              Icons.more_vert,
+                                                              size: 24.0),
+                                                          onSelected:
+                                                              (String value) async {
+                                                            if (value ==
+                                                                'edit') {
+                                                              // Edit action
+                                                            } else if (value ==
+                                                                'leave') {
+                                                              // Leave action
+                                                            } else if (value ==
+                                                                'delete') {
+                                                              final result =
+                                                                  await classManagementViewModel.deleteClass(turma.id);
+                                                              if (result) {
+                                                                await _userInfo(context);
+                                                                ScaffoldMessenger.of(context)
+                                                                    .showSnackBar(const SnackBar(
+                                                                  content: Text(
+                                                                    "Turma deletada com sucesso!",
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                  backgroundColor: cColorSuccess,
+                                                                ));
+                                                              } else if (classManagementViewModel.error != null) {
+                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                  content: Text(
+                                                                    classManagementViewModel.error!,
+                                                                    style: const TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontWeight: FontWeight.bold),
+                                                                  ),
+                                                                  backgroundColor: cColorError,
+                                                                ));
+                                                              }
+                                                            }
+                                                          },
+                                                          itemBuilder: (BuildContext
+                                                                  context) =>
+                                                              turma.role ==
+                                                                      Role.lider
+                                                                  ? popupMenuItemsOwner
+                                                                  : popupMenuItemsMember,
+                                                          // atention: Offset de onde irá aparecer o menu (x, y)
+                                                          offset: const Offset(
+                                                              -24, 24),
+                                                        )
+                                                      ]),
+                                                  Padding(
                                                     padding: const EdgeInsets
                                                         .symmetric(
                                                         horizontal: 24.0),
@@ -217,10 +270,12 @@ class _HomeViewState extends State<HomeView> {
                                                                           16.0,
                                                                       color:
                                                                           cColorTextWhite)),
-                                                        ])),
-                                              ],
-                                            ))
-                                      ]))));
+                                                        ]),
+                                                  ),
+                                                ],
+                                              ))
+                                        ],
+                                      ))));
                         }).toList(),
                       )
                     : const Text("Sem turmas para mostrar."),
@@ -235,19 +290,22 @@ class _HomeViewState extends State<HomeView> {
                           name: userViewModel.user?.name ?? "",
                         ),
                       );
-        
+
                       final ClassModel? classCreated =
-                          await classManagementViewModel.createClass(classModel);
-        
+                          await classManagementViewModel
+                              .createClass(classModel);
+
                       if (classCreated != null) {
                         // sync alterações
                         await _userInfo(context);
-        
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text(
                             "Turma criada com sucesso!",
                             style: TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           backgroundColor: cColorSuccess,
                         ));
@@ -256,7 +314,8 @@ class _HomeViewState extends State<HomeView> {
                           content: Text(
                             classManagementViewModel.error!,
                             style: const TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           backgroundColor: cColorError,
                         ));
@@ -274,19 +333,21 @@ class _HomeViewState extends State<HomeView> {
                 OutlinedButton(
                   onPressed: () async {
                     if (userViewModel.user!.classes.isNotEmpty) {
-                      final ClassModel? classGet = await classManagementViewModel
-                          .getClass(userViewModel.user!.classes[0].id);
-        
+                      final ClassModel? classGet =
+                          await classManagementViewModel
+                              .getClass(userViewModel.user!.classes[0].id);
+
                       if (classGet != null) {
                         print(classGet.inviteCode);
                       }
-        
+
                       if (classManagementViewModel.error != null) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
                             classManagementViewModel.error!,
                             style: const TextStyle(
-                                color: Colors.white, fontWeight: FontWeight.bold),
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                           backgroundColor: cColorError,
                         ));
@@ -299,14 +360,16 @@ class _HomeViewState extends State<HomeView> {
                         )
                       : const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text("Pegar informações da sua primeira turma"),
+                          child:
+                              Text("Pegar informações da sua primeira turma"),
                         ),
                 ),
                 // TESTANDO A INSCRIÇÃO EM TURMAS
                 OutlinedButton(
                   onPressed: () async {
-                    final result = await classManagementViewModel.joinClass("?");
-        
+                    final result =
+                        await classManagementViewModel.joinClass("?");
+
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
@@ -348,7 +411,8 @@ class _HomeViewState extends State<HomeView> {
                         child: Text("Sair da Conta"))),
                 Text("Bem-vindo, ${userViewModel.user?.name}!",
                     style: Theme.of(context).textTheme.labelLarge),
-                Text("Você está em ${userViewModel.user?.classes.length} turmas.",
+                Text(
+                    "Você está em ${userViewModel.user?.classes.length} turmas.",
                     style: Theme.of(context).textTheme.labelLarge),
               ],
             ),
