@@ -8,6 +8,7 @@ import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
+import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -89,21 +90,20 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Selecione uma cor'),
-        content: SingleChildScrollView(
-          child: BlockPicker(
-            pickerColor: currentColor,
-            availableColors: listOfClassColors,
-            onColorChanged: (color) {
-              setState(() {
-                currentColor = color;
-              });
+          title: const Text('Selecione uma cor'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: currentColor,
+              availableColors: listOfClassColors,
+              onColorChanged: (color) {
+                setState(() {
+                  currentColor = color;
+                });
 
-              Navigator.of(ctx).pop();
-            },
-          ),
-        )
-      ),
+                Navigator.of(ctx).pop();
+              },
+            ),
+          )),
     );
   }
 
@@ -118,14 +118,19 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final ClassManagementViewModel classManagementViewModel =
+        context.watch<ClassManagementViewModel>();
+
     return SafeArea(
       child: Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
-            height: 510,
+            // height: 510,
+            // constraints: new BoxConstraints(minHeight: 510, maxHeight: 600),
             padding: const EdgeInsets.symmetric(horizontal: sPadding3),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: sSpacing,
@@ -242,50 +247,48 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                               ),
                             )
                           ])
-                    ]
-                ),
-                
+                    ]),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Cor de destaque",
-                      style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge
-                        ?.copyWith(color: cColorTextAzul),
-                      textAlign: TextAlign.start
-                    ),
-                    GestureDetector(
-                      onTap: () => _colorPicker(),
-                      child: Stack(
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Image.asset(
-                            "assets/images/rainbow.png",
-                            width: 45, height: 45
-                          ),
-                          Container(
-                            width: 37, height: 37,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: currentColor,
-                            ),
-                          ),
-                          const HugeIcon(
-                            icon: HugeIcons.strokeRoundedPaintBoard, 
-                            color: Colors.white,
-                            size: 29,
-                          )
-                        ]
-                      ),
-                    )
-                  ]
-                ),
-                
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Cor de destaque",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: cColorTextAzul),
+                          textAlign: TextAlign.start),
+                      GestureDetector(
+                        onTap: () => _colorPicker(),
+                        child: Stack(
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Image.asset("assets/images/rainbow.png",
+                                  width: 45, height: 45),
+                              Container(
+                                width: 37,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: currentColor,
+                                ),
+                              ),
+                              const HugeIcon(
+                                icon: HugeIcons.strokeRoundedPaintBoard,
+                                color: Colors.white,
+                                size: 29,
+                              )
+                            ]),
+                      )
+                    ]),
                 ElevatedButton(
-                  child: const Text("Criar Turma"),
+                  child: classManagementViewModel.isLoading
+                      ? const LoadingWidget(
+                          color: cColorPrimary,
+                        )
+                      : const Text("Criar Turma"),
                   onPressed: () => _btnCreate(context),
                 ),
+                Container(height: sSpacing / 5),
               ],
             )),
       ),
