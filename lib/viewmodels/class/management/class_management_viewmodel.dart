@@ -1,4 +1,5 @@
 import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ class ClassManagementViewModel extends ChangeNotifier {
 
   ClassManagementViewModel(this.classManagementService);
 
-  Future<ClassModel?> createClass(ClassModel classModel) async {
+  Future<MinimalClassModel?> createClass(ClassModel classModel) async {
     isLoading = true;
     notifyListeners();
 
@@ -43,7 +44,7 @@ class ClassManagementViewModel extends ChangeNotifier {
     return null;
   }
 
-  Future<bool> joinClass(String idClass) async {
+  Future<MinimalClassModel?> joinClass(String idClass) async {
     isLoading = true;
     notifyListeners();
 
@@ -53,7 +54,6 @@ class ClassManagementViewModel extends ChangeNotifier {
     } catch (e) {
       print(e);
       error = e.toString();
-      return false;
     } finally {
       isLoading = false;
       notifyListeners();

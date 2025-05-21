@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,7 @@ class ClassManagementService {
 
   ClassManagementService(this.authService);
 
-  Future<ClassModel> createClass(ClassModel classModel) async {
+  Future<MinimalClassModel> createClass(ClassModel classModel) async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
@@ -46,7 +47,7 @@ class ClassManagementService {
     print(jsonResponse);
 
     if (response.statusCode == 201) {
-      return ClassModel.fromJson(jsonResponse);
+      return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao criar a turma: ${jsonResponse["error"]}");
     }
@@ -76,7 +77,7 @@ class ClassManagementService {
     }
   }
 
-  Future<bool> joinClass(String idClass) async {
+  Future<MinimalClassModel> joinClass(String idClass) async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
@@ -93,12 +94,12 @@ class ClassManagementService {
     print(response.body);
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
+      return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception(
           "Erro ao tentar entrar na turma: ${jsonResponse["error"]}");
     }
-    return true;
   }
 
   Future<bool> deleteClass(String idClass) async {

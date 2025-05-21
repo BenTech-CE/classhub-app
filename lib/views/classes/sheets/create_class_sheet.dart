@@ -6,8 +6,10 @@ import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/class_owner_model.dart';
+import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
+import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -60,7 +62,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
       banner: selectedBannerFile,
     );
 
-    final ClassModel? classCreated =
+    final MinimalClassModel? classCreated =
         await classManagementViewModel.createClass(classModel);
 
     if (classCreated != null) {
@@ -84,6 +86,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     }
 
     Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
   }
 
   void _colorPicker() {

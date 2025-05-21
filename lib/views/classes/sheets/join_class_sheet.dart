@@ -42,7 +42,8 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
         ));
       }
 
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: )))
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
     }
   }
 
