@@ -59,4 +59,21 @@ class ClassManagementViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> deleteClass(String idClass) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return await classManagementService.deleteClass(idClass);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }

@@ -39,23 +39,13 @@ class ClassManagementService {
     var response = await request.send();
 
     final respStr = await response.stream.bytesToString();
-    // final response = await http.post(
-    //   Uri.parse("${Api.baseUrl}${Api.createClassEndpoint}"),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Authorization": "Bearer $token"
-    //   },
-    //   body: jsonEncode(classModel.toJson()),
-    // );
 
     Map<String, dynamic> jsonResponse = jsonDecode(respStr);
-    // Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
     print(response.statusCode);
     print(jsonResponse);
 
     if (response.statusCode == 201) {
-      print('Uploaded sucess!');
       return ClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao criar a turma: ${jsonResponse["error"]}");
@@ -107,6 +97,31 @@ class ClassManagementService {
     } else {
       throw Exception(
           "Erro ao tentar entrar na turma: ${jsonResponse["error"]}");
+    }
+    return true;
+  }
+
+  Future<bool> deleteClass(String idClass) async {
+    final token = await authService.getToken();
+    if (token == null) throw Exception('Token não encontrado');
+
+    final response = await http.delete(
+      Uri.parse(
+          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+    );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception(
+          "Erro ao tentar deletar a turma: ${jsonResponse["error"]}");
     }
     return true;
   }
