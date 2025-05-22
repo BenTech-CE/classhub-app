@@ -85,18 +85,20 @@ class _HomeViewState extends State<HomeView> {
             padding: const EdgeInsets.fromLTRB(
                 sPadding, sPadding, sPadding, sPadding),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 20.0,
               children: [
                 // Verificamos se o usuário tem turmas ai mapeamos cada turma para uma instância de Card de Turma (figma)
-                (userViewModel.user != null &&
-                        userViewModel.user!.classes.isNotEmpty)
+                (userViewModel.user != null)
                     ? Column(
-                        spacing: 20.0,
+                        spacing: sSpacing,
                         children: userViewModel.user!.classes.map((turma) {
                           return ClassCard(turma: turma);
                         }).toList())
-                    : const Text("Sem turmas para mostrar."),
+                    : Column(spacing: sSpacing, children: [
+                        Text("Aguarde enquanto carregamos suas turmas...", style: Theme.of(context).textTheme.titleMedium),
+                        const LoadingWidget(color: cColorPrimary,)
+                    ],),
                 // Botão Sair da Conta (sign out)
                 OutlinedButton(
                     onPressed: () {

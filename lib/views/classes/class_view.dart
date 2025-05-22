@@ -38,13 +38,13 @@ class _ClassViewState extends State<ClassView> {
 
     ClassModel? cl = await classVM.getClass(widget.mClassObj.id);
 
-    if (cl != null) {
+    if (cl != null && mounted) {
       setState(() {
         classObj = cl;
       });
 
       return;
-    } else {
+    } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           classVM.error!,

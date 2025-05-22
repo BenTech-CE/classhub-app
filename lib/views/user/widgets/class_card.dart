@@ -63,7 +63,6 @@ class _ClassCardState extends State<ClassCard> {
     ];
 
     return SizedBox(
-      width: double.maxFinite,
       height: 150,
       child: ElevatedButton(
         style: AppTheme.theme.elevatedButtonTheme.style?.copyWith(

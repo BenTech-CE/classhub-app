@@ -25,7 +25,7 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
     if (_inviteCodeTF.text.isNotEmpty) {
       final result = await classManagementViewModel.joinClass(_inviteCodeTF.text);
 
-      if (result != null) {
+      if (result != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
             "Você entrou na turma com sucesso!",
@@ -35,8 +35,9 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
         ));
 
         await userViewModel.fetchUser();
+        Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(mClassObj: result)));
-      } else if (classManagementViewModel.error != null) {
+      } else if (classManagementViewModel.error != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             classManagementViewModel.error!,
@@ -45,9 +46,9 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
           ),
           backgroundColor: cColorError,
         ));
-      }
 
-      Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.popUntil(context, (route) => route.isFirst);
+      }
     }
   }
 
