@@ -72,7 +72,7 @@ class _ClassCardState extends State<ClassCard> {
         ),
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => ClassView(classObj: turma)));
+              builder: (context) => ClassView(mClassObj: turma)));
         },
         child: ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(sBorderRadius)),

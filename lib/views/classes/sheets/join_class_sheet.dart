@@ -35,7 +35,7 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
         ));
 
         await userViewModel.fetchUser();
-        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(classObj: result)));
+        Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(mClassObj: result)));
       } else if (classManagementViewModel.error != null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(

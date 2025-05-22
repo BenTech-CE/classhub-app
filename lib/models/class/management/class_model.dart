@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 class ClassModel {
   final String? id;
   final String name;
-  final int? inviteCode;
+  final String? inviteCode;
   final int? color;
   final String? bannerUrl;
   final XFile? banner;

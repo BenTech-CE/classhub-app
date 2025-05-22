@@ -75,8 +75,9 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
         backgroundColor: cColorSuccess,
       ));
 
+      Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ClassView(classObj: classCreated)));
+          builder: (context) => ClassView(mClassObj: classCreated)));
     } else if (classManagementViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
@@ -86,9 +87,9 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
         ),
         backgroundColor: cColorError,
       ));
-    }
 
-    Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
   }
 
   void _colorPicker() {
@@ -127,173 +128,174 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
         context.watch<ClassManagementViewModel>();
 
     return SafeArea(
-      child: Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-            // height: 510,
-            // constraints: new BoxConstraints(minHeight: 510, maxHeight: 600),
-            padding: const EdgeInsets.symmetric(horizontal: sPadding3),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: sSpacing,
-              children: [
-                Text("Criar Turma",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleLarge
-                        ?.copyWith(color: cColorPrimary),
-                    textAlign: TextAlign.center),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text("Título",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: cColorTextAzul),
-                          textAlign: TextAlign.start),
-                      TextField(
-                        controller: _titleTF,
-                        focusNode: _titleFocus,
-                        onSubmitted: (_) {
-                          FocusScope.of(context).requestFocus(_schoolFocus);
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: const InputDecoration(
-                            border: RoundedColoredInputBorder(),
-                            enabledBorder: RoundedColoredInputBorder(),
-                            hintText: "Ex.: USP - Medicina",
-                            hintStyle: TextStyle(
-                                fontFamily: "Onest",
-                                fontWeight: FontWeight.w400,
-                                fontSize: 16.0,
-                                color: cColorText2Azul)),
-                      ),
-                    ]),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text("Local de Encontro",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: cColorTextAzul),
-                          textAlign: TextAlign.start),
-                      TextField(
-                        controller: _schoolTF,
-                        focusNode: _schoolFocus,
-                        textInputAction: TextInputAction.done,
-                        decoration: InputDecoration(
-                            border: const RoundedColoredInputBorder(),
-                            enabledBorder: const RoundedColoredInputBorder(),
-                            hintText: "Ex.: USP - R. da Reitoria, 374",
-                            hintStyle: AppTextTheme.placeholder),
-                      ),
-                    ]),
-                Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text("Banner da Turma",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: cColorTextAzul),
-                          textAlign: TextAlign.start),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const HugeIcon(
-                                icon: HugeIcons.strokeRoundedIdea01,
-                                color: cColorPrimary),
-                            const SizedBox(width: 5.0),
-                            Expanded(
-                              child: Text(
-                                "Dica: Clique no botão ao lado para selecionar a foto da turma!",
-                                style: AppTextTheme.placeholder,
-                                softWrap: true,
-                                overflow: TextOverflow.visible,
-                              ),
-                            ),
-                            const SizedBox(width: 10.0),
-                            // Botão de Selecionar o Banner da Turma
-                            SizedBox(
-                              height: 90.0,
-                              child: AspectRatio(
-                                aspectRatio: 2 / 1,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    _btnBanner();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: cColorAzulSecondary,
-                                      side: const BorderSide(
-                                          color: cColorPrimary, width: 1.0),
-                                      padding: const EdgeInsets.all(0.0)),
-                                  child: selectedBanner != null
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(12.0)),
-                                            image: DecorationImage(
-                                              image:
-                                                  MemoryImage(selectedBanner!),
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        )
-                                      : const HugeIcon(
-                                          icon: HugeIcons.strokeRoundedAlbum02,
-                                          color: cColorPrimary),
-                                ),
-                              ),
-                            )
-                          ])
-                    ]),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Cor de destaque",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: cColorTextAzul),
-                          textAlign: TextAlign.start),
-                      GestureDetector(
-                        onTap: () => _colorPicker(),
-                        child: Stack(
-                            alignment: AlignmentDirectional.center,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + sPadding3),
+          child: Container(
+              // height: 510,
+              // constraints: new BoxConstraints(minHeight: 510, maxHeight: 600),
+              padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: sSpacing,
+                children: [
+                  Text("Criar Turma",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(color: cColorPrimary),
+                      textAlign: TextAlign.center),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text("Título",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: cColorTextAzul),
+                            textAlign: TextAlign.start),
+                        TextField(
+                          controller: _titleTF,
+                          focusNode: _titleFocus,
+                          onSubmitted: (_) {
+                            FocusScope.of(context).requestFocus(_schoolFocus);
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                              border: RoundedColoredInputBorder(),
+                              enabledBorder: RoundedColoredInputBorder(),
+                              hintText: "Ex.: USP - Medicina",
+                              hintStyle: TextStyle(
+                                  fontFamily: "Onest",
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16.0,
+                                  color: cColorText2Azul)),
+                        ),
+                      ]),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text("Local de Encontro",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: cColorTextAzul),
+                            textAlign: TextAlign.start),
+                        TextField(
+                          controller: _schoolTF,
+                          focusNode: _schoolFocus,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                              border: const RoundedColoredInputBorder(),
+                              enabledBorder: const RoundedColoredInputBorder(),
+                              hintText: "Ex.: USP - R. da Reitoria, 374",
+                              hintStyle: AppTextTheme.placeholder),
+                        ),
+                      ]),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text("Banner da Turma",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: cColorTextAzul),
+                            textAlign: TextAlign.start),
+                        Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset("assets/images/rainbow.png",
-                                  width: 45, height: 45),
-                              Container(
-                                width: 37,
-                                height: 37,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentColor,
+                              const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedIdea01,
+                                  color: cColorPrimary),
+                              const SizedBox(width: 5.0),
+                              Expanded(
+                                child: Text(
+                                  "Dica: Clique no botão ao lado para selecionar a foto da turma!",
+                                  style: AppTextTheme.placeholder,
+                                  softWrap: true,
+                                  overflow: TextOverflow.visible,
                                 ),
                               ),
-                              const HugeIcon(
-                                icon: HugeIcons.strokeRoundedPaintBoard,
-                                color: Colors.white,
-                                size: 29,
+                              const SizedBox(width: 10.0),
+                              // Botão de Selecionar o Banner da Turma
+                              SizedBox(
+                                height: 90.0,
+                                child: AspectRatio(
+                                  aspectRatio: 2 / 1,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      _btnBanner();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: cColorAzulSecondary,
+                                        side: const BorderSide(
+                                            color: cColorPrimary, width: 1.0),
+                                        padding: const EdgeInsets.all(0.0)),
+                                    child: selectedBanner != null
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(12.0)),
+                                              image: DecorationImage(
+                                                image:
+                                                    MemoryImage(selectedBanner!),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          )
+                                        : const HugeIcon(
+                                            icon: HugeIcons.strokeRoundedAlbum02,
+                                            color: cColorPrimary),
+                                  ),
+                                ),
                               )
-                            ]),
-                      )
-                    ]),
-                ElevatedButton(
-                  child: classManagementViewModel.isLoading
-                      ? const LoadingWidget()
-                      : const Text("Criar Turma"),
-                  onPressed: () => _btnCreate(context),
-                ),
-                Container(height: sSpacing / 5),
-              ],
-            )),
+                            ])
+                      ]),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Cor de destaque",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(color: cColorTextAzul),
+                            textAlign: TextAlign.start),
+                        GestureDetector(
+                          onTap: () => _colorPicker(),
+                          child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Image.asset("assets/images/rainbow.png",
+                                    width: 45, height: 45),
+                                Container(
+                                  width: 37,
+                                  height: 37,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: currentColor,
+                                  ),
+                                ),
+                                const HugeIcon(
+                                  icon: HugeIcons.strokeRoundedPaintBoard,
+                                  color: Colors.white,
+                                  size: 29,
+                                )
+                              ]),
+                        )
+                      ]),
+                  ElevatedButton(
+                    child: classManagementViewModel.isLoading
+                        ? const LoadingWidget()
+                        : const Text("Criar Turma"),
+                    onPressed: () => _btnCreate(context),
+                  ),
+                ],
+              )),
+        ),
       ),
     );
   }
