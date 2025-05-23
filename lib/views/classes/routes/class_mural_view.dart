@@ -26,7 +26,6 @@ class _ClassMuralViewState extends State<ClassMuralView> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () => _fetchMural(),
-      child: SingleChildScrollView(
         child: SizedBox(
           width: double.maxFinite,
           child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -78,7 +77,6 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                 ),
             ),
           ]),
-        ),
       ),
     );
   }

@@ -69,153 +69,183 @@ class _ClassViewState extends State<ClassView> {
     ];
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await _fetchClass();
+      /*showModalBottomSheet(
+        context: context,
+        isDismissible: false,
+        enableDrag: true,
+        isScrollControlled: true,
+        barrierColor: Colors.transparent,
+        useRootNavigator: true,
+        //backgroundColor: Colors.white,
+        builder: (context) => DraggableScrollableSheet(
+          expand: false,
+          snap: true,
+          maxChildSize: 0.9,
+          initialChildSize: 0.7,
+          minChildSize: 0.7,
+          shouldCloseOnMinExtent: false,
+          builder: (context, scrollController) => SingleChildScrollView(
+            controller: scrollController,
+            child: widgetOptions.elementAt(_selectedIndex),
+          ),
+        ),
+      );*/
+
+      _fetchClass();
     });    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.mClassObj.name),
-        backgroundColor: Colors.transparent,
-        flexibleSpace: widget.mClassObj.bannerUrl != null ? Container(
-          decoration: BoxDecoration(
-            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ) : null,
-            image: DecorationImage(
-              image: NetworkImage(widget.mClassObj.bannerUrl!),
-            fit: BoxFit.cover,
-            ),
-          ),
-          foregroundDecoration: BoxDecoration(
-            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ) : null,
-            color: const Color.fromARGB(127, 0, 0, 0)
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
-                bottomLeft: Radius.circular(16),
-                bottomRight: Radius.circular(16),
-              ) : null,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Color(widget.mClassObj.color),
-                ],
-                stops: const [0.0, 1],
-              ),
-            ),
-          )
-        ) : Container(
-          decoration: BoxDecoration(
-            borderRadius: _selectedIndex == 0 ? const BorderRadius.only(
-              bottomLeft: Radius.circular(16),
-              bottomRight: Radius.circular(16),
-            ) : null,
-            color: Color(widget.mClassObj.color)
-          ),
-        ),
-        bottom: _selectedIndex == 0 ? PreferredSize(
-          preferredSize: const Size.fromHeight(180),
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(bottom: 24.0),
-            width: double.maxFinite,
-            height: 180,
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: 130,
-                viewportFraction: 0.9,
-                autoPlay: false,
-                enableInfiniteScroll: false
-              ),
-              items: [
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  padding: const EdgeInsets.all(sPadding3),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    color: classColor.shade100,
-                    border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
-                    borderRadius: const BorderRadius.all(Radius.circular(24))
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Código da Turma",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w600,
-                          color: classColor.shade800
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            classObj != null ? Text(
-                              "${classObj?.inviteCode}",
-                              style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.w700,
-                                color: classColor.shade900
-                              ),
-                            ) : LoadingWidget(color: classColor.shade900)
-                          ],
-                        ),
-                      )
-                    ],
-                  )
+                  bottomNavigationBar: NavigationBar(
+              selectedIndex: _selectedIndex,
+              indicatorColor: cColorAzulSecondary,
+              onDestinationSelected: (int index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              },
+              destinations: const [
+                NavigationDestination(
+                  icon: HugeIcon(icon: HugeIcons.strokeRoundedCanvas, color: Colors.black),
+                  label: "Mural",
                 ),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  padding: const EdgeInsets.all(sPadding3),
-                  width: double.maxFinite,
-                  decoration: BoxDecoration(
-                    color: classColor.shade100,
-                    border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
-                    borderRadius: const BorderRadius.all(Radius.circular(24))
-                  ),
+                NavigationDestination(
+                  icon: HugeIcon(icon: HugeIcons.strokeRoundedCalendar03, color: Colors.black),
+                  label: "Calendário",
+                ),
+                NavigationDestination(
+                  icon: HugeIcon(icon: HugeIcons.strokeRoundedBookBookmark02, color: Colors.black),
+                  label: "Matérias",
                 ),
               ],
             ),
+      body: Stack(
+        children: [
+          Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text(widget.mClassObj.name),
+              backgroundColor: Colors.transparent,
+              flexibleSpace: widget.mClassObj.bannerUrl != null ? Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(widget.mClassObj.bannerUrl!),
+                  fit: BoxFit.cover,
+                  ),
+                ),
+                foregroundDecoration: BoxDecoration(
+                  color: const Color.fromARGB(127, 0, 0, 0)
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Color(widget.mClassObj.color),
+                      ],
+                      stops: const [0.0, 1],
+                    ),
+                  ),
+                )
+              ) : Container(
+                decoration: BoxDecoration(
+                  color: Color(widget.mClassObj.color)
+                ),
+              ),
+              bottom: _selectedIndex == 0 ? PreferredSize(
+                preferredSize: const Size.fromHeight(200),
+                child: Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(bottom: 24.0),
+                  width: double.maxFinite,
+                  height: 200,
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      height: 130,
+                      viewportFraction: 0.9,
+                      autoPlay: false,
+                      enableInfiniteScroll: false
+                    ),
+                    items: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.all(sPadding3),
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: classColor.shade100,
+                          border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
+                          borderRadius: const BorderRadius.all(Radius.circular(24))
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Código da Turma",
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w600,
+                                color: classColor.shade800
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  classObj != null ? Text(
+                                    "${classObj?.inviteCode}",
+                                    style: TextStyle(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.w700,
+                                      color: classColor.shade900
+                                    ),
+                                  ) : LoadingWidget(color: classColor.shade900)
+                                ],
+                              ),
+                            )
+                          ],
+                        )
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.all(sPadding3),
+                        width: double.maxFinite,
+                        decoration: BoxDecoration(
+                          color: classColor.shade100,
+                          border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
+                          borderRadius: const BorderRadius.all(Radius.circular(24))
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ) : null
+            ),
+
           ),
-        ) : null
-      ),
-      body: widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        indicatorColor: cColorAzulSecondary,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedCanvas, color: Colors.black),
-            label: "Mural",
+          DraggableScrollableSheet(
+            expand: true,
+            snap: true,
+            maxChildSize: 0.87,
+            initialChildSize: 0.64,
+            minChildSize: 0.64,
+            shouldCloseOnMinExtent: false,
+            builder: (context, scrollController) => Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
+              ),
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: widgetOptions.elementAt(_selectedIndex),
+              ),
+            ),
           ),
-          NavigationDestination(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedCalendar03, color: Colors.black),
-            label: "Calendário",
-          ),
-          NavigationDestination(
-            icon: HugeIcon(icon: HugeIcons.strokeRoundedBookBookmark02, color: Colors.black),
-            label: "Matérias",
-          ),
-        ],
-      ),
+        ]
+      )
     );
   }
 }
