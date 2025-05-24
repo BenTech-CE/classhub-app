@@ -92,160 +92,181 @@ class _ClassViewState extends State<ClassView> {
       );*/
 
       _fetchClass();
-    });    
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-                  bottomNavigationBar: NavigationBar(
-              selectedIndex: _selectedIndex,
-              indicatorColor: cColorAzulSecondary,
-              onDestinationSelected: (int index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              destinations: const [
-                NavigationDestination(
-                  icon: HugeIcon(icon: HugeIcons.strokeRoundedCanvas, color: Colors.black),
-                  label: "Mural",
-                ),
-                NavigationDestination(
-                  icon: HugeIcon(icon: HugeIcons.strokeRoundedCalendar03, color: Colors.black),
-                  label: "Calendário",
-                ),
-                NavigationDestination(
-                  icon: HugeIcon(icon: HugeIcons.strokeRoundedBookBookmark02, color: Colors.black),
-                  label: "Matérias",
-                ),
-              ],
-            ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        indicatorColor: classColor.shade200,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedCanvas, color: Colors.black),
+            label: "Mural",
+          ),
+          NavigationDestination(
+            icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedCalendar03, color: Colors.black),
+            label: "Calendário",
+          ),
+          NavigationDestination(
+            icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedBookBookmark02,
+                color: Colors.black),
+            label: "Matérias",
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
-              centerTitle: true,
-              title: Text(widget.mClassObj.name),
-              backgroundColor: Colors.transparent,
-              flexibleSpace: widget.mClassObj.bannerUrl != null ? Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(widget.mClassObj.bannerUrl!),
-                  fit: BoxFit.cover,
-                  ),
-                ),
-                foregroundDecoration: BoxDecoration(
-                  color: const Color.fromARGB(127, 0, 0, 0)
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Color(widget.mClassObj.color),
-                      ],
-                      stops: const [0.0, 1],
-                    ),
-                  ),
-                )
-              ) : Container(
-                decoration: BoxDecoration(
-                  color: Color(widget.mClassObj.color)
-                ),
-              ),
-              bottom: _selectedIndex == 0 ? PreferredSize(
-                preferredSize: const Size.fromHeight(200),
-                child: Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(bottom: 24.0),
-                  width: double.maxFinite,
-                  height: 200,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 130,
-                      viewportFraction: 0.9,
-                      autoPlay: false,
-                      enableInfiniteScroll: false
-                    ),
-                    items: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        padding: const EdgeInsets.all(sPadding3),
-                        width: double.maxFinite,
+                centerTitle: true,
+                title: Text(widget.mClassObj.name),
+                backgroundColor: Colors.transparent,
+                flexibleSpace: widget.mClassObj.bannerUrl != null
+                    ? Container(
                         decoration: BoxDecoration(
-                          color: classColor.shade100,
-                          border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
-                          borderRadius: const BorderRadius.all(Radius.circular(24))
+                          image: DecorationImage(
+                            image: NetworkImage(widget.mClassObj.bannerUrl!),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        child: Column(
-                          children: [
-                            Text(
-                              "Código da Turma",
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                                color: classColor.shade800
-                              ),
+                        foregroundDecoration: const BoxDecoration(
+                            color: Color.fromARGB(127, 0, 0, 0)),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.transparent,
+                                Color(widget.mClassObj.color),
+                              ],
+                              stops: const [0.0, 1],
                             ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  classObj != null ? Text(
-                                    "${classObj?.inviteCode}",
-                                    style: TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.w700,
-                                      color: classColor.shade900
-                                    ),
-                                  ) : LoadingWidget(color: classColor.shade900)
-                                ],
+                          ),
+                        ))
+                    : Container(
+                        decoration:
+                            BoxDecoration(color: Color(widget.mClassObj.color)),
+                      ),
+                bottom: _selectedIndex == 0
+                    ? PreferredSize(
+                        preferredSize: const Size.fromHeight(200),
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          width: double.maxFinite,
+                          height: 200,
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                                height: 130,
+                                viewportFraction: 0.9,
+                                autoPlay: false,
+                                enableInfiniteScroll: false),
+                            items: [
+                              Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 8.0),
+                                  padding: const EdgeInsets.all(sPadding3),
+                                  width: double.maxFinite,
+                                  decoration: BoxDecoration(
+                                      color: classColor.shade100,
+                                      border: Border.fromBorderSide(BorderSide(
+                                          color: classColor.shade300,
+                                          width: 4)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(24))),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "Código da Turma",
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w600,
+                                            color: classColor.shade800),
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            classObj != null
+                                                ? Text(
+                                                    "${classObj?.inviteCode}",
+                                                    style: TextStyle(
+                                                        fontSize: 32,
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        color: classColor
+                                                            .shade900),
+                                                  )
+                                                : LoadingWidget(
+                                                    color: classColor.shade900)
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  )),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.all(sPadding3),
+                                width: double.maxFinite,
+                                decoration: BoxDecoration(
+                                    color: classColor.shade100,
+                                    border: Border.fromBorderSide(BorderSide(
+                                        color: classColor.shade300, width: 4)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(24))),
+                                child: Text(
+                                    "${MediaQuery.of(context).size.height} screenHeight"),
                               ),
-                            )
-                          ],
-                        )
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        padding: const EdgeInsets.all(sPadding3),
-                        width: double.maxFinite,
-                        decoration: BoxDecoration(
-                          color: classColor.shade100,
-                          border: Border.fromBorderSide(BorderSide(color: classColor.shade300, width: 4)),
-                          borderRadius: const BorderRadius.all(Radius.circular(24))
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ) : null
-            ),
-
+                      )
+                    : null),
           ),
-          DraggableScrollableSheet(
+          _selectedIndex == 0 ? DraggableScrollableSheet(
             expand: true,
             snap: true,
-            maxChildSize: 0.87,
-            initialChildSize: 0.64,
-            minChildSize: 0.64,
+            maxChildSize: calculatePercentageWithReference(
+                914, 0.87, MediaQuery.of(context).size.height),
+            initialChildSize: calculatePercentageWithReference(
+                914, 0.64, MediaQuery.of(context).size.height),
+            minChildSize: calculatePercentageWithReference(
+                914, 0.64, MediaQuery.of(context).size.height),
             shouldCloseOnMinExtent: false,
             builder: (context, scrollController) => Container(
               decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
-              ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16))),
               child: SingleChildScrollView(
                 controller: scrollController,
                 child: widgetOptions.elementAt(_selectedIndex),
               ),
             ),
+          ) : Container(
+            margin: const EdgeInsets.only(top: sAppBar + 24),
+            child: SingleChildScrollView(
+              child: widgetOptions.elementAt(_selectedIndex),
+            ),
           ),
-        ]
-      )
+        ],
+      ),
     );
   }
 }

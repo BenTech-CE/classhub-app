@@ -35,3 +35,18 @@ Color _shadeColor(Color color, double factor) => Color.fromRGBO(
       (color.blue * (1 - factor)).round(),
       1,
     );
+
+double calculatePercentageWithReference(double refHeight, double refPerc, double currentScreenHeight) {
+  final double referenceScreenHeight = refHeight;
+  final double referencePercentage = refPerc;
+
+  if (currentScreenHeight == referenceScreenHeight) {
+    return referencePercentage;
+  }
+
+  final double ratio = currentScreenHeight / referenceScreenHeight;
+
+  final double newPercentage = referencePercentage * ratio;
+
+  return newPercentage;
+}

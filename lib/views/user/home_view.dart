@@ -70,14 +70,26 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Suas Turmas"),
+        actionsPadding: const EdgeInsets.only(right: 5),
+        actions: [
+          IconButton(
+            onPressed: () {
+              authViewModel.signOut();
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const LoginView()));
+            },
+            icon: const Icon(Icons.logout),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _sheetCreateOrJoinClass(context);
-          },
-          shape: const CircleBorder(),
-          backgroundColor: cColorPrimary,
-          child: const Icon(Icons.add)),
+        onPressed: () {
+          _sheetCreateOrJoinClass(context);
+        },
+        shape: const CircleBorder(),
+        backgroundColor: cColorPrimary,
+        child: const Icon(Icons.add),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
@@ -95,25 +107,16 @@ class _HomeViewState extends State<HomeView> {
                         children: userViewModel.user!.classes.map((turma) {
                           return ClassCard(turma: turma);
                         }).toList())
-                    : Column(spacing: sSpacing, children: [
-                        Text("Aguarde enquanto carregamos suas turmas...", style: Theme.of(context).textTheme.titleMedium),
-                        const LoadingWidget(color: cColorPrimary,)
-                    ],),
-                // Botão Sair da Conta (sign out)
-                OutlinedButton(
-                    onPressed: () {
-                      authViewModel.signOut();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => const LoginView()));
-                    },
-                    child: const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text("Sair da Conta"))),
-                Text("Bem-vindo, ${userViewModel.user?.name}!",
-                    style: Theme.of(context).textTheme.labelLarge),
-                Text(
-                    "Você está em ${userViewModel.user?.classes.length} turmas.",
-                    style: Theme.of(context).textTheme.labelLarge),
+                    : Column(
+                        spacing: sSpacing,
+                        children: [
+                          Text("Aguarde enquanto carregamos suas turmas...",
+                              style: Theme.of(context).textTheme.titleMedium),
+                          const LoadingWidget(
+                            color: cColorPrimary,
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
