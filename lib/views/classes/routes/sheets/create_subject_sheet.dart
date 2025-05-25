@@ -111,7 +111,7 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
                           decoration: InputDecoration(
                               border: const RoundedColoredInputBorder(),
                               enabledBorder: const RoundedColoredInputBorder(),
-                              hintText: "Nome do(a) professor(a)",
+                              hintText: "Ex.: Maria da Silva",
                               hintStyle: AppTextTheme.placeholder),
                         ),
                       ]),

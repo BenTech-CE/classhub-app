@@ -2,7 +2,9 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/views/classes/routes/sheets/create_subject_sheet.dart';
+import 'package:classhub/views/user/widgets/subject_card.dart';
 import 'package:flutter/material.dart';
 
 class ClassSubjectsView extends StatefulWidget {
@@ -17,6 +19,28 @@ class ClassSubjectsView extends StatefulWidget {
 class _ClassSubjectsViewState extends State<ClassSubjectsView> {
 
   late MaterialColor classColor;
+
+  SubjectModel materiafake = SubjectModel.fromJson({
+      "id": "008f56bb-5c8e-4974-9352-bd569e0d1894",
+      "title": "Português II",
+      "teacher": "Jane",
+      "pud": null,
+      "class_id": "f9639c2f-f1d3-4a81-986c-200e51299e6a",
+      "schedule": {
+          "sunday": null,
+          "monday": {
+              "start_time": "13:30",
+              "end_time": "15:39",
+              "location": "BC 12"
+          },
+          "tuesday": null,
+          "wednesday": null,
+          "thursday": null,
+          "friday": null,
+          "saturday": null
+      },
+      "color": 4280521466
+  });
 
   void _sheetCreateSubject(BuildContext context) {
     showModalBottomSheet<void>(
@@ -45,19 +69,9 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                   padding: EdgeInsets.all(sPadding),
                   child: Column(
                     spacing: sSpacing,
-                    children: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                        .map((e) => Container(
-                              padding: EdgeInsets.all(sPadding3),
-                              alignment: Alignment.centerLeft,
-                              width: double.maxFinite,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: cColorText2Azul),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16))),
-                              child: Text("Matéria $e"),
-                            ))
-                        .toList(),
+                    children: [
+                      SubjectCard(subject: materiafake)
+                    ]
                   ),
                 ),
               ],

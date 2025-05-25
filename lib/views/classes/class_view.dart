@@ -261,6 +261,7 @@ class _ClassViewState extends State<ClassView> {
             ),
           ) : Container(
             width: double.maxFinite,
+            height: double.maxFinite,
             margin: const EdgeInsets.only(top: sAppBar + 24),
             child: widgetOptions.elementAt(_selectedIndex),
           ),
