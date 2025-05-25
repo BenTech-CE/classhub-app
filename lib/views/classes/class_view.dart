@@ -64,8 +64,8 @@ class _ClassViewState extends State<ClassView> {
 
     widgetOptions = [
       ClassMuralView(mClassObj: widget.mClassObj),
-      ClassCalendarView(),
-      ClassSubjectsView(),
+      ClassCalendarView(mClassObj: widget.mClassObj),
+      ClassSubjectsView(mClassObj: widget.mClassObj),
     ];
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -260,10 +260,9 @@ class _ClassViewState extends State<ClassView> {
               ),
             ),
           ) : Container(
+            width: double.maxFinite,
             margin: const EdgeInsets.only(top: sAppBar + 24),
-            child: SingleChildScrollView(
-              child: widgetOptions.elementAt(_selectedIndex),
-            ),
+            child: widgetOptions.elementAt(_selectedIndex),
           ),
         ],
       ),

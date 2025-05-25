@@ -1,7 +1,10 @@
+import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:flutter/material.dart';
 
 class ClassCalendarView extends StatefulWidget {
-  const ClassCalendarView({super.key});
+  final MinimalClassModel mClassObj;
+
+  const ClassCalendarView({super.key, required this.mClassObj});
 
   @override
   State<ClassCalendarView> createState() => _ClassCalendarViewState();

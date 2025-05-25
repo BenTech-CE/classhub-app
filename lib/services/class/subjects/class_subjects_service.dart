@@ -31,7 +31,7 @@ class ClassSubjectsService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return SubjectModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao criar a matéria: ${jsonResponse["error"]}");
@@ -44,7 +44,7 @@ class ClassSubjectsService {
 
     final response = await http.get(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}/$idSubject"),
+          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectEndpoint}/$idSubject"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -68,7 +68,7 @@ class ClassSubjectsService {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
-    final response = await http.put(
+    final response = await http.patch(
       Uri.parse(
           "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}/${subjectModel.id}"),
       headers: {
@@ -83,7 +83,7 @@ class ClassSubjectsService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return SubjectModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao atualizar a matéria: ${jsonResponse["error"]}");
@@ -96,7 +96,7 @@ class ClassSubjectsService {
 
     final response = await http.delete(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}/$idSubject"),
+          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectEndpoint}/$idSubject"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -121,7 +121,7 @@ class ClassSubjectsService {
 
     final response = await http.get(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}"),
+          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectsEndpoint}"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"

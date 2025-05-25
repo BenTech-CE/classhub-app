@@ -9,6 +9,8 @@ class Api {
   static const String joinClassEndpoint = '/join';
 
   static const String createSubjectEndpoint = '/materias';
+  static const String getSubjectEndpoint = '/materias';
+  static const String getSubjectsEndpoint = '/materias';
 
   static const String dummyImage = 'https://classhub.b-cdn.net/fematec.jpg';
 }
