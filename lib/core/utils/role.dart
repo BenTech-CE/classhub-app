@@ -14,4 +14,24 @@ enum Role {
       return null;
     }
   }
+
+  // Operador maior que (>)
+  bool operator >(Role other) {
+    return value > other.value;
+  }
+
+  // Operador menor que (<)
+  bool operator <(Role other) {
+    return value < other.value;
+  }
+
+  // Operador maior ou igual a (>=)
+  bool operator >=(Role other) {
+    return value >= other.value;
+  }
+
+  // Operador menor ou igual a (<=)
+  bool operator <=(Role other) {
+    return value <= other.value;
+  }
 }

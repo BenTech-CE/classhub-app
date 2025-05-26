@@ -1,3 +1,4 @@
+import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:flutter/material.dart';
 
 double remap(
@@ -49,4 +50,76 @@ double calculatePercentageWithReference(double refHeight, double refPerc, double
   final double newPercentage = referencePercentage * ratio;
 
   return newPercentage;
+}
+
+List<Map<String, dynamic>> groupScheduleByTime(Map<String, ScheduleWeekday?> schedule) {
+  final Map<ScheduleWeekday, List<String>> grouped = {};
+  final dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  schedule.forEach((day, weekdaySchedule) {
+    if (weekdaySchedule != null) {
+      if (grouped.containsKey(weekdaySchedule)) {
+        grouped[weekdaySchedule]!.add(day);
+      } else {
+        grouped[weekdaySchedule] = [day];
+      }
+    }
+  });
+
+  return grouped.entries.map((entry) {
+    final weekdaySchedule = entry.key;
+    final days = entry.value..sort((a, b) => dayOrder.indexOf(a).compareTo(dayOrder.indexOf(b)));
+    return {
+      'days': days,
+      'time': {
+        'start_time': weekdaySchedule.startTime,
+        'end_time': weekdaySchedule.endTime,
+      },
+    };
+  }).toList();
+}
+
+List<Map<String, dynamic>> groupScheduleByLocation(Map<String, ScheduleWeekday?> schedule) {
+  final Map<String, List<String>> grouped = {};
+  final dayOrder = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+  schedule.forEach((day, weekdaySchedule) {
+    if (weekdaySchedule != null) {
+      if (grouped.containsKey(weekdaySchedule.location)) {
+        grouped[weekdaySchedule.location]!.add(day);
+      } else {
+        grouped[weekdaySchedule.location] = [day];
+      }
+    }
+  });
+
+  return grouped.entries.map((entry) {
+    final location = entry.key;
+    final days = entry.value..sort((a, b) => dayOrder.indexOf(a).compareTo(dayOrder.indexOf(b)));
+    return {
+      'days': days,
+      'location': location
+    };
+  }).toList();
+}
+
+String dayOfWeekAbbreviated(String dayOfWeek) {
+  switch (dayOfWeek.toLowerCase()) {
+    case 'monday':
+      return 'Seg';
+    case 'tuesday':
+      return 'Ter';
+    case 'wednesday':
+      return 'Qua';
+    case 'thursday':
+      return 'Qui';
+    case 'friday':
+      return 'Sex';
+    case 'saturday':
+      return 'Sáb';
+    case 'sunday':
+      return 'Dom';
+    default:
+      return dayOfWeek; // Retorna o dia original se não houver tradução
+  }
 }

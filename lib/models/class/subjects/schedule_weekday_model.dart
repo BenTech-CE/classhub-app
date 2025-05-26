@@ -24,4 +24,15 @@ class ScheduleWeekday {
       'location': location,
     };
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScheduleWeekday &&
+          runtimeType == other.runtimeType &&
+          startTime == other.startTime &&
+          endTime == other.endTime;
+
+  @override
+  int get hashCode => startTime.hashCode ^ endTime.hashCode;
 }

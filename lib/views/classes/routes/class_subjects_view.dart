@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/views/classes/routes/sheets/create_subject_sheet.dart';
 import 'package:classhub/views/user/widgets/subject_card.dart';
@@ -23,18 +27,18 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
   SubjectModel materiafake = SubjectModel.fromJson({
       "id": "008f56bb-5c8e-4974-9352-bd569e0d1894",
       "title": "Português II",
-      "teacher": "Jane",
-      "pud": null,
+      "teacher": "Janieyre",
+      "pud": "https://www.google.com",
       "class_id": "f9639c2f-f1d3-4a81-986c-200e51299e6a",
       "schedule": {
           "sunday": null,
           "monday": {
               "start_time": "13:30",
-              "end_time": "15:39",
+              "end_time": "15:30",
               "location": "BC 12"
           },
-          "tuesday": null,
           "wednesday": null,
+          "tuesday": null,
           "thursday": null,
           "friday": null,
           "saturday": null
@@ -70,14 +74,14 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                   child: Column(
                     spacing: sSpacing,
                     children: [
-                      SubjectCard(subject: materiafake)
+                      SubjectCard(mClassObj: widget.mClassObj, subject: materiafake)
                     ]
                   ),
                 ),
               ],
             ),
           ),
-          Positioned(
+          widget.mClassObj.role >= Role.viceLider ? Positioned(
             right: 16.0, // Distância da direita
             bottom: 16.0, // Distância de baixo
             child: FloatingActionButton(
@@ -86,7 +90,7 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
               backgroundColor: classColor,
               child: const Icon(Icons.add),
             ),
-          ),
+          ) : Container(),
         ],
     );
   }
