@@ -46,6 +46,54 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
       "color": 4280521466
   });
 
+  SubjectModel materiafake2 = SubjectModel.fromJson({
+      "id": "008f56bb-5c8e-4974-9352-bd569e0d1894",
+      "title": "Programação Web I",
+      "teacher": "José Roberto",
+      "pud": "https://www.google.com",
+      "class_id": "f9639c2f-f1d3-4a81-986c-200e51299e6a",
+      "schedule": {
+          "sunday": null,
+          "monday": null,
+          "wednesday": null,
+          "tuesday": {
+              "start_time": "13:30",
+              "end_time": "15:30",
+              "location": "LMC4"
+          },
+          "thursday": {
+              "start_time": "13:30",
+              "end_time": "15:30",
+              "location": "LMC4"
+          },
+          "friday": null,
+          "saturday": null
+      },
+      "color": Color.fromARGB(255, 240, 65, 243).toARGB32()
+  });
+
+  SubjectModel materiafake3 = SubjectModel.fromJson({
+      "id": "008f56bb-5c8e-4974-9352-bd569e0d1894",
+      "title": "Matemática VI",
+      "teacher": "Kiara",
+      "pud": "https://www.google.com",
+      "class_id": "f9639c2f-f1d3-4a81-986c-200e51299e6a",
+      "schedule": {
+          "sunday": null,
+          "monday": null,
+          "wednesday": {
+              "start_time": "13:30",
+              "end_time": "15:30",
+              "location": "BC 48"
+          },
+          "tuesday": null,
+          "thursday": null,
+          "friday": null,
+          "saturday": null
+      },
+      "color": Color.fromARGB(255, 250, 90, 16).toARGB32()
+  });
+
   void _sheetCreateSubject(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
@@ -74,7 +122,9 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                   child: Column(
                     spacing: sSpacing,
                     children: [
-                      SubjectCard(mClassObj: widget.mClassObj, subject: materiafake)
+                      SubjectCard(mClassObj: widget.mClassObj, subject: materiafake),
+                      SubjectCard(mClassObj: widget.mClassObj, subject: materiafake2),
+                      SubjectCard(mClassObj: widget.mClassObj, subject: materiafake3)
                     ]
                   ),
                 ),

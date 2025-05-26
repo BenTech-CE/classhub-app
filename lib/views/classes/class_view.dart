@@ -241,12 +241,9 @@ class _ClassViewState extends State<ClassView> {
           _selectedIndex == 0 ? DraggableScrollableSheet(
             expand: true,
             snap: true,
-            maxChildSize: calculatePercentageWithReference(
-                914, 0.87, MediaQuery.of(context).size.height),
-            initialChildSize: calculatePercentageWithReference(
-                914, 0.64, MediaQuery.of(context).size.height),
-            minChildSize: calculatePercentageWithReference(
-                914, 0.64, MediaQuery.of(context).size.height),
+            maxChildSize: 0.87,
+            initialChildSize: 0.64,
+            minChildSize: 0.64,
             shouldCloseOnMinExtent: false,
             builder: (context, scrollController) => Container(
               decoration: const BoxDecoration(
@@ -262,7 +259,7 @@ class _ClassViewState extends State<ClassView> {
           ) : Container(
             width: double.maxFinite,
             height: double.maxFinite,
-            margin: const EdgeInsets.only(top: sAppBar + 24),
+            margin: const EdgeInsets.only(top: sAppBar),
             child: widgetOptions.elementAt(_selectedIndex),
           ),
         ],

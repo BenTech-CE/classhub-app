@@ -250,8 +250,8 @@ class _SubjectCardState extends State<SubjectCard> {
                             icon: HugeIcons.strokeRoundedLocation04,
                             color: Colors.black),
                         groupedScheduleLocations.length < 2 ? Text(
-                          "BC-17",
-                          style: TextStyle(
+                          groupedScheduleLocations[0]["location"],
+                          style: const TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w500,
                             color: Colors.black,
@@ -344,7 +344,7 @@ class _SubjectCardState extends State<SubjectCard> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 HugeIcon(size: 20, icon: HugeIcons.strokeRoundedLink04, color: color.shade900),
-                                const Text("PUD - Conteúdos")
+                                const Text("PUD")
                               ],
                             ),
                           ),
