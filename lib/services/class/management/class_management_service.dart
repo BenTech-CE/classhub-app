@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:classhub/core/utils/api.dart';
@@ -7,8 +6,6 @@ import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 
 class ClassManagementService {
   // final http = Client();

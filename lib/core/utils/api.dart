@@ -8,6 +8,8 @@ class Api {
   static const String getClassEndpoint = '/api/turmas';
   static const String joinClassEndpoint = '/join';
 
+  static const String membersClassEndpoint = '/membros';
+
   static const String createSubjectEndpoint = '/materias';
   static const String getSubjectEndpoint = '/materias';
   static const String getSubjectsEndpoint = '/materias';
