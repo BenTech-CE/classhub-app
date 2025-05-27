@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 const cColorPrimary = Color(0xFF024D94);
 const cColorSecond = Color.fromARGB(255, 42, 122, 196);
 const cColorTertiary = Color(0xFFE3EDF6);
+const cColorTertiary2 = Color(0xFFD1E2F2);
 const cColorAzulSecondary = Color(0xFF90BCE5);
 
 const cColorSuccess = Colors.green;

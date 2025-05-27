@@ -2,12 +2,12 @@ import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 
 class SubjectModel {
   final String id;
-  final String title;
-  final String? teacher;
-  final String? pud;
+  String title;
+  String? teacher;
+  String? pud;
   final String? classId;
-  final Map<String, ScheduleWeekday?> schedule;
-  final int? color;
+  Map<String, ScheduleWeekday?> schedule;
+  int? color;
 
   SubjectModel({
     required this.id,

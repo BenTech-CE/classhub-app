@@ -2,8 +2,11 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
+import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
+import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
+import 'package:classhub/widgets/ui/weekday_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -18,6 +21,25 @@ class CreateSubjectSheet extends StatefulWidget {
 
 class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
   Color currentColor = Color(4280521466);
+
+  SubjectModel subject = SubjectModel(id: "", title: "", schedule: <String, ScheduleWeekday?>{
+    "sunday": null,
+    "monday": null,
+    "tuesday": null,
+    "wednesday": null,
+    "thursday": null,
+    "friday": null,
+    "saturday": null
+  });
+
+  void _handleSubjectUpdate() {
+    setState(() {
+      // O objeto 'subject' já foi modificado pelo weekday_select.dart
+      // Apenas chamamos setState para informar ao Flutter que a UI precisa ser reconstruída.
+    });
+
+    print(subject.schedule);
+  }
 
   void _btnCreate(BuildContext context) {
     
@@ -147,6 +169,19 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
                               ]),
                         )
                       ]),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text("Dias de encontro ${subject.title}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyLarge
+                            ?.copyWith(color: cColorTextAzul),
+                        textAlign: TextAlign.start),
+                    const SizedBox(height: 5,),
+                    WeekdaySelect(subject: subject, onSubjectChanged: _handleSubjectUpdate,),
+                  ]),
+                  
                   ElevatedButton(
                     child: subjectsViewModel.isLoading
                         ? const LoadingWidget()
