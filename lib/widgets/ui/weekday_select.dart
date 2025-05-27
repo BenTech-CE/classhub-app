@@ -41,7 +41,7 @@ class _WeekdaySelectState extends State<WeekdaySelect> {
               onTap: () {
                 setState(() {
                   if (entry.value == null) {
-                    widget.subject.schedule[entry.key] = ScheduleWeekday(startTime: "10:00", endTime: "12:00", location: "");
+                    widget.subject.schedule[entry.key] = ScheduleWeekday(startTime: "", endTime: "", location: "");
                   } else {
                     widget.subject.schedule[entry.key] = null;
                   }
@@ -52,7 +52,7 @@ class _WeekdaySelectState extends State<WeekdaySelect> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: ShapeDecoration(
-                  color: entry.value == null ? cColorTertiary2 : cColorAzulSecondary,
+                  color: entry.value == null ? cColorTertiary2 : Color(0xFF9BC6E5),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(9)),
                 ),

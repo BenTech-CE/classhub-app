@@ -62,7 +62,7 @@ class ClassSubjectsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<List<SubjectModel?>> getSubjects(String idClass) async {
+  Future<List<SubjectModel>> getSubjects(String idClass) async {
     isLoading = true;
     notifyListeners();
 

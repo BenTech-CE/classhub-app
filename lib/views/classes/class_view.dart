@@ -256,11 +256,13 @@ class _ClassViewState extends State<ClassView> {
                 child: widgetOptions.elementAt(_selectedIndex),
               ),
             ),
-          ) : Container(
-            width: double.maxFinite,
-            height: double.maxFinite,
-            margin: const EdgeInsets.only(top: sAppBar),
-            child: widgetOptions.elementAt(_selectedIndex),
+          ) : SafeArea(
+            child: Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              margin: const EdgeInsets.only(top: kToolbarHeight),
+              child: widgetOptions.elementAt(_selectedIndex),
+            ),
           ),
         ],
       ),

@@ -1,11 +1,16 @@
+import 'dart:convert';
+
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
+import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
+import 'package:classhub/widgets/ui/weekday_card.dart';
 import 'package:classhub/widgets/ui/weekday_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -13,13 +18,19 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class CreateSubjectSheet extends StatefulWidget {
-  const CreateSubjectSheet({super.key});
+  final String classId;
+  final VoidCallback onSubjectCreated; 
+
+  const CreateSubjectSheet({super.key, required this.classId, required this.onSubjectCreated});
 
   @override
   State<CreateSubjectSheet> createState() => _CreateSubjectSheetState();
 }
 
 class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
+  final _titleTF = TextEditingController();
+  final _teacherTF = TextEditingController();
+
   Color currentColor = Color(4280521466);
 
   SubjectModel subject = SubjectModel(id: "", title: "", schedule: <String, ScheduleWeekday?>{
@@ -38,11 +49,47 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
       // Apenas chamamos setState para informar ao Flutter que a UI precisa ser reconstruída.
     });
 
-    print(subject.schedule);
+    print(jsonEncode(subject.schedule));
   }
 
-  void _btnCreate(BuildContext context) {
-    
+  void _btnCreate(BuildContext context) async {
+    setState(() {
+      subject.title = _titleTF.text;
+      subject.teacher = _teacherTF.text;
+      subject.color = currentColor.toARGB32();
+    });
+
+    if (subject.schedule.entries.where((entry) => entry.value != null).isEmpty) return; // Alertar
+
+    final userViewModel = context.read<UserViewModel>();
+    final subjectViewModel = context.read<ClassSubjectsViewModel>();
+
+    SubjectModel? result = await subjectViewModel.createSubject(widget.classId, subject);
+
+    if (result != null) {
+      widget.onSubjectCreated();
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Matéria criada com sucesso!",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorSuccess,
+      ));
+
+      Navigator.of(context).pop();
+    } else if (subjectViewModel.error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          subjectViewModel.error!,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+
+      //Navigator.popUntil(context, (route) => route.isFirst);
+    }
   }
 
   void _colorPicker() {
@@ -57,6 +104,7 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
               onColorChanged: (color) {
                 setState(() {
                   currentColor = color;
+                  subject.color = color.toARGB32();
                 });
 
                 Navigator.of(ctx).pop();
@@ -66,130 +114,144 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
     );
   }
 
+  @override void dispose() {
+    super.dispose();
+    _titleTF.dispose();
+    _teacherTF.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ClassSubjectsViewModel subjectsViewModel =
         context.watch<ClassSubjectsViewModel>();
 
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + sPadding3),
-          child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: sPadding3),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: sSpacing,
-                children: [
-                  Text("Criar Matéria",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.copyWith(color: cColorPrimary),
-                      textAlign: TextAlign.center),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text("Título",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: cColorTextAzul),
-                            textAlign: TextAlign.start),
-                        TextField(
-                          /*controller: _titleTF,
-                          focusNode: _titleFocus,
-                          onSubmitted: (_) {
-                            FocusScope.of(context).requestFocus(_schoolFocus);
-                          },*/
-                          textInputAction: TextInputAction.next,
-                          decoration: const InputDecoration(
-                              border: RoundedColoredInputBorder(),
-                              enabledBorder: RoundedColoredInputBorder(),
-                              hintText: "Ex.: Português I",
-                              hintStyle: TextStyle(
-                                  fontFamily: "Onest",
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16.0,
-                                  color: cColorText2Azul)),
-                        ),
-                      ]),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text("Professor(a)",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: cColorTextAzul),
-                            textAlign: TextAlign.start),
-                        TextField(
-                          //controller: _titleTF,
-                          //focusNode: _titleFocus,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                              border: const RoundedColoredInputBorder(),
-                              enabledBorder: const RoundedColoredInputBorder(),
-                              hintText: "Ex.: Maria da Silva",
-                              hintStyle: AppTextTheme.placeholder),
-                        ),
-                      ]),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Cor de destaque",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: cColorTextAzul),
-                            textAlign: TextAlign.start),
-                        GestureDetector(
-                          onTap: () => _colorPicker(),
-                          child: Stack(
-                              alignment: AlignmentDirectional.center,
-                              children: [
-                                Image.asset("assets/images/rainbow.png",
-                                    width: 45, height: 45),
-                                Container(
-                                  width: 37,
-                                  height: 37,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: currentColor,
-                                  ),
-                                ),
-                                const HugeIcon(
-                                  icon: HugeIcons.strokeRoundedPaintBoard,
-                                  color: Colors.white,
-                                  size: 29,
-                                )
-                              ]),
-                        )
-                      ]),
-                Column(
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.85
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + sPadding3),
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: sPadding3),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  spacing: sSpacing,
                   children: [
-                    Text("Dias de encontro ${subject.title}",
+                    Text("Criar Matéria",
                         style: Theme.of(context)
                             .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: cColorTextAzul),
-                        textAlign: TextAlign.start),
-                    const SizedBox(height: 5,),
-                    WeekdaySelect(subject: subject, onSubjectChanged: _handleSubjectUpdate,),
-                  ]),
-                  
-                  ElevatedButton(
-                    child: subjectsViewModel.isLoading
-                        ? const LoadingWidget()
-                        : const Text("Criar Matéria"),
-                    onPressed: () => _btnCreate(context),
-                  ),
-                ],
-              )),
+                            .titleLarge
+                            ?.copyWith(color: cColorPrimary),
+                        textAlign: TextAlign.center),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text("Título",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: cColorTextAzul),
+                              textAlign: TextAlign.start),
+                          TextField(
+                            controller: _titleTF,
+                            textInputAction: TextInputAction.next,
+                            decoration: const InputDecoration(
+                                border: RoundedColoredInputBorder(),
+                                enabledBorder: RoundedColoredInputBorder(),
+                                hintText: "Ex.: Português I",
+                                hintStyle: TextStyle(
+                                    fontFamily: "Onest",
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16.0,
+                                    color: cColorText2Azul)),
+                          ),
+                        ]),
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text("Professor(a)",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: cColorTextAzul),
+                              textAlign: TextAlign.start),
+                          TextField(
+                            controller: _teacherTF,
+                            //focusNode: _titleFocus,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                                border: const RoundedColoredInputBorder(),
+                                enabledBorder: const RoundedColoredInputBorder(),
+                                hintText: "Ex.: Maria da Silva",
+                                hintStyle: AppTextTheme.placeholder),
+                          ),
+                        ]),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Cor de destaque",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: cColorTextAzul),
+                              textAlign: TextAlign.start),
+                          GestureDetector(
+                            onTap: () => _colorPicker(),
+                            child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  Image.asset("assets/images/rainbow.png",
+                                      width: 45, height: 45),
+                                  Container(
+                                    width: 37,
+                                    height: 37,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: currentColor,
+                                    ),
+                                  ),
+                                  const HugeIcon(
+                                    icon: HugeIcons.strokeRoundedPaintBoard,
+                                    color: Colors.white,
+                                    size: 29,
+                                  )
+                                ]),
+                          )
+                        ]),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    spacing: 5,
+                    children: [
+                      Text("Dias de encontro",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge
+                              ?.copyWith(color: cColorTextAzul),
+                          textAlign: TextAlign.start),
+                      WeekdaySelect(subject: subject, onSubjectChanged: _handleSubjectUpdate,),
+                      ...subject.schedule.entries
+                        .where((entry) => entry.value != null)
+                        .map((entry) => WeekdayCard(
+                            subject: subject,
+                            onSubjectChanged: _handleSubjectUpdate,
+                            weekday: entry.key,
+                          ))
+                    ]),
+                    
+                    ElevatedButton(
+                      child: subjectsViewModel.isLoading
+                          ? const LoadingWidget()
+                          : const Text("Criar Matéria"),
+                      onPressed: () => _btnCreate(context),
+                    ),
+                  ],
+                )),
+          ),
         ),
       ),
     );

@@ -123,3 +123,56 @@ String dayOfWeekAbbreviated(String dayOfWeek) {
       return dayOfWeek; // Retorna o dia original se não houver tradução
   }
 }
+
+String dayOfWeekNormalized(String dayOfWeek) {
+  switch (dayOfWeek.toLowerCase()) {
+    case 'monday':
+      return 'Segunda-feira';
+    case 'tuesday':
+      return 'Terça-feira';
+    case 'wednesday':
+      return 'Quarta-feira';
+    case 'thursday':
+      return 'Quinta-feira';
+    case 'friday':
+      return 'Sexta-feira';
+    case 'saturday':
+      return 'Sábado';
+    case 'sunday':
+      return 'Domingo';
+    default:
+      return dayOfWeek; // Retorna o dia original se não houver tradução
+  }
+}
+
+String timeOfDayToString(TimeOfDay time) {
+  final String hour = time.hour.toString().padLeft(2, '0');
+  final String minute = time.minute.toString().padLeft(2, '0');
+  
+  return '$hour:$minute';
+}
+
+TimeOfDay? stringToTimeOfDay(String timeString) {
+  try {
+    final parts = timeString.split(':');
+    if (parts.length != 2) {
+      return null; 
+    }
+
+    final int? hour = int.tryParse(parts[0]);
+    final int? minute = int.tryParse(parts[1]);
+
+    if (hour == null || minute == null) {
+      return null;
+    }
+
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+      return null;
+    }
+
+    return TimeOfDay(hour: hour, minute: minute);
+
+  } catch (e) {
+    return null;
+  }
+}

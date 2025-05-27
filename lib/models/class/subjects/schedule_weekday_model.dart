@@ -1,7 +1,7 @@
 class ScheduleWeekday {
-  final String startTime;
-  final String endTime;
-  final String location;
+  String startTime;
+  String endTime;
+  String location;
 
   ScheduleWeekday({
     required this.startTime,

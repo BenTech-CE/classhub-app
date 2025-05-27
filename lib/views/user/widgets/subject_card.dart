@@ -312,7 +312,7 @@ class _SubjectCardState extends State<SubjectCard> {
                           spacing: 8.0,
                           children: [
                             const HugeIcon(
-                                icon: HugeIcons.strokeRoundedTeacher,
+                                icon: HugeIcons.strokeRoundedTeaching,
                                 color: Colors.black),
                             Text(
                               widget.subject.teacher ?? "Sem professor",

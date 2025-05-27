@@ -132,6 +132,7 @@ class ClassSubjectsService {
     print(response.body);
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+    
     if (response.statusCode == 200) {
       List<SubjectModel> subjects = [];
       for (var subject in jsonResponse['subjects']) {
