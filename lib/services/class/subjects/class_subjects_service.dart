@@ -18,7 +18,7 @@ class ClassSubjectsService {
 
     final response = await http.post(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}"),
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.subjectEndpoint}"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -38,13 +38,40 @@ class ClassSubjectsService {
     }
   }
 
+  Future<SubjectModel> editSubject(
+      String idClass, SubjectModel subjectModel) async {
+    final token = await authService.getToken();
+    if (token == null) throw Exception('Token não encontrado');
+
+    final response = await http.put(
+      Uri.parse(
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.subjectEndpoint}/${subjectModel.id}"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+      body: jsonEncode(subjectModel.toJson()),
+    );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return SubjectModel.fromJson(jsonResponse);
+    } else {
+      throw Exception("Erro ao editar a matéria: ${jsonResponse["error"]}");
+    }
+  }
+
   Future<SubjectModel> getSubject(String idClass, String idSubject) async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectEndpoint}/$idSubject"),
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.subjectEndpoint}/$idSubject"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -63,40 +90,13 @@ class ClassSubjectsService {
     }
   }
 
-  Future<SubjectModel> updateSubject(
-      String idClass, SubjectModel subjectModel) async {
-    final token = await authService.getToken();
-    if (token == null) throw Exception('Token não encontrado');
-
-    final response = await http.patch(
-      Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.createSubjectEndpoint}/${subjectModel.id}"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: jsonEncode(subjectModel.toJson()),
-    );
-
-    print(response.statusCode);
-    print(response.body);
-
-    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-
-    if (response.statusCode == 200) {
-      return SubjectModel.fromJson(jsonResponse);
-    } else {
-      throw Exception("Erro ao atualizar a matéria: ${jsonResponse["error"]}");
-    }
-  }
-
   Future<bool> deleteSubject(String idClass, String idSubject) async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectEndpoint}/$idSubject"),
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.subjectEndpoint}/$idSubject"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -121,7 +121,7 @@ class ClassSubjectsService {
 
     final response = await http.get(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.getSubjectsEndpoint}"),
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.subjectEndpoint}"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -132,7 +132,7 @@ class ClassSubjectsService {
     print(response.body);
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
-    
+
     if (response.statusCode == 200) {
       List<SubjectModel> subjects = [];
       for (var subject in jsonResponse['subjects']) {

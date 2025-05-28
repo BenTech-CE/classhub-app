@@ -27,6 +27,23 @@ class ClassManagementViewModel extends ChangeNotifier {
     return null;
   }
 
+  Future<MinimalClassModel?> editClass(ClassModel classModel) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return await classManagementService.editClass(classModel);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    return null;
+  }
+
   Future<ClassModel?> getClass(String idClass) async {
     isLoading = true;
     notifyListeners();

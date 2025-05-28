@@ -15,7 +15,7 @@ class ClassMembersService {
 
     final response = await http.delete(
       Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass${Api.membersClassEndpoint}/$idUser"),
+          "${Api.baseUrl}${Api.classEndpoint}/$idClass${Api.membersClassEndpoint}/$idUser"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"

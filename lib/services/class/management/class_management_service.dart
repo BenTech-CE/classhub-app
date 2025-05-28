@@ -17,7 +17,7 @@ class ClassManagementService {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
-    var uri = Uri.parse("${Api.baseUrl}${Api.createClassEndpoint}");
+    var uri = Uri.parse("${Api.baseUrl}${Api.classEndpoint}");
 
     Map<String, String> requestBody = classModel.toJson();
     Map<String, String> headers = <String, String>{
@@ -29,8 +29,10 @@ class ClassManagementService {
       ..fields.addAll(requestBody);
 
     if (classModel.banner != null) {
-      final Uint8List fileBytes =  await classModel.banner!.readAsBytes();
-      final multipartFileBanner = http.MultipartFile.fromBytes('banner',  fileBytes, filename: classModel.banner!.name);
+      final Uint8List fileBytes = await classModel.banner!.readAsBytes();
+      final multipartFileBanner = http.MultipartFile.fromBytes(
+          'banner', fileBytes,
+          filename: classModel.banner!.name);
       request.files.add(multipartFileBanner);
     }
 
@@ -50,12 +52,51 @@ class ClassManagementService {
     }
   }
 
+  Future<MinimalClassModel> editClass(ClassModel classModel) async {
+    final token = await authService.getToken();
+    if (token == null) throw Exception('Token não encontrado');
+
+    var uri = Uri.parse("${Api.baseUrl}${Api.classEndpoint}/${classModel.id}");
+
+    Map<String, String> requestBody = classModel.toJson();
+    Map<String, String> headers = <String, String>{
+      "Authorization": "Bearer $token"
+    };
+
+    var request = http.MultipartRequest('PUT', uri)
+      ..headers.addAll(headers)
+      ..fields.addAll(requestBody);
+
+    if (classModel.banner != null) {
+      final Uint8List fileBytes = await classModel.banner!.readAsBytes();
+      final multipartFileBanner = http.MultipartFile.fromBytes(
+          'banner', fileBytes,
+          filename: classModel.banner!.name);
+      request.files.add(multipartFileBanner);
+    }
+
+    var response = await request.send();
+
+    final respStr = await response.stream.bytesToString();
+
+    Map<String, dynamic> jsonResponse = jsonDecode(respStr);
+
+    print(response.statusCode);
+    print(jsonResponse);
+
+    if (response.statusCode == 201) {
+      return MinimalClassModel.fromJson(jsonResponse);
+    } else {
+      throw Exception("Erro ao editar a turma: ${jsonResponse["error"]}");
+    }
+  }
+
   Future<ClassModel> getClass(String idClass) async {
     final token = await authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
-      Uri.parse("${Api.baseUrl}${Api.getClassEndpoint}/$idClass"),
+      Uri.parse("${Api.baseUrl}${Api.classEndpoint}/$idClass"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
@@ -79,16 +120,12 @@ class ClassManagementService {
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.post(
-      Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}${Api.joinClassEndpoint}"),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: jsonEncode({
-        "invite_code": idClass
-      })
-    );
+        Uri.parse("${Api.baseUrl}${Api.classEndpoint}${Api.joinClassEndpoint}"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: jsonEncode({"invite_code": idClass}));
 
     print(response.statusCode);
     print(response.body);
@@ -107,8 +144,7 @@ class ClassManagementService {
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(
-      Uri.parse(
-          "${Api.baseUrl}${Api.getClassEndpoint}/$idClass"),
+      Uri.parse("${Api.baseUrl}${Api.classEndpoint}/$idClass"),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"

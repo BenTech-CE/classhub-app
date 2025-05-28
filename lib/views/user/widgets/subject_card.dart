@@ -25,7 +25,6 @@ class SubjectCard extends StatefulWidget {
 }
 
 class _SubjectCardState extends State<SubjectCard> {
-
   final collapsedHeight = 60.0;
 
   late MaterialColor color;
@@ -37,7 +36,7 @@ class _SubjectCardState extends State<SubjectCard> {
   void initState() {
     super.initState();
 
-    color = generateMaterialColor(Color(widget.subject.color??0));
+    color = generateMaterialColor(Color(widget.subject.color ?? 0));
     groupedSchedule = groupScheduleByTime(widget.subject.schedule);
     groupedScheduleLocations = groupScheduleByLocation(widget.subject.schedule);
   }
@@ -87,30 +86,33 @@ class _SubjectCardState extends State<SubjectCard> {
                       icon: HugeIcons.strokeRoundedBookBookmark02,
                       color: color.shade800,
                     ),
-                    Text(widget.subject.title,
+                    Text(
+                      widget.subject.title,
                       style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                        color: color.shade800
-                      ),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          color: color.shade800),
                     ),
                   ],
                 ),
               ),
-              widget.mClassObj.role >= Role.viceLider ? PopupMenuButton<String>(
-                icon: Icon(Icons.more_vert, size: 24.0, color: color.shade800),
-                onSelected: (String value) async {
-                  if (value == 'edit') {
-                    // Edit action
-                  } else if (value == 'delete') {
-                    // Delete action
-                  }
-                },
-                itemBuilder: (BuildContext context) =>
-                    popupMenuItemsLeader,
-                // atention: Offset de onde irá aparecer o menu (x, y)
-                offset: const Offset(-24, 24),
-              ) : Container()
+              widget.mClassObj.role >= Role.viceLider
+                  ? PopupMenuButton<String>(
+                      icon: Icon(Icons.more_vert,
+                          size: 24.0, color: color.shade800),
+                      onSelected: (String value) async {
+                        if (value == 'edit') {
+                          // Edit action
+                        } else if (value == 'delete') {
+                          // Delete action
+                        }
+                      },
+                      itemBuilder: (BuildContext context) =>
+                          popupMenuItemsLeader,
+                      // atention: Offset de onde irá aparecer o menu (x, y)
+                      offset: const Offset(-24, 24),
+                    )
+                  : Container()
             ],
           ),
         ),
@@ -119,7 +121,7 @@ class _SubjectCardState extends State<SubjectCard> {
         decoration: BoxDecoration(
           color: color.shade50,
           border: Border.fromBorderSide(border),
-            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          borderRadius: BorderRadius.all(Radius.circular(12.0)),
         ),
         child: Column(
           children: [
@@ -132,12 +134,14 @@ class _SubjectCardState extends State<SubjectCard> {
                   borderRadius: BorderRadius.all(Radius.circular(12.0)),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2), // Cor da sombra (ajuste a opacidade)
-                      spreadRadius: 0, // Quão longe a sombra se espalha antes do blur
-                      blurRadius: 4,   // A intensidade do desfoque da sombra
+                      color: Colors.black.withOpacity(
+                          0.2), // Cor da sombra (ajuste a opacidade)
+                      spreadRadius:
+                          0, // Quão longe a sombra se espalha antes do blur
+                      blurRadius: 4, // A intensidade do desfoque da sombra
                       offset: Offset(0, 2), // Deslocamento da sombra:
-                                            // 0 no eixo X (horizontal)
-                                            // 2 (ou outro valor positivo) no eixo Y para mover a sombra para BAIXO
+                      // 0 no eixo X (horizontal)
+                      // 2 (ou outro valor positivo) no eixo Y para mover a sombra para BAIXO
                     ),
                   ],
                 ),
@@ -154,234 +158,265 @@ class _SubjectCardState extends State<SubjectCard> {
                             icon: HugeIcons.strokeRoundedBookBookmark02,
                             color: color.shade800,
                           ),
-                          Text(widget.subject.title,
+                          Text(
+                            widget.subject.title,
                             style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              color: color.shade800
-                            ),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: color.shade800),
                           ),
                         ],
                       ),
                     ),
-                    widget.mClassObj.role >= Role.viceLider ? PopupMenuButton<String>(
-                      icon: Icon(Icons.more_vert, size: 24.0, color: color.shade800),
-                      onSelected: (String value) async {
-                        if (value == 'edit') {
-                          // Edit action
-                        } else if (value == 'delete') {
-                          // Delete action
-                        }
-                      },
-                      itemBuilder: (BuildContext context) =>
-                          popupMenuItemsLeader,
-                      // atention: Offset de onde irá aparecer o menu (x, y)
-                      offset: const Offset(-24, 24),
-                    ) : Container()
+                    widget.mClassObj.role >= Role.viceLider
+                        ? PopupMenuButton<String>(
+                            icon: Icon(Icons.more_vert,
+                                size: 24.0, color: color.shade800),
+                            onSelected: (String value) async {
+                              if (value == 'edit') {
+                                // Edit action
+                              } else if (value == 'delete') {
+                                // Delete action
+                              }
+                            },
+                            itemBuilder: (BuildContext context) =>
+                                popupMenuItemsLeader,
+                            // atention: Offset de onde irá aparecer o menu (x, y)
+                            offset: const Offset(-24, 24),
+                          )
+                        : Container()
                   ],
                 ),
               ),
             ),
             Container(
-                width: double.maxFinite,
-                padding: EdgeInsets.all(sPadding3),
-                child: Column(
-                  spacing: 5.0,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 8.0,
-                      children: [
-                        const HugeIcon(
-                            icon: HugeIcons.strokeRoundedCalendar03,
-                            color: Colors.black),
-                        Expanded(
-                          child: Wrap(
-                            spacing: 8.0,
-                            runSpacing: 4,
-                            children: groupedSchedule.map((e) {
-                              return Row(
-                                spacing: 8.0,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    spacing: 4,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: (e["days"] as List<String>).map((day) =>
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 3.0),
-                                        decoration: BoxDecoration(
-                                          color: color.shade200,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(100),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          dayOfWeekAbbreviated(day),
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: color.shade800),
-                                        ),
-                                      ),
-                                    ).toList(),
-                                  ),
-                                  Text(
-                                    "${e["time"]["start_time"]} > ${e["time"]["end_time"]}",
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      spacing: 8.0,
-                      children: [
-                        const HugeIcon(
-                            icon: HugeIcons.strokeRoundedLocation04,
-                            color: Colors.black),
-                        groupedScheduleLocations.length < 2 ? Text(
-                          groupedScheduleLocations[0]["location"],
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        )
-                        : Expanded(
-                          child: Wrap(
-                            spacing: 8.0,
-                            runSpacing: 4,
-                            children: groupedScheduleLocations.map((e) {
-                              return Row(
-                                spacing: 8.0,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    spacing: 4,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: (e["days"] as List<String>).map((day) =>
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8.0, vertical: 3.0),
-                                        decoration: BoxDecoration(
-                                          color: color.shade200,
-                                          borderRadius: const BorderRadius.all(
-                                            Radius.circular(100),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          dayOfWeekAbbreviated(day),
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: color.shade800),
-                                        ),
-                                      ),
-                                    ).toList(),
-                                  ),
-                                  Text(
-                                    "${e["location"]}",
-                                    style: const TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
+              width: double.maxFinite,
+              padding: EdgeInsets.all(sPadding3),
+              child: Column(
+                spacing: 5.0,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: 8.0,
+                    children: [
+                      const HugeIcon(
+                          icon: HugeIcons.strokeRoundedCalendar03,
+                          color: Colors.black),
+                      Expanded(
+                        child: Wrap(
                           spacing: 8.0,
-                          children: [
-                            const HugeIcon(
-                                icon: HugeIcons.strokeRoundedTeaching,
-                                color: Colors.black),
-                            Text(
-                              widget.subject.teacher ?? "Sem professor",
+                          runSpacing: 4,
+                          children: groupedSchedule.map((e) {
+                            return Row(
+                              spacing: 8.0,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  spacing: 4,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: (e["days"] as List<String>)
+                                      .map(
+                                        (day) => Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8.0, vertical: 3.0),
+                                          decoration: BoxDecoration(
+                                            color: color.shade200,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(100),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            dayOfWeekAbbreviated(day),
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.w600,
+                                                color: color.shade800),
+                                          ),
+                                        ),
+                                      )
+                                      .toList(),
+                                ),
+                                Text(
+                                  "${e["time"]["start_time"]} > ${e["time"]["end_time"]}",
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: 8.0,
+                    children: [
+                      const HugeIcon(
+                          icon: HugeIcons.strokeRoundedLocation04,
+                          color: Colors.black),
+                      groupedScheduleLocations.length < 2
+                          ? Text(
+                              groupedScheduleLocations[0]["location"],
                               style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.w500,
                                 color: Colors.black,
                               ),
                             )
-                          ],
-                        ),
-                        (widget.subject.pud != null && widget.subject.pud!.isNotEmpty) ? SizedBox(
-                          height: 30,
-                          child: OutlinedButton(
-                            onPressed: () {},
-                            style: OutlinedButton.styleFrom(
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                              side: BorderSide(color: color.shade900),
-                              foregroundColor: color.shade900,
-                              elevation: 0,
-                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-                              shadowColor: Colors.transparent,
-                              textStyle: const TextStyle(
-                                  fontWeight: FontWeight.w600, fontFamily: "Onest", fontSize: 14),
+                          : Expanded(
+                              child: Wrap(
+                                spacing: 8.0,
+                                runSpacing: 4,
+                                children: groupedScheduleLocations.map((e) {
+                                  return Row(
+                                    spacing: 8.0,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Row(
+                                        spacing: 4,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: (e["days"] as List<String>)
+                                            .map(
+                                              (day) => Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8.0,
+                                                        vertical: 3.0),
+                                                decoration: BoxDecoration(
+                                                  color: color.shade200,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(100),
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  dayOfWeekAbbreviated(day),
+                                                  style: TextStyle(
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: color.shade800),
+                                                ),
+                                              ),
+                                            )
+                                            .toList(),
+                                      ),
+                                      Text(
+                                        "${e["location"]}",
+                                        style: const TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                            child: Row(
-                              spacing: 4,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                HugeIcon(size: 20, icon: HugeIcons.strokeRoundedLink04, color: color.shade900),
-                                const Text("PUD")
-                              ],
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        spacing: 8.0,
+                        children: [
+                          const HugeIcon(
+                              icon: HugeIcons.strokeRoundedTeaching,
+                              color: Colors.black),
+                          Text(
+                            widget.subject.teacher ?? "Sem professor",
+                            style: const TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
                             ),
-                          ),
-                        ) : Container()
-                      ],
-                    ),
-                    const SizedBox(height: 5,),
-                    SizedBox(
-                      width: double.maxFinite,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {}, 
-                        style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                          foregroundColor: cColorTextWhite,
-                          backgroundColor: color.shade900,
-                          // side: const BorderSide(color: cColorPrimary),
-                          elevation: 0,
-                          padding: EdgeInsets.all(0),
-                          shadowColor: Colors.transparent,
-                          textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600, fontFamily: "Onest", fontSize: 16),
-                        ),
-                        child: const Row(
-                          spacing: 4,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HugeIcon(size: 20, icon: HugeIcons.strokeRoundedBooks02, color: cColorTextWhite),
-                            Text("Visualizar materiais")
-                          ],
-                        ),
+                          )
+                        ],
+                      ),
+                      (widget.subject.pud != null &&
+                              widget.subject.pud!.isNotEmpty)
+                          ? SizedBox(
+                              height: 30,
+                              child: OutlinedButton(
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(16.0))),
+                                  side: BorderSide(color: color.shade900),
+                                  foregroundColor: color.shade900,
+                                  elevation: 0,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 0),
+                                  shadowColor: Colors.transparent,
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Onest",
+                                      fontSize: 14),
+                                ),
+                                child: Row(
+                                  spacing: 4,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    HugeIcon(
+                                        size: 20,
+                                        icon: HugeIcons.strokeRoundedLink04,
+                                        color: color.shade900),
+                                    const Text("PUD")
+                                  ],
+                                ),
+                              ),
+                            )
+                          : Container()
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    width: double.maxFinite,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(16.0))),
+                        foregroundColor: cColorTextWhite,
+                        backgroundColor: color.shade900,
+                        // side: const BorderSide(color: cColorPrimary),
+                        elevation: 0,
+                        padding: EdgeInsets.all(0),
+                        shadowColor: Colors.transparent,
+                        textStyle: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Onest",
+                            fontSize: 16),
+                      ),
+                      child: const Row(
+                        spacing: 4,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          HugeIcon(
+                              size: 20,
+                              icon: HugeIcons.strokeRoundedBooks02,
+                              color: cColorTextWhite),
+                          Text("Visualizar materiais")
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
           ],
         ),
       ),

@@ -27,14 +27,14 @@ class ClassSubjectsViewModel extends ChangeNotifier {
     return null;
   }
 
-  Future<SubjectModel?> updateSubject(
+  Future<SubjectModel?> editSubject(
       String idClass, SubjectModel subjectModel) async {
     isLoading = true;
     notifyListeners();
 
     try {
       error = null;
-      return await classSubjectsService.createSubject(idClass, subjectModel);
+      return await classSubjectsService.editSubject(idClass, subjectModel);
     } catch (e) {
       print(e);
       error = e.toString();
