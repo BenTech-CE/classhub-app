@@ -1,7 +1,7 @@
 import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 
 class SubjectModel {
-  final String id;
+  String id;
   String title;
   String? teacher;
   String? pud;

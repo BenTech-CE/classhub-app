@@ -8,6 +8,7 @@ import 'package:classhub/viewmodels/class/management/class_management_viewmodel.
 import 'package:classhub/viewmodels/class/members/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/classes/class_view.dart';
+import 'package:classhub/views/classes/sheets/edit_class_sheet.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,15 @@ class ClassCard extends StatefulWidget {
 class _ClassCardState extends State<ClassCard> {
   bool loadingLeave = false;
   bool loadingDelete = false;
+
+  void _sheetEditClass(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) => EditClassSheet(mClassObj: widget.turma,),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +124,7 @@ class _ClassCardState extends State<ClassCard> {
                         icon: const Icon(Icons.more_vert, size: 24.0),
                         onSelected: (String value) async {
                           if (value == 'edit') {
-                            // Edit action
+                            _sheetEditClass(context);
                           } else if (value == 'leave') {
                             loadingLeave = true;
                             setState(() {});

@@ -23,6 +23,7 @@ class WeekdayCard extends StatefulWidget {
 
 class _WeekdayCardState extends State<WeekdayCard> {
   final timeInputWidth = 140.0;
+  final _localTF = TextEditingController();
 
   void _showStartTimePicker() async {
     TimeOfDay? selectedTime = await showTimePicker(
@@ -64,6 +65,12 @@ class _WeekdayCardState extends State<WeekdayCard> {
     });
     
     widget.onSubjectChanged();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _localTF.text = widget.subject.schedule[widget.weekday]!.location;
   }
 
   @override
@@ -175,6 +182,7 @@ class _WeekdayCardState extends State<WeekdayCard> {
                       ?.copyWith(color: cColorTextAzul),
                   textAlign: TextAlign.start),
               TextField(
+                controller: _localTF,
                 onChanged: (value) {
                   setState(() {
                     widget.subject.schedule[widget.weekday]!.location = value;

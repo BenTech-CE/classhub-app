@@ -34,8 +34,36 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      builder: (BuildContext context) => CreateSubjectSheet(classId: widget.mClassObj.id, onSubjectCreated: () => _fetchSubjects(context),),
+      builder: (BuildContext context) => CreateSubjectSheet(classId: widget.mClassObj.id, classColor: widget.mClassObj.color, onSubjectCreated: () => _fetchSubjects(context),),
     );
+  }
+
+  void _handleEdit(SubjectModel sbj) {
+    int idx = subjects.indexWhere((s) => s.id == sbj.id);
+
+    if (idx != -1) {
+      subjects[idx] = sbj;
+    }
+
+    print("updated subject: ${sbj.title}");
+  }
+
+  void _handleDel(String id) {
+    int idx = subjects.indexWhere((s) => s.id == id);
+
+    if (idx != -1) {
+      subjects.removeAt(idx);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(
+        content: Text(
+          "Matéria deletada com sucesso!",
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorSuccess,
+      ));
+    }
   }
 
   Future<void> _fetchSubjects(BuildContext context) async {
@@ -76,7 +104,7 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                             color: cColorPrimary,
                           ),
                     ] : [
-                      ...subjects.map((sbj) => SubjectCard(mClassObj: widget.mClassObj, subject: sbj))
+                      ...subjects.map((sbj) => SubjectCard(mClassObj: widget.mClassObj, subject: sbj, onEdited: _handleEdit, onDeleted: () => _handleDel(sbj.id) ))
                     ],
                   ),
                 ),

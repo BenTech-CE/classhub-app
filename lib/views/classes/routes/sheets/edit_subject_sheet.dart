@@ -17,18 +17,19 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
-class CreateSubjectSheet extends StatefulWidget {
+class EditSubjectSheet extends StatefulWidget {
+  final SubjectModel subjObj;
   final String classId;
   final int classColor;
-  final VoidCallback onSubjectCreated; 
+  final Function(SubjectModel) onSubjectCreated; 
 
-  const CreateSubjectSheet({super.key, required this.classId, required this.classColor, required this.onSubjectCreated});
+  const EditSubjectSheet({super.key, required this.subjObj, required this.classId, required this.classColor, required this.onSubjectCreated});
 
   @override
-  State<CreateSubjectSheet> createState() => _CreateSubjectSheetState();
+  State<EditSubjectSheet> createState() => _EditSubjectSheetState();
 }
 
-class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
+class _EditSubjectSheetState extends State<EditSubjectSheet> {
   final _titleTF = TextEditingController();
   final _teacherTF = TextEditingController();
 
@@ -65,14 +66,14 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
     final userViewModel = context.read<UserViewModel>();
     final subjectViewModel = context.read<ClassSubjectsViewModel>();
 
-    SubjectModel? result = await subjectViewModel.createSubject(widget.classId, subject);
+    SubjectModel? result = await subjectViewModel.editSubject(widget.classId, subject);
 
     if (result != null) {
-      widget.onSubjectCreated();
+      widget.onSubjectCreated(result);
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
-          "Matéria criada com sucesso!",
+          "Matéria editada com sucesso!",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         backgroundColor: cColorSuccess,
@@ -119,7 +120,15 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
   @override void initState() {
     super.initState();
 
-    currentColor = Color(widget.classColor);
+    currentColor = Color(widget.subjObj.color!);
+    _titleTF.text = widget.subjObj.title;
+    _teacherTF.text = widget.subjObj.teacher!;
+
+    setState(() {
+      subject.schedule = widget.subjObj.schedule;
+      subject.pud = widget.subjObj.pud;
+      subject.id = widget.subjObj.id;
+    });
   }
 
   @override void dispose() {
@@ -150,7 +159,7 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: sSpacing,
                   children: [
-                    Text("Criar Matéria",
+                    Text("Editar Matéria",
                         style: Theme.of(context)
                             .textTheme
                             .titleLarge
@@ -254,7 +263,7 @@ class _CreateSubjectSheetState extends State<CreateSubjectSheet> {
                     ElevatedButton(
                       child: subjectsViewModel.isLoading
                           ? const LoadingWidget()
-                          : const Text("Criar Matéria"),
+                          : const Text("Editar Matéria"),
                       onPressed: () => _btnCreate(context),
                     ),
                   ],

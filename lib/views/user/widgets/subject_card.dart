@@ -7,8 +7,10 @@ import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
+import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/classes/class_view.dart';
+import 'package:classhub/views/classes/routes/sheets/edit_subject_sheet.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -17,8 +19,10 @@ import 'package:provider/provider.dart';
 class SubjectCard extends StatefulWidget {
   final SubjectModel subject;
   final MinimalClassModel mClassObj;
+  final Function(SubjectModel) onEdited;
+  final VoidCallback onDeleted;
 
-  const SubjectCard({Key? key, required this.mClassObj, required this.subject});
+  const SubjectCard({Key? key, required this.mClassObj, required this.subject, required this.onEdited, required this.onDeleted});
 
   @override
   _SubjectCardState createState() => _SubjectCardState();
@@ -31,6 +35,38 @@ class _SubjectCardState extends State<SubjectCard> {
 
   late List<Map<String, dynamic>> groupedSchedule;
   late List<Map<String, dynamic>> groupedScheduleLocations;
+
+  void _sheetEditSubject(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) => EditSubjectSheet(subjObj: widget.subject, classId: widget.mClassObj.id, classColor: widget.mClassObj.color, onSubjectCreated: (sbj) {
+        widget.onEdited(sbj);
+      },),
+    );
+  }
+
+  void  _deleteSubject(BuildContext context) async {
+    final subjectViewModel = context.read<ClassSubjectsViewModel>();
+
+    final result = await subjectViewModel.deleteSubject(widget.mClassObj.id, widget.subject.id);
+
+    if (result) {
+      widget.onDeleted();
+    } else if (subjectViewModel.error != null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(
+        content: Text(
+          subjectViewModel.error!,
+          style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    }
+  }
 
   @override
   void initState() {
@@ -67,6 +103,7 @@ class _SubjectCardState extends State<SubjectCard> {
       collapsed: ExpandableButton(
         child: Container(
           alignment: Alignment.centerLeft,
+          width: double.maxFinite,
           height: collapsedHeight,
           decoration: BoxDecoration(
             color: color.shade100,
@@ -77,23 +114,30 @@ class _SubjectCardState extends State<SubjectCard> {
             spacing: 16,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                margin: EdgeInsets.only(left: sPadding3),
-                child: Row(
-                  spacing: 16.0,
-                  children: [
-                    HugeIcon(
-                      icon: HugeIcons.strokeRoundedBookBookmark02,
-                      color: color.shade800,
-                    ),
-                    Text(
-                      widget.subject.title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                          color: color.shade800),
-                    ),
-                  ],
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: sPadding3),
+                  child: Row(
+                    spacing: 16.0,
+                    children: [
+                      HugeIcon(
+                        icon: HugeIcons.strokeRoundedBookBookmark02,
+                        color: color.shade800,
+                      ),
+                      Expanded(
+                        child: Text(
+                              widget.subject.title,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: color.shade800,
+                                  height: 0.9
+                              ),
+                                  
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               widget.mClassObj.role >= Role.viceLider
@@ -102,9 +146,9 @@ class _SubjectCardState extends State<SubjectCard> {
                           size: 24.0, color: color.shade800),
                       onSelected: (String value) async {
                         if (value == 'edit') {
-                          // Edit action
+                          _sheetEditSubject(context);
                         } else if (value == 'delete') {
-                          // Delete action
+                          _deleteSubject(context);
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -149,23 +193,29 @@ class _SubjectCardState extends State<SubjectCard> {
                   spacing: 16,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      margin: EdgeInsets.only(left: sPadding3),
-                      child: Row(
-                        spacing: 16.0,
-                        children: [
-                          HugeIcon(
-                            icon: HugeIcons.strokeRoundedBookBookmark02,
-                            color: color.shade800,
-                          ),
-                          Text(
-                            widget.subject.title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: color.shade800),
-                          ),
-                        ],
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(left: sPadding3),
+                        child: Row(
+                          spacing: 16.0,
+                          children: [
+                            HugeIcon(
+                              icon: HugeIcons.strokeRoundedBookBookmark02,
+                              color: color.shade800,
+                            ),
+                            Expanded(
+                              child: Text(
+                                widget.subject.title,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                    color: color.shade800,
+                                    height: 0.9
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     widget.mClassObj.role >= Role.viceLider
@@ -174,9 +224,9 @@ class _SubjectCardState extends State<SubjectCard> {
                                 size: 24.0, color: color.shade800),
                             onSelected: (String value) async {
                               if (value == 'edit') {
-                                // Edit action
+                                _sheetEditSubject(context);
                               } else if (value == 'delete') {
-                                // Delete action
+                                _deleteSubject(context);
                               }
                             },
                             itemBuilder: (BuildContext context) =>

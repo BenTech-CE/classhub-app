@@ -68,6 +68,7 @@ class ClassManagementService {
       ..fields.addAll(requestBody);
 
     if (classModel.banner != null) {
+      print("ADding banner to class request..");
       final Uint8List fileBytes = await classModel.banner!.readAsBytes();
       final multipartFileBanner = http.MultipartFile.fromBytes(
           'banner', fileBytes,
@@ -84,7 +85,7 @@ class ClassManagementService {
     print(response.statusCode);
     print(jsonResponse);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao editar a turma: ${jsonResponse["error"]}");

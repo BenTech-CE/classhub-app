@@ -17,7 +17,7 @@ class ClassMuralView extends StatefulWidget {
 }
 
 class _ClassMuralViewState extends State<ClassMuralView> {
-  String muralSelectedOption = "avisos";
+  Set<String> muralSelectedOption = { "avisos", "materiais" };
 
   late MaterialColor classColor;
 
@@ -41,11 +41,10 @@ class _ClassMuralViewState extends State<ClassMuralView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: sPadding),
             SegmentedButton<String>(
               style: SegmentedButton.styleFrom(
-                  selectedBackgroundColor: classColor.shade200,
-                  selectedForegroundColor: classColor.shade900,
+                  selectedBackgroundColor: classColor.shade400,
+                  selectedForegroundColor: Colors.white,
                   foregroundColor: classColor.shade800,
                   side: BorderSide(color: classColor.shade300, width: 1)),
               segments: const <ButtonSegment<String>>[
@@ -58,14 +57,20 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                   label: Text('Materiais'),
                 ),
               ],
-              selected: <String>{muralSelectedOption},
+              selected: muralSelectedOption,
               showSelectedIcon: false,
+              multiSelectionEnabled: true,
+              emptySelectionAllowed: true,
               onSelectionChanged: (Set<String> newSelection) {
                 setState(() {
                   // By default there is only a single segment that can be
                   // selected at one time, so its value is always the first
                   // item in the selected set.
-                  muralSelectedOption = newSelection.first;
+                  try {
+                    muralSelectedOption = newSelection;
+                  } catch (_) {
+                    muralSelectedOption = {};
+                  }
                 });
               },
             ),

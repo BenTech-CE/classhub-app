@@ -34,10 +34,24 @@ const cBackground2 = Color(0xFFFEFCFE);
 const cBackground3 = Color(0xFFF1F2F3);
 
 const listOfClassColors = [
-  Color(0xff2392fa),
-  cColorSuccess,
-  cColorError,
-  Colors.black,
-  cColorText2,
-  cColorTextAzul,
+  Color(0xFF1E88E5), // Azul Médio
+  Color(0xFF388E3C), // Verde Escuro
+  Color(0xFFD32F2F), // Vermelho Escuro
+  Color(0xFFF57C00), // Laranja Escuro
+  Color(0xFF8E24AA), // Roxo Médio
+  Color(0xFF795548), // Marrom
+  Colors.grey,        // Cinza Escuro
+  Color(0xFF00838F), // Azul Cian Escuro
+  Color(0xFF689F38), // Verde Oliva Escuro
+  Color(0xFFFBC02D), // Amarelo Mostarda
+  Color(0xFFC2185B), // Rosa Choque
+  Color(0xFF3F51B5), // Índigo Médio
+  Color(0xFF00796B), // Teal Escuro
+  Color(0xFFE64A19), // Laranja Avermelhado
+  Color(0xFF512DA8), // Roxo Profundo
+  Color(0xFF607D8B), // Azul Ardósia
+  Color(0xFF43A047), // Verde Marinho
+  Color(0xFF880E4F), // Vermelho Borgonha
+  Color(0xFFFFA000), // Dourado Escuro
+  Color(0xFF00695C), // Azul Petróleo
 ];
