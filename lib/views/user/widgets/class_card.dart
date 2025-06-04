@@ -6,7 +6,6 @@ import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_management_viewmodel.dart';
-import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/views/classes/sheets/edit_class_sheet.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
@@ -30,7 +29,9 @@ class _ClassCardState extends State<ClassCard> {
       context: context,
       showDragHandle: true,
       isScrollControlled: true,
-      builder: (BuildContext context) => EditClassSheet(mClassObj: widget.turma,),
+      builder: (BuildContext context) => EditClassSheet(
+        mClassObj: widget.turma,
+      ),
     );
   }
 
@@ -89,6 +90,13 @@ class _ClassCardState extends State<ClassCard> {
                       children: [
                         Image.network(
                           turma.bannerUrl!,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Container(
+                                width: double.maxFinite,
+                                height: 150,
+                                color: Color(turma.color));
+                          },
                           width: double.maxFinite,
                           height: 150,
                           fit: BoxFit.cover,

@@ -11,6 +11,7 @@ import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
+import 'package:classhub/widgets/ui/popup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -67,13 +68,25 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
 
     if (classCreated != null) {
       await userViewModel.fetchUser();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text(
-          "Turma criada com sucesso!",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: cColorSuccess,
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      //   content: Text(
+      //     "Turma criada com sucesso!",
+      //     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      //   ),
+      //   backgroundColor: cColorSuccess,
+      // ));
+      showDialog<String>(
+        context: context,
+        builder: (BuildContext context) => PopupWidget(
+            title: 'Parabéns, você entrou na turma!',
+            description:
+                'Agora você pode visualizar materiais, avisos, eventos e informações sobre as matérias de sua turma!',
+            icon: const HugeIcon(
+              icon: HugeIcons.strokeRoundedParty,
+              color: cColorPrimary,
+              size: 50,
+            )),
+      );
 
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.of(context).push(MaterialPageRoute(
@@ -130,8 +143,8 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + sPadding3),
+          padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom + sPadding3),
           child: Container(
               // height: 510,
               // constraints: new BoxConstraints(minHeight: 510, maxHeight: 600),
@@ -241,14 +254,15 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                                                   const BorderRadius.all(
                                                       Radius.circular(12.0)),
                                               image: DecorationImage(
-                                                image:
-                                                    MemoryImage(selectedBanner!),
+                                                image: MemoryImage(
+                                                    selectedBanner!),
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
                                           )
                                         : const HugeIcon(
-                                            icon: HugeIcons.strokeRoundedAlbum02,
+                                            icon:
+                                                HugeIcons.strokeRoundedAlbum02,
                                             color: cColorPrimary),
                                   ),
                                 ),
