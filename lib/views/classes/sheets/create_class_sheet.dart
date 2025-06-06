@@ -5,7 +5,6 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/models/class/management/class_model.dart';
-import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
@@ -75,18 +74,7 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
       //   ),
       //   backgroundColor: cColorSuccess,
       // ));
-      showDialog<String>(
-        context: context,
-        builder: (BuildContext context) => PopupWidget(
-            title: 'Parabéns, você entrou na turma!',
-            description:
-                'Agora você pode visualizar materiais, avisos, eventos e informações sobre as matérias de sua turma!',
-            icon: const HugeIcon(
-              icon: HugeIcons.strokeRoundedParty,
-              color: cColorPrimary,
-              size: 50,
-            )),
-      );
+      
 
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.of(context).push(MaterialPageRoute(

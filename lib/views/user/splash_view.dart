@@ -14,13 +14,12 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    _checkLogin();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkLogin());
   }
 
   Future<void> _checkLogin() async {
     final token = MMKV.defaultMMKV().decodeString("classhub-user-token");
-
-    await Future.delayed(const Duration(milliseconds: 500));
 
     if (token != null && token.isNotEmpty) {
       Navigator.pushReplacement(

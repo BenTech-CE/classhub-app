@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
-import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/classes/routes/sheets/create_subject_sheet.dart';

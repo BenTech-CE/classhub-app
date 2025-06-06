@@ -1,7 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:classhub/core/theme/colors.dart';
-import 'package:classhub/core/theme/sizes.dart';
-import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
@@ -194,35 +192,38 @@ class _ClassViewState extends State<ClassView> {
                                             MainAxisAlignment.center,
                                         children: [
                                           classObj != null
-                                              ? Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  spacing: 4,
-                                                  children: [
-                                                    Expanded(child: Container()),
-                                                    Text(
-                                                      "${classObj?.inviteCode}",
-                                                      style: TextStyle(
-                                                          fontSize: 32,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color: classColor
-                                                              .shade900),
+                                              ? InkWell(
+                                                onTap: () async {
+                                                  print("copying..");
+                                                  await Clipboard.setData(ClipboardData(text: classObj!.inviteCode.toString()));
+                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                      "Copiado com sucesso!",
+                                                      style:
+                                                          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                     ),
-                                                    Expanded(
-                                                      child: Row(
-                                                        children: [
-                                                          InkWell(
-                                                            child: HugeIcon(icon: HugeIcons.strokeRoundedLink04, color: classColor.shade900),
-                                                            onTap: () async {
-                                                              await Clipboard.setData(ClipboardData(text: classObj!.inviteCode.toString()));
-                                                              // copied successfully
-                                                            },
-                                                          ),
-                                                        ],
+                                                    backgroundColor: cColorSuccess,
+                                                  ));
+                                                  // copied successfully
+                                                },
+                                                child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    spacing: 4,
+                                                    children: [
+                                                      Text(
+                                                        "${classObj?.inviteCode}",
+                                                        style: TextStyle(
+                                                            fontSize: 32,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color: classColor
+                                                                .shade900),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
+                                                      HugeIcon(icon: HugeIcons.strokeRoundedLink04, color: classColor.shade900),
+                                                    ],
+                                                  ),
+                                              )
                                               : LoadingWidget(
                                                   color: classColor.shade900)
                                         ],

@@ -6,8 +6,6 @@ import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
-import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
-import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:classhub/widgets/ui/weekday_card.dart';
@@ -63,7 +61,7 @@ class _EditSubjectSheetState extends State<EditSubjectSheet> {
 
     if (subject.schedule.entries.where((entry) => entry.value != null).isEmpty) return; // Alertar
 
-    final userViewModel = context.read<UserViewModel>();
+    //final userViewModel = context.read<UserViewModel>();
     final subjectViewModel = context.read<ClassSubjectsViewModel>();
 
     SubjectModel? result = await subjectViewModel.editSubject(widget.classId, subject);

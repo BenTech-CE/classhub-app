@@ -1,6 +1,3 @@
-import 'package:classhub/models/class/management/class_model.dart';
-import 'package:classhub/models/class/management/minimal_class_model.dart';
-import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
 import 'package:flutter/material.dart';
 

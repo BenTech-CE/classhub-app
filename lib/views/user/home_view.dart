@@ -1,23 +1,12 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
-import 'package:classhub/core/theme/textfields.dart';
-import 'package:classhub/core/theme/texts.dart';
-import 'package:classhub/core/theme/theme.dart';
-import 'package:classhub/core/utils/role.dart';
-import 'package:classhub/models/class/management/class_model.dart';
-import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
-import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
-import 'package:classhub/views/classes/class_view.dart';
-import 'package:classhub/views/classes/sheets/create_class_sheet.dart';
 import 'package:classhub/views/classes/sheets/create_or_join_sheet.dart';
-import 'package:classhub/views/classes/sheets/join_class_sheet.dart';
 import 'package:classhub/views/user/widgets/class_card.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -30,6 +19,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   Future<void> _userInfo(BuildContext ctx) async {
     final userViewModel = ctx.read<UserViewModel>();
+
+    userViewModel.fetchCachedUser();
 
     await userViewModel.fetchUser();
     print(userViewModel.error);

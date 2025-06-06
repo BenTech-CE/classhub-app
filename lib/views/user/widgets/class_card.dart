@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/theme.dart';
@@ -5,7 +6,7 @@ import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
-import 'package:classhub/viewmodels/class/members/class_management_viewmodel.dart';
+import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/views/classes/sheets/edit_class_sheet.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
@@ -52,7 +53,7 @@ class _ClassCardState extends State<ClassCard> {
       const PopupMenuItem<String>(value: 'delete', child: Text('Deletar turma'))
     ];
 
-    final popupMenuItemsLeader = [
+    /*final popupMenuItemsLeader = [
       const PopupMenuItem<String>(
         value: 'edit',
         child: Text('Editar turma'),
@@ -61,7 +62,7 @@ class _ClassCardState extends State<ClassCard> {
         value: 'leave',
         child: Text('Sair da turma'),
       )
-    ];
+    ];*/
 
     final popupMenuItemsMember = [
       const PopupMenuItem<String>(
@@ -215,13 +216,17 @@ class _ClassCardState extends State<ClassCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(turma.name,
+                          AutoSizeText(turma.name,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.copyWith(
                                       fontSize: 24.0, color: cColorTextWhite)),
-                          Text(turma.school,
+                          AutoSizeText(turma.school,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge

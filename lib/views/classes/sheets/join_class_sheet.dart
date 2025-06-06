@@ -5,7 +5,9 @@ import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
+import 'package:classhub/widgets/ui/popup_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class JoinClassSheet extends StatefulWidget {
@@ -26,17 +28,23 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
       final result = await classManagementViewModel.joinClass(_inviteCodeTF.text);
 
       if (result != null && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-            "Você entrou na turma com sucesso!",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: cColorSuccess,
-        ));
-
         await userViewModel.fetchUser();
+
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ClassView(mClassObj: result)));
+
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => const PopupWidget(
+              title: 'Parabéns, você entrou na turma!',
+              description:
+                  'Agora você pode visualizar materiais, avisos, eventos e informações sobre as matérias de sua turma!',
+              icon: HugeIcon(
+                icon: HugeIcons.strokeRoundedParty,
+                color: cColorPrimary,
+                size: 50,
+              )),
+        );
       } else if (classManagementViewModel.error != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(

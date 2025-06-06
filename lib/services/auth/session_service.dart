@@ -29,10 +29,27 @@ class SessionService {
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      return UserModel.fromJson(jsonResponse);
+      final UserModel um = UserModel.fromJson(jsonResponse);
+      
+      authService.mmkv.encodeString("classhub-user-id", um.id);
+      authService.mmkv.encodeString("user.${um.id}", response.body);
+
+      return um;
     } else {
       throw Exception(
           "Erro ao coletar as informações do usuário: ${jsonResponse["error"]}");
+    }
+  }
+
+  UserModel? getCachedUser() {
+    if (authService.mmkv.containsKey("user.${authService.getUserId()}")) {
+      String userString = authService.mmkv.decodeString("user.${authService.getUserId()}")!;
+
+      final UserModel um = UserModel.fromJson(jsonDecode(userString));
+
+      return um;
+    } else {
+      return null;
     }
   }
 }

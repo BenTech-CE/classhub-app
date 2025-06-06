@@ -59,8 +59,12 @@ class AuthService {
     return true;
   }
 
-  Future<String?> getToken() async {
+  String? getToken() {
     return mmkv.decodeString("classhub-user-token");
+  }
+
+  String? getUserId() {
+    return mmkv.decodeString("classhub-user-id");
   }
 
   Future<bool> signOut() async {

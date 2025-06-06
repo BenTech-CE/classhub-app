@@ -1,11 +1,8 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
-import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
-import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ClassMuralView extends StatefulWidget {
   final MinimalClassModel mClassObj;

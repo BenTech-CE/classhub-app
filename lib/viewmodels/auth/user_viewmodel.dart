@@ -24,4 +24,19 @@ class UserViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void fetchCachedUser() {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      user = sessionService.getCachedUser();
+      error = null;
+    } catch (e) {
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 }

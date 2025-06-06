@@ -6,10 +6,12 @@ import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:mmkv/mmkv.dart';
 
 class ClassManagementService {
   // final http = Client();
   final AuthService authService;
+  var mmkv = MMKV.defaultMMKV();
 
   ClassManagementService(this.authService);
 
@@ -46,6 +48,8 @@ class ClassManagementService {
     print(jsonResponse);
 
     if (response.statusCode == 201) {
+      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", respStr);
+
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao criar a turma: ${jsonResponse["error"]}");
@@ -86,6 +90,8 @@ class ClassManagementService {
     print(jsonResponse);
 
     if (response.statusCode == 200) {
+      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", respStr);
+
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception("Erro ao editar a turma: ${jsonResponse["error"]}");
@@ -109,7 +115,9 @@ class ClassManagementService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      return ClassModel.fromJson(jsonResponse);
+      final ClassModel cm = ClassModel.fromJson(jsonResponse);
+      authService.mmkv.encodeString("${authService.getUserId()}.class.${cm.id}", response.body);
+      return cm;
     } else {
       throw Exception(
           "Erro ao tentar acessar as informações da turma: ${jsonResponse["error"]}");
@@ -133,6 +141,8 @@ class ClassManagementService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", response.body);
+
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
       throw Exception(
@@ -157,6 +167,8 @@ class ClassManagementService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      authService.mmkv.removeValue("${authService.getUserId()}.minimalclass.$idClass");
+      authService.mmkv.removeValue("${authService.getUserId()}.class.$idClass");
     } else {
       throw Exception(
           "Erro ao tentar deletar a turma: ${jsonResponse["error"]}");
