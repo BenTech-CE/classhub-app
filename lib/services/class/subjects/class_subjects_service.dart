@@ -134,6 +134,8 @@ class ClassSubjectsService {
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
+      authService.mmkv.encodeString("${authService.getUserId()}.class.$idClass.subjects", response.body);
+
       List<SubjectModel> subjects = [];
       for (var subject in jsonResponse['subjects']) {
         subjects.add(SubjectModel.fromJson(subject));
@@ -143,5 +145,17 @@ class ClassSubjectsService {
       throw Exception(
           "Erro ao tentar acessar as matérias: ${jsonResponse["error"]}");
     }
+  }
+
+  List<SubjectModel> getCachedSubjects(String idClass) {
+      final sbjString = authService.mmkv.decodeString("${authService.getUserId()}.class.$idClass.subjects");
+
+      if (sbjString == null) return [];
+
+      List<SubjectModel> subjects = [];
+      for (var subject in jsonDecode(sbjString)['subjects']) {
+        subjects.add(SubjectModel.fromJson(subject));
+      }
+      return subjects;
   }
 }

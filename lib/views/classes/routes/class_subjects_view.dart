@@ -66,7 +66,19 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
   Future<void> _fetchSubjects(BuildContext context) async {
     final subjectViewModel = context.read<ClassSubjectsViewModel>();
 
-    subjects = await subjectViewModel.getSubjects(widget.mClassObj.id);
+    final cached = subjectViewModel.getCachedSubjects(widget.mClassObj.id);
+    cached.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
+    setState(() {
+      subjects = cached;
+    });
+
+    final fetched = await subjectViewModel.getSubjects(widget.mClassObj.id, changeLoadingState: false);
+    fetched.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
+    setState(() {
+      subjects = fetched;
+    });
   }
 
   @override
@@ -101,7 +113,7 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                             color: cColorPrimary,
                           ),
                     ] : [
-                      ...subjects.map((sbj) => SubjectCard(mClassObj: widget.mClassObj, subject: sbj, onEdited: _handleEdit, onDeleted: () => _handleDel(sbj.id) ))
+                      ...subjects.map((sbj) => SubjectCard(key: ValueKey(sbj.id), mClassObj: widget.mClassObj, subject: sbj, onEdited: _handleEdit, onDeleted: () => _handleDel(sbj.id) ))
                     ],
                   ),
                 ),

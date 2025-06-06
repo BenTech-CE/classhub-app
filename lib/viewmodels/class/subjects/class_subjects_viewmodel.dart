@@ -62,13 +62,30 @@ class ClassSubjectsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<List<SubjectModel>> getSubjects(String idClass) async {
-    isLoading = true;
+  Future<List<SubjectModel>> getSubjects(String idClass, {bool changeLoadingState = true}) async {
+    if (changeLoadingState) isLoading = true;
     notifyListeners();
 
     try {
       error = null;
       return await classSubjectsService.getSubjects(idClass);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    return [];
+  }
+
+  List<SubjectModel> getCachedSubjects(String idClass) {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return classSubjectsService.getCachedSubjects(idClass);
     } catch (e) {
       print(e);
       error = e.toString();
