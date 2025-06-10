@@ -76,9 +76,11 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
     final fetched = await subjectViewModel.getSubjects(widget.mClassObj.id, changeLoadingState: false);
     fetched.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
 
-    setState(() {
-      subjects = fetched;
-    });
+    if (mounted) {
+      setState(() {
+        subjects = fetched;
+      });
+    }
   }
 
   @override
@@ -104,18 +106,38 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                 Container(
                   width: double.maxFinite,
                   padding: EdgeInsets.all(sPadding),
-                  child: Column(
-                    spacing: sSpacing,
-                    children: subjectViewModel.isLoading ? [
-                          Text("Aguarde enquanto carregamos as matérias...",
-                              style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,),
+                  child: subjectViewModel.isLoading
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        spacing: sSpacing,
+                        children: [
+                          Text(
+                            "Aguarde enquanto carregamos as matérias...",
+                            style: Theme.of(context).textTheme.titleMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: sSpacing),
                           const LoadingWidget(
                             color: cColorPrimary,
                           ),
-                    ] : [
-                      ...subjects.map((sbj) => SubjectCard(key: ValueKey(sbj.id), mClassObj: widget.mClassObj, subject: sbj, onEdited: _handleEdit, onDeleted: () => _handleDel(sbj.id) ))
-                    ],
-                  ),
+                        ],
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(), 
+                        separatorBuilder: (context, index) => const SizedBox(height: sSpacing),
+                        itemCount: subjects.length,
+                        itemBuilder: (context, index) {
+                          final sbj = subjects[index];
+                          return SubjectCard(
+                            key: ValueKey(sbj.id),
+                            mClassObj: widget.mClassObj,
+                            subject: sbj,
+                            onEdited: _handleEdit,
+                            onDeleted: () => _handleDel(sbj.id),
+                          );
+                        },
+                      ),
                 ),
               ],
             ),

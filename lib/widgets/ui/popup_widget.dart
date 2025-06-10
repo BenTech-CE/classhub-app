@@ -24,9 +24,12 @@ class _PopupWidgetState extends State<PopupWidget> {
   @override
   void initState() {
     super.initState();
-    _confetti = ConfettiController(duration: const Duration(seconds: 1));
+    _confetti = ConfettiController(duration: const Duration(milliseconds: 200));
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _confetti.play());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 500)) ;
+      _confetti.play();
+    });
   }
 
   @override
@@ -80,6 +83,8 @@ class _PopupWidgetState extends State<PopupWidget> {
             emissionFrequency: 0.5,
             maxBlastForce: 20,
             minBlastForce: 1,
+            minimumSize: const Size(20, 10),
+            maximumSize: const Size(20, 10),
             blastDirection: (7*pi) /4,
             blastDirectionality: BlastDirectionality.directional,
           ),

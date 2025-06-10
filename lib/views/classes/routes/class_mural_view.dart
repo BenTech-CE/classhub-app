@@ -14,7 +14,7 @@ class ClassMuralView extends StatefulWidget {
 }
 
 class _ClassMuralViewState extends State<ClassMuralView> {
-  Set<String> muralSelectedOption = { "avisos", "materiais" };
+  Set<String> muralSelectedOption = {  };
 
   late MaterialColor classColor;
 
@@ -56,7 +56,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
               ],
               selected: muralSelectedOption,
               showSelectedIcon: false,
-              multiSelectionEnabled: true,
+              multiSelectionEnabled: false,
               emptySelectionAllowed: true,
               onSelectionChanged: (Set<String> newSelection) {
                 setState(() {
