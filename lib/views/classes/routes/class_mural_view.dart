@@ -32,14 +32,12 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () => _fetchMural(),
-      child: SizedBox(
+    return SizedBox(
         width: double.maxFinite,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            NewPostWidget(classColor: classColor),
+            NewPostWidget(classColor: classColor, classId: widget.mClassObj.id,),
             SegmentedButton<String>(
               style: SegmentedButton.styleFrom(
                   selectedBackgroundColor: classColor.shade400,
@@ -94,7 +92,6 @@ class _ClassMuralViewState extends State<ClassMuralView> {
             ),
           ],
         ),
-      ),
     );
   }
 }

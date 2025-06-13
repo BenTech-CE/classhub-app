@@ -18,7 +18,7 @@ class NewCardWidget extends StatefulWidget {
 }
 
 class _NewCardWidgetState extends State<NewCardWidget> {
-  final color = Colors.grey;
+  final color = const Color.fromARGB(255, 194, 194, 194);
 
   @override
   Widget build(BuildContext context) {

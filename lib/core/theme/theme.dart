@@ -7,6 +7,7 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData theme = ThemeData(
+    useMaterial3: true,
     primarySwatch: Colors.indigo,
     scaffoldBackgroundColor: cBackground,
     colorScheme: const ColorScheme.light()
@@ -19,7 +20,7 @@ class AppTheme {
       centerTitle: true,
       foregroundColor: cColorTextWhite,
       surfaceTintColor: cBackground,
-      scrolledUnderElevation: 12,
+      scrolledUnderElevation: null,
     ),
     snackBarTheme: const SnackBarThemeData(
         backgroundColor: cColorGray4,
