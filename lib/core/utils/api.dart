@@ -11,5 +11,7 @@ class Api {
 
   static const String subjectEndpoint = '/materias';
 
+  static const String muralEndpoint = '/mural';
+
   static const String dummyImage = 'https://classhub.b-cdn.net/fematec.jpg';
 }

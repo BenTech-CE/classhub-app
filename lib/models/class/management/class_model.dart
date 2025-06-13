@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:classhub/models/class/management/class_owner_model.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -21,7 +19,7 @@ class ClassModel {
     this.bannerUrl,
     this.banner,
     required this.school,
-     this.owner,
+    this.owner,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) {

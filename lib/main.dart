@@ -3,11 +3,13 @@ import 'package:classhub/services/auth/auth_service.dart';
 import 'package:classhub/services/auth/session_service.dart';
 import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
+import 'package:classhub/services/class/mural/class_mural_service.dart';
 import 'package:classhub/services/class/subjects/class_subjects_service.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
+import 'package:classhub/viewmodels/class/mural/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/user/splash_view.dart';
@@ -43,11 +45,14 @@ class MyApp extends StatelessWidget {
     final classManagementService = ClassManagementService(authService);
     final classMembersService = ClassMembersService(authService);
     final classSubjectsService = ClassSubjectsService(authService);
+    final classMuralService = ClassMuralService(authService);
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserViewModel(sessionService)),
         ChangeNotifierProvider(create: (_) => AuthViewModel(authService)),
+        ChangeNotifierProvider(
+            create: (_) => ClassMuralViewModel(classMuralService)),
         ChangeNotifierProvider(
             create: (_) => ClassSubjectsViewModel(classSubjectsService)),
         ChangeNotifierProvider(
