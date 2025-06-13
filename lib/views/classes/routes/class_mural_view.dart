@@ -2,6 +2,7 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/views/classes/widgets/new_post_widget.dart';
 import 'package:flutter/material.dart';
 
 class ClassMuralView extends StatefulWidget {
@@ -38,6 +39,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            NewPostWidget(classColor: classColor),
             SegmentedButton<String>(
               style: SegmentedButton.styleFrom(
                   selectedBackgroundColor: classColor.shade400,

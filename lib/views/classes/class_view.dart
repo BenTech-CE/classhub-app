@@ -1,14 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:classhub/core/theme/colors.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/models/class/management/class_widget.model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/routes/class_calendar_view.dart';
 import 'package:classhub/views/classes/routes/class_mural_view.dart';
 import 'package:classhub/views/classes/routes/class_subjects_view.dart';
-import 'package:classhub/widgets/ui/base_class_widget.dart';
+import 'package:classhub/views/classes/widgets/base_class_widget.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
+import 'package:classhub/views/classes/widgets/new_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -171,11 +174,14 @@ class _ClassViewState extends State<ClassView> {
                           child: CarouselSlider(
                             options: CarouselOptions(
                                 height: 130,
+                                clipBehavior: Clip.none,
+                                enlargeCenterPage: false,
                                 viewportFraction: 0.8,
                                 autoPlay: false,
                                 enableInfiniteScroll: false),
                             items: [
                               BaseClassWidget(
+                                canEdit: widget.mClassObj.role >= Role.viceLider,
                                 classColor: classColor,
                                 child: Column(
                                   children: [
@@ -208,7 +214,7 @@ class _ClassViewState extends State<ClassView> {
                                                 },
                                                 child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
-                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisSize: MainAxisSize.min,
                                                     spacing: 4,
                                                     children: [
                                                       Text(
@@ -233,27 +239,13 @@ class _ClassViewState extends State<ClassView> {
                                 ),
                               ),
                               BaseClassWidget(
+                                canEdit: widget.mClassObj.role >= Role.viceLider,
                                 classColor: classColor,
-                                child: Text(
-                                  "Eventos Próximos" ,style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight:
-                                      FontWeight.w600,
-                                  color: classColor
-                                      .shade800),
-                                ),
+                                widgetModel: ClassWidgetModel(title: "Eventos Próximos", description: ""),
+                                child: Container()
                               ),
-                              BaseClassWidget(
-                                classColor: classColor,
-                                child: Text(
-                                  "Lanche do Dia" ,style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight:
-                                      FontWeight.w600,
-                                  color: classColor
-                                      .shade800),
-                                ),
-                              ),
+                              if (widget.mClassObj.role >= Role.viceLider)
+                                NewCardWidget(classColor: classColor,)
                             ],
                           ),
                         ),
