@@ -5,14 +5,14 @@ class MuralModel {
   final String? id;
   final MuralType type;
   final String description;
-  final int subjectId;
+  final String? subjectId;
   final List<XFile>? attachments;
 
   MuralModel({
     this.id,
     required this.type,
     required this.description,
-    required this.subjectId,
+    this.subjectId,
     this.attachments,
   });
 
@@ -28,10 +28,15 @@ class MuralModel {
   }
 
   Map<String, String> toJson() {
-    return {
+    final Map<String, String> json = {
       'type': type.name,
       'description': description,
-      'subjectId': subjectId.toString(),
     };
+    
+    if (subjectId != null) {
+      json['subjectId'] = subjectId!;
+    }
+    
+    return json;
   }
 }

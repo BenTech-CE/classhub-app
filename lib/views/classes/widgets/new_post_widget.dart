@@ -44,7 +44,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
     materias = [
       SubjectModel(
         id: "not-selected-subject",
-        title: "Matéria",
+        title: "Não associar",
         schedule: {},
         color: widget.classColor.toARGB32()
       ),
@@ -131,6 +131,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   menuPadding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
+                                  offset: Offset(0, 28),
                                   itemBuilder: (context) {
                                     return tiposPost.map((str) {
                                       return PopupMenuItem(
@@ -187,6 +188,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   menuPadding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
+                                  offset: Offset(0, 28),
                                   itemBuilder: (context) {    
                                     return materias.map((mt) {
                                       final matColor = generateMaterialColor(Color(mt.color!));
@@ -234,7 +236,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: <Widget>[
-                                          Text(idMateria.title, style: TextStyle(
+                                          Text(idMateria.id == "not-selected-subject" ? "Matéria" : idMateria.title, style: TextStyle(
                                             color: matColor.shade900,
                                             fontSize: 14
                                           ), textAlign: TextAlign.end, overflow: TextOverflow.ellipsis,),

@@ -1,8 +1,11 @@
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:classhub/views/classes/widgets/new_post_widget.dart';
+import 'package:classhub/views/classes/widgets/post_alert_widget.dart';
 import 'package:flutter/material.dart';
 
 class ClassMuralView extends StatefulWidget {
@@ -76,17 +79,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
               child: Column(
                 spacing: sSpacing,
                 children: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                    .map((e) => Container(
-                          padding: EdgeInsets.all(sPadding3),
-                          alignment: Alignment.centerLeft,
-                          width: double.maxFinite,
-                          height: 100,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: cColorText2Azul),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(16))),
-                          child: Text("Aviso $e"),
-                        ))
+                    .map((e) => PostAlertWidget(classColor: classColor, post: MuralModel(type: MuralType.AVISO, description: "Fake Post!", subjectId: null)))
                     .toList(),
               ),
             ),
