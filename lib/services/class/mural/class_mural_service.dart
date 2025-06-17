@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:classhub/core/utils/api.dart';
+import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:http/http.dart' as http;
@@ -13,8 +14,39 @@ class ClassMuralService {
 
   ClassMuralService(this.authService);
 
-  Future<MuralModel> createPost(String classId, MuralModel muralModel) async {
-    final token = await authService.getToken();
+  Future<List<MuralModel>> getPosts(String classId, int page) async {
+    final token = authService.getToken();
+    if (token == null) throw Exception('Token não encontrado');
+
+    final response = await http.get(
+      Uri.parse(
+          "${Api.baseUrl}${Api.classEndpoint}/$classId${Api.muralEndpoint}?page=$page"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+    );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      List<MuralModel> posts = [];
+      for (var post in jsonResponse['posts']) {
+        posts.add(MuralModel.fromJson(post));
+      }
+      return posts;
+    } else {
+      throw Exception(
+          "Erro ao tentar acessar os posts: ${jsonResponse["error"]}");
+    }
+  }
+
+  Future<MuralModel> createPost(
+      String classId, CreatePostMuralModel muralModel) async {
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     var uri = Uri.parse(
@@ -57,7 +89,7 @@ class ClassMuralService {
   }
 
   Future<bool> deletePost(String classId, String postId) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(

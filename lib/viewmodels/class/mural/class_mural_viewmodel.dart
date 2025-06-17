@@ -1,7 +1,5 @@
-import 'package:classhub/models/class/management/class_model.dart';
-import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
-import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:classhub/services/class/mural/class_mural_service.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +10,25 @@ class ClassMuralViewModel extends ChangeNotifier {
 
   ClassMuralViewModel(this.classMuralService);
 
-  Future<MuralModel?> createPost(String classId, MuralModel muralModel) async {
+  Future<List<MuralModel>> getPosts(String classId, int page) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return await classMuralService.getPosts(classId, page);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    return [];
+  }
+
+  Future<MuralModel?> createPost(
+      String classId, CreatePostMuralModel muralModel) async {
     isLoading = true;
     notifyListeners();
 

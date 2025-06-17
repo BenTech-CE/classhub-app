@@ -16,7 +16,7 @@ class ClassManagementService {
   ClassManagementService(this.authService);
 
   Future<MinimalClassModel> createClass(ClassModel classModel) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     var uri = Uri.parse("${Api.baseUrl}${Api.classEndpoint}");
@@ -48,7 +48,9 @@ class ClassManagementService {
     print(jsonResponse);
 
     if (response.statusCode == 201) {
-      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", respStr);
+      authService.mmkv.encodeString(
+          "${authService.getUserId()}.minimalclass.${jsonResponse["id"]}",
+          respStr);
 
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
@@ -57,7 +59,7 @@ class ClassManagementService {
   }
 
   Future<MinimalClassModel> editClass(ClassModel classModel) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     var uri = Uri.parse("${Api.baseUrl}${Api.classEndpoint}/${classModel.id}");
@@ -90,7 +92,9 @@ class ClassManagementService {
     print(jsonResponse);
 
     if (response.statusCode == 200) {
-      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", respStr);
+      authService.mmkv.encodeString(
+          "${authService.getUserId()}.minimalclass.${jsonResponse["id"]}",
+          respStr);
 
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
@@ -99,7 +103,7 @@ class ClassManagementService {
   }
 
   Future<ClassModel> getClass(String idClass) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
@@ -116,7 +120,8 @@ class ClassManagementService {
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
       final ClassModel cm = ClassModel.fromJson(jsonResponse);
-      authService.mmkv.encodeString("${authService.getUserId()}.class.${cm.id}", response.body);
+      authService.mmkv.encodeString(
+          "${authService.getUserId()}.class.${cm.id}", response.body);
       return cm;
     } else {
       throw Exception(
@@ -125,7 +130,7 @@ class ClassManagementService {
   }
 
   Future<MinimalClassModel> joinClass(String idClass) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.post(
@@ -141,7 +146,9 @@ class ClassManagementService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      authService.mmkv.encodeString("${authService.getUserId()}.minimalclass.${jsonResponse["id"]}", response.body);
+      authService.mmkv.encodeString(
+          "${authService.getUserId()}.minimalclass.${jsonResponse["id"]}",
+          response.body);
 
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
@@ -151,7 +158,7 @@ class ClassManagementService {
   }
 
   Future<bool> deleteClass(String idClass) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(
@@ -167,7 +174,8 @@ class ClassManagementService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
-      authService.mmkv.removeValue("${authService.getUserId()}.minimalclass.$idClass");
+      authService.mmkv
+          .removeValue("${authService.getUserId()}.minimalclass.$idClass");
       authService.mmkv.removeValue("${authService.getUserId()}.class.$idClass");
     } else {
       throw Exception(

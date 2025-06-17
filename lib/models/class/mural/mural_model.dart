@@ -1,42 +1,37 @@
-import 'package:classhub/core/utils/mural_type.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:classhub/models/class/mural/attachment_model.dart';
+import 'package:classhub/models/class/mural/author_model.dart';
+import 'package:classhub/models/class/mural/subject_mural_model.dart';
 
 class MuralModel {
   final String? id;
-  final MuralType type;
+  final String type;
   final String description;
-  final String? subjectId;
-  final List<XFile>? attachments;
+  final String createdAt;
+  final List<AttachmentModel>? attachments;
+  final AuthorModel author;
+  final SubjectMuralModel? subject;
 
   MuralModel({
-    this.id,
+    required this.id,
     required this.type,
     required this.description,
-    this.subjectId,
+    required this.createdAt,
     this.attachments,
+    required this.author,
+    this.subject,
   });
 
   factory MuralModel.fromJson(Map<String, dynamic> json) {
     return MuralModel(
       id: json['id'],
-      type: json['type'] != null
-          ? MuralType.getMuralTypeFromName(json['type']) ?? MuralType.AVISO
-          : MuralType.AVISO,
+      type: json['type'],
       description: json['description'],
-      subjectId: json['subjectId'],
+      createdAt: json['created_at'],
+      attachments: (json['attachments'] as List?)
+          ?.map((attachment) => AttachmentModel.fromJson(attachment))
+          .toList(),
+      author: AuthorModel.fromJson(json['author']),
+      subject: SubjectMuralModel.fromJson(json['subject']),
     );
-  }
-
-  Map<String, String> toJson() {
-    final Map<String, String> json = {
-      'type': type.name,
-      'description': description,
-    };
-    
-    if (subjectId != null) {
-      json['subjectId'] = subjectId!;
-    }
-    
-    return json;
   }
 }

@@ -1,11 +1,12 @@
-import 'package:classhub/models/class/mural/mural_model.dart';
+import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:flutter/material.dart';
 
 class PostAlertWidget extends StatefulWidget {
   final MaterialColor classColor;
-  final MuralModel post;
+  final CreatePostMuralModel post;
 
-  const PostAlertWidget({super.key, required this.classColor, required this.post});
+  const PostAlertWidget(
+      {super.key, required this.classColor, required this.post});
 
   @override
   State<PostAlertWidget> createState() => _PostAlertWidgetState();
@@ -16,9 +17,8 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: widget.classColor.shade100
-      ),
+          borderRadius: BorderRadius.circular(12),
+          color: widget.classColor.shade100),
       child: Column(
         children: [
           Container(
@@ -44,13 +44,10 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: -4,
                   children: [
-                    Text("João Gabriel Aguiar", style: TextStyle(
-                      color: Colors.black87
-                    )),
-                    Text("23/12/2024", style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 12
-                    ))
+                    Text("João Gabriel Aguiar",
+                        style: TextStyle(color: Colors.black87)),
+                    Text("23/12/2024",
+                        style: TextStyle(color: Colors.black87, fontSize: 12))
                   ],
                 ),
                 Spacer(),
@@ -58,8 +55,11 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                   width: 24,
                   height: 24,
                   child: IconButton(
-                    onPressed: () {}, 
-                    icon: Icon(Icons.more_vert, color: Colors.black87,),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.more_vert,
+                      color: Colors.black87,
+                    ),
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                   ),
@@ -72,9 +72,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
             width: double.maxFinite,
             child: Text(
               widget.post.description,
-              style: TextStyle(
-                color: Colors.black87
-              ),
+              style: TextStyle(color: Colors.black87),
               textAlign: TextAlign.start,
             ),
           )

@@ -10,7 +10,7 @@ class ClassMembersService {
   ClassMembersService(this.authService);
 
   Future<bool> deleteMember(String idClass, String idUser) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(

@@ -13,7 +13,7 @@ class ClassSubjectsService {
 
   Future<SubjectModel> createSubject(
       String idClass, SubjectModel subjectModel) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.post(
@@ -40,7 +40,7 @@ class ClassSubjectsService {
 
   Future<SubjectModel> editSubject(
       String idClass, SubjectModel subjectModel) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.put(
@@ -66,7 +66,7 @@ class ClassSubjectsService {
   }
 
   Future<SubjectModel> getSubject(String idClass, String idSubject) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
@@ -91,7 +91,7 @@ class ClassSubjectsService {
   }
 
   Future<bool> deleteSubject(String idClass, String idSubject) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.delete(
@@ -116,7 +116,7 @@ class ClassSubjectsService {
   }
 
   Future<List<SubjectModel>> getSubjects(String idClass) async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
@@ -134,7 +134,8 @@ class ClassSubjectsService {
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
 
     if (response.statusCode == 200) {
-      authService.mmkv.encodeString("${authService.getUserId()}.class.$idClass.subjects", response.body);
+      authService.mmkv.encodeString(
+          "${authService.getUserId()}.class.$idClass.subjects", response.body);
 
       List<SubjectModel> subjects = [];
       for (var subject in jsonResponse['subjects']) {
@@ -148,14 +149,15 @@ class ClassSubjectsService {
   }
 
   List<SubjectModel> getCachedSubjects(String idClass) {
-      final sbjString = authService.mmkv.decodeString("${authService.getUserId()}.class.$idClass.subjects");
+    final sbjString = authService.mmkv
+        .decodeString("${authService.getUserId()}.class.$idClass.subjects");
 
-      if (sbjString == null) return [];
+    if (sbjString == null) return [];
 
-      List<SubjectModel> subjects = [];
-      for (var subject in jsonDecode(sbjString)['subjects']) {
-        subjects.add(SubjectModel.fromJson(subject));
-      }
-      return subjects;
+    List<SubjectModel> subjects = [];
+    for (var subject in jsonDecode(sbjString)['subjects']) {
+      subjects.add(SubjectModel.fromJson(subject));
+    }
+    return subjects;
   }
 }

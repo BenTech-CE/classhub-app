@@ -12,7 +12,7 @@ class SessionService {
   SessionService(this.authService);
 
   Future<UserModel?> getUser() async {
-    final token = await authService.getToken();
+    final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
     final response = await http.get(
@@ -30,7 +30,7 @@ class SessionService {
 
     if (response.statusCode == 200) {
       final UserModel um = UserModel.fromJson(jsonResponse);
-      
+
       authService.mmkv.encodeString("classhub-user-id", um.id);
       authService.mmkv.encodeString("user.${um.id}", response.body);
 
@@ -43,7 +43,8 @@ class SessionService {
 
   UserModel? getCachedUser() {
     if (authService.mmkv.containsKey("user.${authService.getUserId()}")) {
-      String userString = authService.mmkv.decodeString("user.${authService.getUserId()}")!;
+      String userString =
+          authService.mmkv.decodeString("user.${authService.getUserId()}")!;
 
       final UserModel um = UserModel.fromJson(jsonDecode(userString));
 
