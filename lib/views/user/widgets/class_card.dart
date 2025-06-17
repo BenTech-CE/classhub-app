@@ -8,6 +8,7 @@ import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
+import 'package:classhub/views/classes/sheets/delete_class_sheet.dart';
 import 'package:classhub/views/classes/sheets/edit_class_sheet.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,6 @@ class ClassCard extends StatefulWidget {
 
 class _ClassCardState extends State<ClassCard> {
   bool loadingLeave = false;
-  bool loadingDelete = false;
 
   void _sheetEditClass(BuildContext context) {
     showModalBottomSheet<void>(
@@ -31,6 +31,17 @@ class _ClassCardState extends State<ClassCard> {
       showDragHandle: true,
       isScrollControlled: true,
       builder: (BuildContext context) => EditClassSheet(
+        mClassObj: widget.turma,
+      ),
+    );
+  }
+
+  void _sheetDeleteClass(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) => DeleteClassSheet(
         mClassObj: widget.turma,
       ),
     );
@@ -169,38 +180,7 @@ class _ClassCardState extends State<ClassCard> {
                               setState(() {});
                             }
                           } else if (value == 'delete') {
-                            loadingDelete = true;
-                            setState(() {});
-                            final result = await classManagementViewModel
-                                .deleteClass(turma.id);
-                            if (result) {
-                              await userViewModel.fetchUser();
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text(
-                                  "Turma deletada com sucesso!",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                backgroundColor: cColorSuccess,
-                              ));
-                              loadingDelete = false;
-                              setState(() {});
-                            } else if (classManagementViewModel.error != null) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content: Text(
-                                  classManagementViewModel.error!,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                backgroundColor: cColorError,
-                              ));
-                              loadingDelete = false;
-                              setState(() {});
-                            }
+                            _sheetDeleteClass(context);
                           }
                         },
                         itemBuilder: (BuildContext context) =>
@@ -238,7 +218,7 @@ class _ClassCardState extends State<ClassCard> {
                   ],
                 ),
               ),
-              if (loadingLeave || loadingDelete)
+              if (loadingLeave)
                 Positioned(
                   top: 0,
                   left: 0,
@@ -259,11 +239,7 @@ class _ClassCardState extends State<ClassCard> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            loadingLeave
-                                ? "Saindo da turma"
-                                : loadingDelete
-                                    ? "Deletando turma"
-                                    : "",
+                            "Saindo da turma",
                             style: Theme.of(context)
                                 .textTheme
                                 .labelMedium

@@ -9,6 +9,7 @@ const cColorAzulSecondary = Color(0xFF90BCE5);
 
 const cColorSuccess = Colors.green;
 const cColorError = Colors.redAccent;
+const cColorWarning = Color(0xFFC3B127);
 
 const cColorPrimary1 = Color.fromARGB(255, 217, 241, 222);
 const cColorPrimary2 = Color.fromARGB(51, 51, 103, 64);
@@ -40,7 +41,7 @@ const listOfClassColors = [
   Color(0xFFF57C00), // Laranja Escuro
   Color(0xFF8E24AA), // Roxo Médio
   Color(0xFF795548), // Marrom
-  Colors.grey,        // Cinza Escuro
+  Colors.grey, // Cinza Escuro
   Color(0xFF00838F), // Azul Cian Escuro
   Color(0xFF689F38), // Verde Oliva Escuro
   Color(0xFFFBC02D), // Amarelo Mostarda

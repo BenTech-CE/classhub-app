@@ -42,7 +42,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: -4,
+                  spacing: 0,
                   children: [
                     Text("João Gabriel Aguiar",
                         style: TextStyle(color: Colors.black87)),
