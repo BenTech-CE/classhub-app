@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
@@ -24,13 +27,50 @@ class ClassMuralView extends StatefulWidget {
 class _ClassMuralViewState extends State<ClassMuralView> {
   Set<String> muralSelectedOption = {};
 
+  int _currentPage = 1;
+  bool _canLoadMore = false;
+  bool _refreshingPage = false;
+
   late MaterialColor classColor;
 
-  late Future<List<MuralModel>> _muralFuture;
+  final _muralController = StreamController<List<MuralModel>>();
+  final List<MuralModel> _posts = [];
 
-  Future<List<MuralModel>> _fetchMural() async {
+  Future<void> _fetchMural() async {
     final cmvm = context.read<ClassMuralViewModel>();
-    return await cmvm.getPostsDoNotNotify(widget.mClassObj.id, 1);
+
+    try {
+      _refreshingPage = true;
+
+      final cmvm = context.read<ClassMuralViewModel>();
+      final newPosts = await cmvm.getPosts(widget.mClassObj.id, _currentPage);
+
+      if (newPosts.isEmpty && cmvm.error != null) {
+        _muralController.addError(cmvm.error!);
+      }
+
+      if (newPosts.length < 10) {
+        // Se a API retornou menos de 10 itens, assumimos que é a última página
+        _canLoadMore = false;
+      } else {
+        _canLoadMore = true;
+      }
+
+      // Adiciona os novos posts à lista existente
+      _posts.addAll(newPosts);
+      
+      // Adiciona a lista completa e atualizada ao stream, o que irá notificar o StreamBuilder
+      if (!_muralController.isClosed) {
+        _muralController.add(_posts);
+      }
+      
+      _currentPage++;
+      _refreshingPage = false;
+    } catch (e, s) {
+      if (!_muralController.isClosed) {
+         _muralController.addError(e, s);
+      }
+    }
   }
 
   @override
@@ -39,11 +79,19 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
     classColor = generateMaterialColor(Color(widget.mClassObj.color));
 
-    _muralFuture = _fetchMural();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchMural());
+  }
+
+  @override
+  void dispose() {
+    _muralController.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final cmvm = context.watch<ClassMuralViewModel>();
+
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -54,6 +102,13 @@ class _ClassMuralViewState extends State<ClassMuralView> {
           NewPostWidget(
             classColor: classColor,
             classId: widget.mClassObj.id,
+            onCreated: () {
+              setState(() {
+                _posts.clear();
+                _currentPage = 1;
+              });
+              _fetchMural();
+            },
           ),
           SegmentedButton<String>(
             style: SegmentedButton.styleFrom(
@@ -91,8 +146,8 @@ class _ClassMuralViewState extends State<ClassMuralView> {
           Container(
             padding: EdgeInsets.all(sPadding),
             alignment: Alignment.topCenter,
-            child: FutureBuilder<List<MuralModel>>(
-              future: _muralFuture,
+            child: StreamBuilder<List<MuralModel>>(
+              stream: _muralController.stream,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -109,7 +164,14 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
                 if (snapshot.hasData) {
                   final posts = snapshot.data!;
-                  print(posts.length);
+                  
+                  if (_refreshingPage && _posts.length == 0) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  if (posts.isEmpty) {
+                    return const Text('Nenhum post no mural.');
+                  }
 
                   return ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
@@ -118,6 +180,9 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (BuildContext context, int index) {
                       if (posts[index].type == MuralType.AVISO) {
+                        return PostAlertWidget(
+                            classColor: classColor, post: posts[index]);
+                      } else if (posts[index].type == MuralType.MATERIAL) {
                         return PostAlertWidget(
                             classColor: classColor, post: posts[index]);
                       }
@@ -132,6 +197,17 @@ class _ClassMuralViewState extends State<ClassMuralView> {
               },
             ),
           ),
+          if (_posts.length >= 10 &&_canLoadMore)
+            Container(
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(horizontal: sPadding),
+              child: OutlinedButton(
+                onPressed: () {
+                  _fetchMural();
+                }, 
+                child: _refreshingPage ? Container(width: 16, height: 16, child: const CircularProgressIndicator(strokeWidth: 1,)) : const Text("Carregar mais postagens"),
+              ),
+            )
         ],
       ),
     );

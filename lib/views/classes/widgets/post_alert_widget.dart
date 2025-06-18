@@ -1,9 +1,11 @@
 import 'package:classhub/core/extensions/string.dart';
+import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PostAlertWidget extends StatefulWidget {
   final MaterialColor classColor;
@@ -120,8 +122,32 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                       color: widget.classColor.shade50,
                       child: InkWell(
                         splashColor: Colors.grey.withAlpha(80),
-                        onTap: () {
-                          print("InkWell Tapped!");
+                        onTap: () async {
+                          final Uri url = Uri.parse(att.url);
+
+                          try {
+                            // 2. Tenta abrir a URL
+                            // O `launchUrl` retorna um booleano: true se conseguiu, false se não.
+                            if (!await launchUrl(url)) {
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                content: Text(
+                                  "Não foi possível abrir este arquivo",
+                                  style:
+                                      const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                                backgroundColor: cColorError,
+                              ));
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(
+                                "Erro: $e",
+                                style:
+                                    const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              ),
+                              backgroundColor: cColorError,
+                            ));
+                          }
                         },
                         borderRadius: BorderRadius.circular(12),
                         child: Container(
@@ -138,7 +164,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                             children: [
                               HugeIcon(icon: HugeIcons.strokeRoundedDocumentAttachment, color: widget.classColor.shade900, size: 20,),
                               Flexible(
-                                child: Text(att.filename, style: TextStyle(
+                                child: Text(att.filename, style: const TextStyle(
                                   color: Colors.black87,
                                   fontSize: 16,
                                   

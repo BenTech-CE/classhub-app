@@ -1,10 +1,14 @@
 import 'dart:collection';
 
+import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/textfields.dart';
+import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
+import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
@@ -13,23 +17,66 @@ import 'package:provider/provider.dart';
 class NewPostWidget extends StatefulWidget {
   final MaterialColor classColor;
   final String classId;
+  final VoidCallback onCreated;
 
-  const NewPostWidget({super.key, required this.classColor, required this.classId});
+  const NewPostWidget({super.key, required this.classColor, required this.classId, required this.onCreated});
 
   @override
   State<NewPostWidget> createState() => _NewPostWidgetState();
 }
 
 class _NewPostWidgetState extends State<NewPostWidget> {
-  final List<String> tiposPost = <String>['Aviso','Material'];
+  final TextEditingController _tf = TextEditingController();
 
-  String dropTipos = "Aviso";
+  final List<MuralType> tiposPost = [MuralType.AVISO, MuralType.MATERIAL];
+
+  MuralType dropTipos = MuralType.AVISO;
 
   late String uname;
 
   late List<SubjectModel> materias;
 
   late SubjectModel idMateria;
+
+  void _createPost() async {
+    final cmvm = context.read<ClassMuralViewModel>();
+    print("will create post");
+    if (_tf.text.isNotEmpty && !cmvm.isLoading) {
+      
+
+      final postModel = CreatePostMuralModel(
+        type: dropTipos, 
+        description: _tf.text,
+        subjectId: idMateria.id != "not-selected-subject" ? idMateria.id : null,
+        attachments: []
+      );
+
+      
+      final result = await cmvm.createPost(widget.classId, postModel);
+      print("result: ");
+      print(result);
+      if (result != null) {
+        widget.onCreated();
+
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "Postagem criada com sucesso!",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: cColorSuccess,
+        ));
+      } else if (cmvm.error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            cmvm.error!,
+            style:
+                const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: cColorError,
+        ));
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -60,6 +107,8 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final cmvm = context.watch<ClassMuralViewModel>();
+
     return Container(
       margin: const EdgeInsets.all(16.0),
       padding: const EdgeInsets.all(12.0),
@@ -96,6 +145,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                     child: Column(
                       children: [
                         TextField(
+                          controller: _tf,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           decoration: const InputDecoration(
@@ -126,7 +176,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                               spacing: 8,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                PopupMenuButton<String>(
+                                PopupMenuButton<MuralType>(
                                   padding: const EdgeInsets.all(0),
                                   menuPadding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -148,7 +198,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Text(str, style: TextStyle(
+                                              Text(str.type.toCapitalized(), style: TextStyle(
                                                 color: widget.classColor.shade900,
                                                 fontSize: 14
                                               ), textAlign: TextAlign.end,),
@@ -158,7 +208,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       );
                                     }).toList();
                                   },
-                                  onSelected: (String value) {
+                                  onSelected: (MuralType value) {
                                     // This is called when the user selects an item.
                                     setState(() {
                                       dropTipos = value;
@@ -174,7 +224,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text(dropTipos, style: TextStyle(
+                                        Text(dropTipos.type.toCapitalized(), style: TextStyle(
                                           color: widget.classColor.shade900,
                                           fontSize: 14
                                         ), textAlign: TextAlign.end,),
@@ -275,8 +325,14 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {}, 
-                          child: HugeIcon(icon: HugeIcons.strokeRoundedArrowRight02, color: widget.classColor.shade900,)
+                          onTap: _createPost, 
+                          child: cmvm.isLoading ? 
+                            Container(width: 24, height: 24, padding: EdgeInsets.all(4), child: CircularProgressIndicator(strokeWidth: 1,)) 
+                          : SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: HugeIcon(icon: HugeIcons.strokeRoundedArrowRight02, color: widget.classColor.shade900,)
+                          )
                         )
                       ],
                     ),

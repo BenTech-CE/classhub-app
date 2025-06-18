@@ -57,6 +57,8 @@ class ClassMuralService {
       "Authorization": "Bearer $token"
     };
 
+    print(requestBody);
+
     var request = http.MultipartRequest('POST', uri)
       ..headers.addAll(headers)
       ..fields.addAll(requestBody);
@@ -80,7 +82,7 @@ class ClassMuralService {
     print(response.statusCode);
     print(jsonResponse);
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return MuralModel.fromJson(jsonResponse);
     } else {
       throw Exception(

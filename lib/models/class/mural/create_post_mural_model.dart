@@ -18,7 +18,7 @@ class CreatePostMuralModel {
 
   Map<String, String> toJson() {
     final Map<String, String> json = {
-      'type': type.name,
+      'type': type.type,
       'description': description,
     };
 
