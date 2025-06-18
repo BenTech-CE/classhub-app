@@ -7,11 +7,10 @@ enum MuralType {
   const MuralType(this.type);
 
   static MuralType? getMuralTypeFromName(String type) {
-    for (var muralType in MuralType.values) {
-      if (muralType.type == type.toLowerCase()) {
-        return muralType;
-      }
+    try {
+      return MuralType.values.firstWhere((e) => e.type == type);
+    } catch (_) {
+      return null;
     }
-    return null;
   }
 }

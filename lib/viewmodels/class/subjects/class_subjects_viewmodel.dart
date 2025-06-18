@@ -95,4 +95,8 @@ class ClassSubjectsViewModel extends ChangeNotifier {
     }
     return [];
   }
+
+  List<SubjectModel> getCachedSubjectsDoNotNotify(String idClass) {
+    return classSubjectsService.getCachedSubjects(idClass);
+  }
 }

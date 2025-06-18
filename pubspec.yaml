@@ -48,6 +48,8 @@ dependencies:
   auto_size_text: ^3.0.0
   confetti: ^0.8.0
   dotted_border: ^3.0.1
+  intl: ^0.20.2
+  file_picker: ^10.2.0
 
 dev_dependencies:
   flutter_test:

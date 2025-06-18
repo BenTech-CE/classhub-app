@@ -3,10 +3,14 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/models/class/mural/author_model.dart';
 import 'package:classhub/models/class/mural/create_post_mural_model.dart';
+import 'package:classhub/models/class/mural/mural_model.dart';
+import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/new_post_widget.dart';
 import 'package:classhub/views/classes/widgets/post_alert_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ClassMuralView extends StatefulWidget {
   final MinimalClassModel mClassObj;
@@ -22,8 +26,11 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
   late MaterialColor classColor;
 
-  Future<void> _fetchMural() {
-    return Future.delayed(Duration(seconds: 1));
+  late Future<List<MuralModel>> _muralFuture;
+
+  Future<List<MuralModel>> _fetchMural() async {
+    final cmvm = context.read<ClassMuralViewModel>();
+    return await cmvm.getPostsDoNotNotify(widget.mClassObj.id, 1);
   }
 
   @override
@@ -31,6 +38,8 @@ class _ClassMuralViewState extends State<ClassMuralView> {
     super.initState();
 
     classColor = generateMaterialColor(Color(widget.mClassObj.color));
+
+    _muralFuture = _fetchMural();
   }
 
   @override
@@ -38,6 +47,8 @@ class _ClassMuralViewState extends State<ClassMuralView> {
     return SizedBox(
       width: double.maxFinite,
       child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           NewPostWidget(
@@ -79,16 +90,46 @@ class _ClassMuralViewState extends State<ClassMuralView> {
           ),
           Container(
             padding: EdgeInsets.all(sPadding),
-            child: Column(
-              spacing: sSpacing,
-              children: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-                  .map((e) => PostAlertWidget(
-                      classColor: classColor,
-                      post: CreatePostMuralModel(
-                          type: MuralType.AVISO,
-                          description: "Fake Post!",
-                          subjectId: null)))
-                  .toList(),
+            alignment: Alignment.topCenter,
+            child: FutureBuilder<List<MuralModel>>(
+              future: _muralFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
+                if (snapshot.hasError) {
+                  print(snapshot.stackTrace);
+                  print(snapshot.error);
+
+                  return Text(
+                    'Ocorreu um erro: ${snapshot.error}',
+                  );
+                }
+
+                if (snapshot.hasData) {
+                  final posts = snapshot.data!;
+                  print(posts.length);
+
+                  return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: posts.length,
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (BuildContext context, int index) {
+                      if (posts[index].type == MuralType.AVISO) {
+                        return PostAlertWidget(
+                            classColor: classColor, post: posts[index]);
+                      }
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: 16);
+                    },
+                  );
+                }
+
+                return const CircularProgressIndicator();
+              },
             ),
           ),
         ],

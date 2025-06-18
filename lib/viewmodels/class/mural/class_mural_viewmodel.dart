@@ -27,6 +27,10 @@ class ClassMuralViewModel extends ChangeNotifier {
     return [];
   }
 
+  Future<List<MuralModel>> getPostsDoNotNotify(String classId, int page) async {
+    return await classMuralService.getPosts(classId, page);
+  }
+
   Future<MuralModel?> createPost(
       String classId, CreatePostMuralModel muralModel) async {
     isLoading = true;

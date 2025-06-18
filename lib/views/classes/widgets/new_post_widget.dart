@@ -39,7 +39,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
     uname = uvm.user!.name;
 
     final svm = context.read<ClassSubjectsViewModel>();
-    materias = svm.getCachedSubjects(widget.classId);
+    materias = svm.getCachedSubjectsDoNotNotify(widget.classId);
 
     materias = [
       SubjectModel(
