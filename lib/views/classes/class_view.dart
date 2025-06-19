@@ -9,6 +9,7 @@ import 'package:classhub/viewmodels/class/management/class_management_viewmodel.
 import 'package:classhub/views/classes/routes/class_calendar_view.dart';
 import 'package:classhub/views/classes/routes/class_mural_view.dart';
 import 'package:classhub/views/classes/routes/class_subjects_view.dart';
+import 'package:classhub/views/classes/sheets/list_members.dart';
 import 'package:classhub/views/classes/widgets/base_class_widget.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:classhub/views/classes/widgets/new_card_widget.dart';
@@ -136,6 +137,15 @@ class _ClassViewState extends State<ClassView> {
                 centerTitle: true,
                 title: Text(widget.mClassObj.name),
                 backgroundColor: Colors.transparent,
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(), showDragHandle: true, useSafeArea: false,);
+                    },
+                    icon: Icon(HugeIcons.strokeRoundedUserGroup02),
+                    color: Colors.white,
+                  )
+                ],
                 flexibleSpace: widget.mClassObj.bannerUrl != null
                     ? Container(
                         decoration: BoxDecoration(
