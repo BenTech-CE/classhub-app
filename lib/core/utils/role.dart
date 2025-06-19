@@ -15,6 +15,16 @@ enum Role {
     }
   }
 
+  String get name {
+    return switch (value) {
+      0 => "Colega",
+      5 => "Líder",
+      4 => "Vice-líder",
+      3 => "Contribuidor",
+      _ => "Colega",
+    };
+  }
+
   // Operador maior que (>)
   bool operator >(Role other) {
     return value > other.value;

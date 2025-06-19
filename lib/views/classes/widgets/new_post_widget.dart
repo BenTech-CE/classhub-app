@@ -130,8 +130,16 @@ class _NewPostWidgetState extends State<NewPostWidget> {
         spacing: 12,
         children: [
           CircleAvatar(
-            backgroundColor: widget.classColor, radius: 22,
-            foregroundImage: NetworkImage("https://ui-avatars.com/api/?name=$uname&background=random"),
+            radius: 20, // Define o raio do círculo
+            backgroundColor: widget.classColor.shade100, // Define a cor de fundo
+            child: Text(
+                (() {
+                  final initials = uname.trim().split(' ').map((sobrenome) => sobrenome[0].toCapitalized()).join();
+                  return initials.length > 2 ? initials.substring(0, 2) : initials;
+                })(),
+                overflow: TextOverflow.clip,
+                style: TextStyle(
+                    color: widget.classColor)), // Conteúdo dentro do círculo
           ),
           Expanded(
             child: Container(

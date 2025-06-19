@@ -1,4 +1,7 @@
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/utils/role.dart';
+import 'package:classhub/core/utils/util.dart';
+import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/views/classes/sheets/create_class_sheet.dart';
 import 'package:classhub/views/classes/sheets/join_class_sheet.dart';
 import 'package:classhub/views/classes/widgets/member_card_widget.dart';
@@ -13,17 +16,39 @@ class ListMembersSheet extends StatefulWidget {
 }
 
 class _ListMembersSheetState extends State<ListMembersSheet> {
+
+  final _membersList = [
+    ClassMemberModel.fromJson({
+      "id": "uuid-do-lider-1",
+      "name": "João Gabriel Aguiar",
+      "profile_picture": null,
+      "role": 5
+    },),
+    ClassMemberModel.fromJson({
+      "id": "uuid-do-lider-2",
+      "name": "Kauã Sousa",
+      "profile_picture": null,
+      "role": 4
+    },),
+    ClassMemberModel.fromJson({
+      "id": "uuid-do-3",
+      "name": "Ismael Lira",
+      "profile_picture": null,
+      "role": 0
+    },)
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.all(sPadding),
+        padding: const EdgeInsets.symmetric(horizontal: sPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           spacing: sSpacing,
           children: [
             Text(
-              "Lista de Colegas",
+              "Lista de Colegas", 
               style: Theme.of(context)
                   .textTheme
                   .titleLarge
@@ -31,20 +56,15 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
               textAlign: TextAlign.center,
             ),
             Text(
-              "Mostrando 4 colegas em P5 - Informática",
+              "Mostrando ${_membersList.length} colegas em P5 - Informática",
               style: TextStyle(color: cColorText2Azul),
               textAlign: TextAlign.left,
             ), // se quiser espaço entre os textos e a lista
             Expanded(
               // solução do problema
               child: ListView(
-                padding: EdgeInsets.all(0),
-                children: const [
-                  MemberCardWidget(name: "João Gabriel", role: "Líder", color: Colors.pink,),
-                  MemberCardWidget(name: "Ismael Lira Nascimento Lira Lira Lira Lira Lira Lira Lira Lira Lira Lira Lira Lira Lira ", role: "Vice-Líder", color: Colors.green,),
-                  MemberCardWidget(name: "Yasmin Sousa", role: "Colega", color: Colors.blueGrey,),
-                  MemberCardWidget(name: "Kauã Sousa", role: "Colega", color: Colors.deepOrange),
-                ],
+                padding: EdgeInsets.zero,
+                children: _membersList.map((member) => MemberCardWidget(member: member, color: generateMaterialColor(cColorPrimary))).toList()
               ),
             ),
           ],

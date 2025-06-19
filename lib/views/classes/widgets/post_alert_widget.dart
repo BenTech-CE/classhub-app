@@ -44,7 +44,25 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
             child: Row(
               spacing: 12,
               children: [
-                CircleAvatar(backgroundColor: widget.classColor.shade200, foregroundImage: widget.post.author.profilePicture != null ? NetworkImage(widget.post.author.profilePicture!) : null,),
+                CircleAvatar(
+                  radius: 20, // Define o raio do círculo
+                  backgroundColor:
+                      widget.classColor.shade100, // Define a cor de fundo
+                  child: Text(
+                    (() {
+                      final initials = widget.post.author.name
+                          .trim()
+                          .split(' ')
+                          .map((sobrenome) => sobrenome[0].toCapitalized())
+                          .join();
+                      return initials.length > 2
+                          ? initials.substring(0, 2)
+                          : initials;
+                    })(),
+                    overflow: TextOverflow.clip,
+                    style: TextStyle(color: widget.classColor),
+                  ), // Conteúdo dentro do círculo
+                ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
