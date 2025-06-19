@@ -140,7 +140,7 @@ class _ClassViewState extends State<ClassView> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(), showDragHandle: true, useSafeArea: false,);
+                      showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(mClassObj: widget.mClassObj,), showDragHandle: true, useSafeArea: false,);
                     },
                     icon: Icon(HugeIcons.strokeRoundedUserGroup02),
                     color: Colors.white,

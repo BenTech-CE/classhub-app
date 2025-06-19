@@ -65,6 +65,8 @@ class ClassMuralService {
 
     if (muralModel.attachments != null) {
       for (var attachment in muralModel.attachments!) {
+        print("processing attachment ${attachment.name}");
+
         final Uint8List fileBytes = await attachment.readAsBytes();
         final multipartFile = http.MultipartFile.fromBytes(
             'attachments', fileBytes,
@@ -72,6 +74,9 @@ class ClassMuralService {
         request.files.add(multipartFile);
       }
     }
+
+    print("request files: ");
+    print(request.files);
 
     var response = await request.send();
 

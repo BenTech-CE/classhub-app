@@ -4,6 +4,7 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/core/utils/mural_type.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/models/class/mural/author_model.dart';
@@ -181,10 +182,16 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                     itemBuilder: (BuildContext context, int index) {
                       if (posts[index].type == MuralType.AVISO) {
                         return PostAlertWidget(
-                            classColor: classColor, post: posts[index]);
+                          classColor: classColor, 
+                          post: posts[index],
+                          editable: widget.mClassObj.role >= Role.contribuidor,
+                        );
                       } else if (posts[index].type == MuralType.MATERIAL) {
                         return PostAlertWidget(
-                            classColor: classColor, post: posts[index]);
+                          classColor: classColor, 
+                          post: posts[index],
+                          editable: widget.mClassObj.role >= Role.contribuidor,
+                        );
                       }
                     },
                     separatorBuilder: (BuildContext context, int index) {

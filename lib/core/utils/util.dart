@@ -1,3 +1,4 @@
+import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:flutter/material.dart';
 
@@ -175,4 +176,9 @@ TimeOfDay? stringToTimeOfDay(String timeString) {
   } catch (e) {
     return null;
   }
+}
+
+String getNameInitials(String input) {
+  final initials = input.trim().split(' ').map((sobrenome) => sobrenome[0].toCapitalized()).join();
+  return initials.length > 2 ? initials.substring(0, 2) : initials;
 }

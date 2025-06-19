@@ -137,6 +137,8 @@ class _SubjectCardState extends State<SubjectCard> {
               ),
               widget.mClassObj.role >= Role.viceLider
                   ? PopupMenuButton<String>(
+                      shadowColor: Colors.grey,
+                      menuPadding: EdgeInsets.zero,
                       icon: Icon(Icons.more_vert,
                           size: 24.0, color: color.shade800),
                       onSelected: (String value) async {

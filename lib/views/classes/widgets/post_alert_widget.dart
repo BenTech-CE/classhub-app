@@ -4,21 +4,57 @@ import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostAlertWidget extends StatefulWidget {
   final MaterialColor classColor;
+  final bool editable;
   final MuralModel post;
 
   const PostAlertWidget(
-      {super.key, required this.classColor, required this.post});
+      {super.key, required this.classColor, required this.post, required this.editable});
 
   @override
   State<PostAlertWidget> createState() => _PostAlertWidgetState();
 }
 
 class _PostAlertWidgetState extends State<PostAlertWidget> {
+  final popupMenuItemsLeader = [
+    const PopupMenuItem<String>(
+      value: 'copy',
+      child: Text('Copiar'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'delete',
+      child: Text('Apagar'),
+    )
+  ];
+
+  final popupMenuItemsMember = [
+    const PopupMenuItem<String>(
+      value: 'copy',
+      child: Text('Copiar'),
+    ),
+  ];
+
+  void _copy() async {
+    print("copying..");
+
+    await Clipboard.setData(ClipboardData(text: widget.post.description));
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+        "Copiado com sucesso!",
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: cColorSuccess,
+    ));
+    // copied successfully
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,20 +83,11 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                 CircleAvatar(
                   radius: 20, // Define o raio do círculo
                   backgroundColor:
-                      widget.classColor.shade100, // Define a cor de fundo
+                      widget.classColor.shade200, // Define a cor de fundo
                   child: Text(
-                    (() {
-                      final initials = widget.post.author.name
-                          .trim()
-                          .split(' ')
-                          .map((sobrenome) => sobrenome[0].toCapitalized())
-                          .join();
-                      return initials.length > 2
-                          ? initials.substring(0, 2)
-                          : initials;
-                    })(),
+                    getNameInitials(widget.post.author.name),
                     overflow: TextOverflow.clip,
-                    style: TextStyle(color: widget.classColor),
+                    style: TextStyle(color: widget.classColor.shade900),
                   ), // Conteúdo dentro do círculo
                 ),
                 Column(
@@ -69,9 +96,9 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                   spacing: 0,
                   children: [
                     Text(widget.post.author.name,
-                        style: const TextStyle(color: Colors.black87)),
+                        style: const TextStyle(color: cColorText1)),
                     Text(widget.post.formattedCreatedAt,
-                        style: const TextStyle(color: Colors.black87, fontSize: 12))
+                        style: const TextStyle(color: cColorText1, fontSize: 12))
                   ],
                 ),
                 Expanded(
@@ -102,18 +129,28 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                     ),
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: 24,
                   height: 24,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.more_vert,
-                      color: Colors.black87,
-                    ),
+                  child: PopupMenuButton<String>(
+                    shadowColor: Colors.grey,
+                    menuPadding: EdgeInsets.zero,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                  ),
+                    icon: const Icon(Icons.more_vert,
+                        size: 24.0, color: cColorText1),
+                    onSelected: (String value) async {
+                      if (value == 'copy') {
+                        _copy();
+                      } else if (value == 'delete') {
+                        // Deletar o aviso.
+                      }
+                    },
+                    itemBuilder: (BuildContext context) =>
+                        widget.editable ? popupMenuItemsLeader : popupMenuItemsMember,
+                    // atention: Offset de onde irá aparecer o menu (x, y)
+                    offset: const Offset(-16, 16),
+                  )
                 )
               ],
             ),
@@ -183,7 +220,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                               HugeIcon(icon: HugeIcons.strokeRoundedDocumentAttachment, color: widget.classColor.shade900, size: 20,),
                               Flexible(
                                 child: Text(att.filename, style: const TextStyle(
-                                  color: Colors.black87,
+                                  color: cColorText1,
                                   fontSize: 16,
                                   
                                 ), overflow: TextOverflow.ellipsis, maxLines: 1,),

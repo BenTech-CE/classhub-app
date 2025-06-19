@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
@@ -10,8 +11,11 @@ import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
+import 'package:collection/collection.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class NewPostWidget extends StatefulWidget {
@@ -38,6 +42,34 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   late SubjectModel idMateria;
 
+  List<XFile> _selectedAttachments = [];
+
+  void _attach() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: [
+        'pdf', 'doc', 'docx', 'odt', 'txt', 'epub',
+        'ppt', 'pptx', 'odp',
+        'xls', 'xlsx', 'ods', 'csv',
+        'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp',
+        'mp4', 'mov', 'avi',
+        'mp3', 'wav', 'm4a', 'ogg', 'opus'
+      ],
+    );
+
+    if (result != null) {
+      List<XFile> files = result.xFiles;
+
+      setState(() {
+        _selectedAttachments = files;
+      });
+      
+    } else {
+      print("Canceled file picker.");
+    }
+  }
+
   void _createPost() async {
     final cmvm = context.read<ClassMuralViewModel>();
     print("will create post");
@@ -48,7 +80,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
         type: dropTipos, 
         description: _tf.text,
         subjectId: idMateria.id != "not-selected-subject" ? idMateria.id : null,
-        attachments: []
+        attachments: _selectedAttachments
       );
 
       
@@ -57,6 +89,12 @@ class _NewPostWidgetState extends State<NewPostWidget> {
       print(result);
       if (result != null) {
         widget.onCreated();
+
+        setState(() {
+          _tf.text = "";
+          _selectedAttachments.clear();
+        });
+        
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -131,15 +169,12 @@ class _NewPostWidgetState extends State<NewPostWidget> {
         children: [
           CircleAvatar(
             radius: 20, // Define o raio do círculo
-            backgroundColor: widget.classColor.shade100, // Define a cor de fundo
+            backgroundColor: widget.classColor.shade200, // Define a cor de fundo
             child: Text(
-                (() {
-                  final initials = uname.trim().split(' ').map((sobrenome) => sobrenome[0].toCapitalized()).join();
-                  return initials.length > 2 ? initials.substring(0, 2) : initials;
-                })(),
+                getNameInitials(uname),
                 overflow: TextOverflow.clip,
                 style: TextStyle(
-                    color: widget.classColor)), // Conteúdo dentro do círculo
+                    color: widget.classColor.shade900)), // Conteúdo dentro do círculo
           ),
           Expanded(
             child: Container(
@@ -149,8 +184,10 @@ class _NewPostWidgetState extends State<NewPostWidget> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 8,
                       children: [
                         TextField(
                           controller: _tf,
@@ -163,6 +200,48 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                               hintText: "O que você deseja postar?",
                               hintStyle:
                                   TextStyle(color: cColorText3, fontSize: 16)),
+                        ),
+                        ..._selectedAttachments.mapIndexed((index, file) =>
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: widget.classColor.shade50,
+                              border: Border.all(color: widget.classColor.shade200, width: 2),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              spacing: 4,
+                              children: [
+                                HugeIcon(icon: HugeIcons.strokeRoundedDocumentAttachment, color: widget.classColor.shade900, size: 20,),
+                                Flexible(
+                                  child: Text(file.name, style: const TextStyle(
+                                    color: cColorText1,
+                                    fontSize: 16,
+                                    
+                                  ), overflow: TextOverflow.ellipsis, maxLines: 1,),
+                                ),
+                                SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      // Remover anexo
+                                      
+                                      setState(() {
+                                        _selectedAttachments.removeAt(index);
+                                      });
+                                    }, 
+                                    icon: const Icon(Icons.close),
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -306,7 +385,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   ),
                                 ),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: _attach,
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: widget.classColor.shade200,
