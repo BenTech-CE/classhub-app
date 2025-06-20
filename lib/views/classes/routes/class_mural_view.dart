@@ -22,7 +22,7 @@ class ClassMuralView extends StatefulWidget {
 }
 
 class _ClassMuralViewState extends State<ClassMuralView> {
-  Set<String> muralSelectedOption = {};
+  Set<MuralType> muralSelectedOption = {};
 
   int _currentPage = 1;
   bool _canLoadMore = false;
@@ -37,7 +37,10 @@ class _ClassMuralViewState extends State<ClassMuralView> {
     //final cmvm = context.read<ClassMuralViewModel>();
 
     try {
-      _refreshingPage = true;
+      setState(() {
+        _refreshingPage = true;
+      });
+      
 
       final cmvm = context.read<ClassMuralViewModel>();
       final newPosts = await cmvm.getPosts(widget.mClassObj.id, _currentPage);
@@ -48,9 +51,14 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
       if (newPosts.length < 10) {
         // Se a API retornou menos de 10 itens, assumimos que é a última página
-        _canLoadMore = false;
+        
+        setState(() {
+          _canLoadMore = false;
+        });
       } else {
-        _canLoadMore = true;
+        setState(() {
+          _canLoadMore = true;
+        });
       }
 
       // Adiciona os novos posts à lista existente
@@ -61,8 +69,10 @@ class _ClassMuralViewState extends State<ClassMuralView> {
         _muralController.add(_posts);
       }
       
-      _currentPage++;
-      _refreshingPage = false;
+      setState(() {
+        _currentPage++;
+        _refreshingPage = false;
+      });
     } catch (e, s) {
       if (!_muralController.isClosed) {
          _muralController.addError(e, s);
@@ -107,19 +117,19 @@ class _ClassMuralViewState extends State<ClassMuralView> {
               _fetchMural();
             },
           ),
-          SegmentedButton<String>(
+          SegmentedButton<MuralType>(
             style: SegmentedButton.styleFrom(
                 selectedBackgroundColor: classColor.shade400,
                 selectedForegroundColor: Colors.white,
                 foregroundColor: classColor.shade800,
                 side: BorderSide(color: classColor.shade300, width: 1)),
-            segments: const <ButtonSegment<String>>[
-              ButtonSegment<String>(
-                value: "avisos",
+            segments: const [
+              ButtonSegment(
+                value: MuralType.AVISO,
                 label: Text('Avisos'),
               ),
-              ButtonSegment<String>(
-                value: "materiais",
+              ButtonSegment(
+                value: MuralType.MATERIAL,
                 label: Text('Materiais'),
               ),
             ],
@@ -127,7 +137,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
             showSelectedIcon: false,
             multiSelectionEnabled: false,
             emptySelectionAllowed: true,
-            onSelectionChanged: (Set<String> newSelection) {
+            onSelectionChanged: (Set<MuralType> newSelection) {
               setState(() {
                 // By default there is only a single segment that can be
                 // selected at one time, so its value is always the first
@@ -141,7 +151,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
             },
           ),
           Container(
-            padding: EdgeInsets.all(sPadding),
+            padding: const EdgeInsets.all(sPadding),
             alignment: Alignment.topCenter,
             child: StreamBuilder<List<MuralModel>>(
               stream: _muralController.stream,
@@ -162,37 +172,41 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                 if (snapshot.hasData) {
                   final posts = snapshot.data!;
                   
-                  if (_refreshingPage && _posts.length == 0) {
+                  final filteredPosts = muralSelectedOption.isEmpty
+                    ? posts
+                    : posts.where((p) => muralSelectedOption.contains(p.type)).toList();
+
+                  if (_refreshingPage && _posts.isEmpty) {
                     return const CircularProgressIndicator();
                   }
 
-                  if (posts.isEmpty) {
+                  if (filteredPosts.isEmpty) {
                     return const Text('Nenhum post no mural.');
                   }
 
                   return ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: posts.length,
+                    itemCount: filteredPosts.length,
                     padding: EdgeInsets.zero,
                     itemBuilder: (BuildContext context, int index) {
-                      if (posts[index].type == MuralType.AVISO) {
+                      if (filteredPosts[index].type == MuralType.AVISO) {
                         return PostAlertWidget(
                           classColor: classColor, 
-                          post: posts[index],
+                          post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,
                         );
-                      } else if (posts[index].type == MuralType.MATERIAL) {
+                      } else if (filteredPosts[index].type == MuralType.MATERIAL) {
                         return PostAlertWidget(
                           classColor: classColor, 
-                          post: posts[index],
+                          post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,
                         );
                       }
 
                       return PostAlertWidget(
                           classColor: classColor, 
-                          post: posts[index],
+                          post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,
                       );
                     },
@@ -206,7 +220,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
               },
             ),
           ),
-          if (_posts.length >= 10 &&_canLoadMore)
+          if (_posts.length >= 10 && _canLoadMore)
             Container(
               width: double.maxFinite,
               padding: const EdgeInsets.symmetric(horizontal: sPadding),

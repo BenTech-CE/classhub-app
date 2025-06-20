@@ -11,7 +11,6 @@ import 'package:classhub/viewmodels/class/management/class_management_viewmodel.
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
-import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/user/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

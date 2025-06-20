@@ -175,12 +175,12 @@ class _ClassViewState extends State<ClassView> {
                       ),
                 bottom: _selectedIndex == 0
                     ? PreferredSize(
-                        preferredSize: const Size.fromHeight(200),
+                        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.24),
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.only(bottom: 24.0),
                           width: double.maxFinite,
-                          height: 200,
+                          height: MediaQuery.of(context).size.height * 0.24,
                           child: CarouselSlider(
                             options: CarouselOptions(
                                 height: 130,

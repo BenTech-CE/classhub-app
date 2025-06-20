@@ -1,10 +1,11 @@
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
-import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/member_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:classhub/core/theme/colors.dart';
+import 'package:provider/provider.dart';
 
 class ListMembersSheet extends StatefulWidget {
   final MinimalClassModel mClassObj;
@@ -16,32 +17,25 @@ class ListMembersSheet extends StatefulWidget {
 }
 
 class _ListMembersSheetState extends State<ListMembersSheet> {
-  final _membersList = [
-    ClassMemberModel.fromJson({
-      "id": "uuid-do-lider-1",
-      "name": "João Gabriel Aguiar",
-      "profile_picture": null,
-      "role": 5
-    },),
-    ClassMemberModel.fromJson({
-      "id": "uuid-do-lider-2",
-      "name": "Kauã Sousa",
-      "profile_picture": null,
-      "role": 4
-    },),
-    ClassMemberModel.fromJson({
-      "id": "uuid-do-3",
-      "name": "Ismael Lira",
-      "profile_picture": null,
-      "role": 0
-    },)
-  ];
+  int _membersCount = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Chama a função do provider para buscar os dados.
+      // Use 'listen: false' porque estamos apenas disparando uma ação,
+      // não precisamos 'ouvir' mudanças dentro do initState.
+      Provider.of<ClassMembersViewModel>(context, listen: false).getMembers(widget.mClassObj.id);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<ClassMembersViewModel>();
+
     return SafeArea(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: sSpacing,
         children: [
           Padding(
@@ -51,33 +45,52 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
               spacing: sSpacing,
               children: [
                 Text(
-                  "Lista de Colegas", 
+                  "Lista de Colegas",
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge
                       ?.copyWith(color: cColorPrimary),
                   textAlign: TextAlign.center,
                 ),
-                Text(
-                  "Mostrando ${_membersList.length} colegas em P5 - Informática",
-                  style: TextStyle(color: cColorText2Azul),
-                  textAlign: TextAlign.left,
-                ),
+                if (!provider.isLoading&&provider.members.isNotEmpty)
+                  Text(
+                    "Mostrando ${provider.members.length} colegas em P5 - Informática",
+                    style: const TextStyle(color: cColorText2Azul),
+                    textAlign: TextAlign.left,
+                  )
               ],
             ),
-          ), // se quiser espaço entre os textos e a lista
-          Expanded(
-            // solução do problema
-            child: ListView(
-              children: _membersList.map(
-                (member) => MemberCardWidget(
-                  member: member, 
-                  color: generateMaterialColor(cColorPrimary),
-                  myRole: widget.mClassObj.role
-                ),
-              ).toList(),
-            ),
           ),
+          Consumer<ClassMembersViewModel>(
+            builder: (context, provider, child) {
+              if (provider.isLoading) {
+                return const CircularProgressIndicator();
+
+              } else if (provider.error != null) {
+                return Text(provider.error!); // Exibe a mensagem de erro do provider
+
+              } else if (provider.members.isEmpty) {
+                return const Text('Nenhum membro encontrado');
+              }
+
+              // Se tudo deu certo, use a lista de membros do provider
+              final members = provider.members;
+
+              return Expanded(
+                child: ListView(
+                  children: members
+                      .map(
+                        (member) => MemberCardWidget(
+                          member: member,
+                          color: generateMaterialColor(cColorPrimary), 
+                          myRole: widget.mClassObj.role
+                        ),
+                      )
+                      .toList(),
+                ),
+              );
+            },
+          )
         ],
       )
     );

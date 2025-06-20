@@ -4,42 +4,48 @@ import 'package:flutter/material.dart';
 
 class ClassMembersViewModel extends ChangeNotifier {
   final ClassMembersService classMembersService;
-  bool isLoading = false;
-  String? error;
+
+  bool _isLoading = false;
+  List<ClassMemberModel> _members = [];
+  String? _error;
+
+  bool get isLoading => _isLoading;
+  List<ClassMemberModel> get members => _members;
+  String? get error => _error;
 
   ClassMembersViewModel(this.classMembersService);
 
   Future<bool> deleteMember(String idClass, String idUser) async {
-    isLoading = true;
+    _isLoading = true;
     notifyListeners();
 
     try {
-      error = null;
+      _error = null;
       return await classMembersService.deleteMember(idClass, idUser);
     } catch (e) {
       print(e);
-      error = e.toString();
+      _error = e.toString();
       return false;
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<List<ClassMemberModel>> getMembers(String classId) async {
-    isLoading = true;
+  Future<void> getMembers(String classId) async {
+    _isLoading = true;
     notifyListeners();
 
     try {
-      error = null;
-      return await classMembersService.getMembers(classId);
+      _error = null;
+      _members = await classMembersService.getMembers(classId);
     } catch (e) {
       print(e);
-      error = e.toString();
+      _error = e.toString();
     } finally {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
-    return [];
+    return;
   }
 }
