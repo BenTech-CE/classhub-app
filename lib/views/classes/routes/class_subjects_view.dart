@@ -121,7 +121,7 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
 
   @override
   Widget build(BuildContext context) {
-    final subjectViewModel = context.watch<ClassSubjectsViewModel>();
+    //final subjectViewModel = context.watch<ClassSubjectsViewModel>();
 
     return Stack(
         children: [

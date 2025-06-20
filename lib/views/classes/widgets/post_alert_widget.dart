@@ -1,7 +1,5 @@
-import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/utils/util.dart';
-import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

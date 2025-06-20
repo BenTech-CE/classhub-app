@@ -10,7 +10,6 @@ import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
-import 'package:classhub/widgets/ui/popup_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hugeicons/hugeicons.dart';

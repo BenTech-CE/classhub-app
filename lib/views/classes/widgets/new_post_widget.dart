@@ -1,9 +1,7 @@
-import 'dart:collection';
 import 'dart:io';
 
 import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
-import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/create_post_mural_model.dart';

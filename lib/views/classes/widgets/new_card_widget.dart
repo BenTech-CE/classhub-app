@@ -1,5 +1,4 @@
 import 'package:classhub/core/theme/sizes.dart';
-import 'package:classhub/models/class/management/class_widget.model.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';

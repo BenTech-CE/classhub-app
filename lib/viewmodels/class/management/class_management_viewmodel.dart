@@ -75,6 +75,7 @@ class ClassManagementViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+    return null;
   }
 
   Future<bool> deleteClass(String idClass) async {

@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
-import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
-import 'package:classhub/models/class/mural/author_model.dart';
-import 'package:classhub/models/class/mural/create_post_mural_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/new_post_widget.dart';
@@ -38,7 +34,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
   final List<MuralModel> _posts = [];
 
   Future<void> _fetchMural() async {
-    final cmvm = context.read<ClassMuralViewModel>();
+    //final cmvm = context.read<ClassMuralViewModel>();
 
     try {
       _refreshingPage = true;
@@ -91,7 +87,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
   @override
   Widget build(BuildContext context) {
-    final cmvm = context.watch<ClassMuralViewModel>();
+    //final cmvm = context.watch<ClassMuralViewModel>();
 
     return SizedBox(
       width: double.maxFinite,
@@ -193,6 +189,12 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                           editable: widget.mClassObj.role >= Role.contribuidor,
                         );
                       }
+
+                      return PostAlertWidget(
+                          classColor: classColor, 
+                          post: posts[index],
+                          editable: widget.mClassObj.role >= Role.contribuidor,
+                      );
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 16);

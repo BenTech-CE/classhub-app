@@ -1,11 +1,9 @@
-import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:flutter/material.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 class MemberCardWidget extends StatefulWidget {
   final ClassMemberModel member;
