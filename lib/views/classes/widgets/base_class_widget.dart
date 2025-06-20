@@ -152,13 +152,18 @@ class _BaseClassWidgetState extends State<BaseClassWidget> with TickerProviderSt
                         BorderSide(color: widget.classColor.shade300, width: 4)),
                     borderRadius: const BorderRadius.all(Radius.circular(24))),
                 child: widget.widgetModel != null ?
-                  Text(
-                    widget.widgetModel!.title ,style: TextStyle(
-                    fontSize: 24,
-                    fontWeight:
-                        FontWeight.w600,
-                    color: widget.classColor
-                        .shade800),
+                  Column(
+                    children: [
+                      Text(
+                        widget.widgetModel!.title ,style: TextStyle(
+                        fontSize: 24,
+                        fontWeight:
+                            FontWeight.w600,
+                        color: widget.classColor
+                            .shade800),
+                      ),
+                      Text(widget.widgetModel!.description)
+                    ],
                   )
                   : widget.child,
               ),

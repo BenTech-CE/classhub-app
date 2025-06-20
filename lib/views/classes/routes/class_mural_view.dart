@@ -40,7 +40,6 @@ class _ClassMuralViewState extends State<ClassMuralView> {
       setState(() {
         _refreshingPage = true;
       });
-      
 
       final cmvm = context.read<ClassMuralViewModel>();
       final newPosts = await cmvm.getPosts(widget.mClassObj.id, _currentPage);
@@ -51,7 +50,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
       if (newPosts.length < 10) {
         // Se a API retornou menos de 10 itens, assumimos que é a última página
-        
+
         setState(() {
           _canLoadMore = false;
         });
@@ -63,19 +62,19 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
       // Adiciona os novos posts à lista existente
       _posts.addAll(newPosts);
-      
+
       // Adiciona a lista completa e atualizada ao stream, o que irá notificar o StreamBuilder
       if (!_muralController.isClosed) {
         _muralController.add(_posts);
       }
-      
+
       setState(() {
         _currentPage++;
         _refreshingPage = false;
       });
     } catch (e, s) {
       if (!_muralController.isClosed) {
-         _muralController.addError(e, s);
+        _muralController.addError(e, s);
       }
     }
   }
@@ -171,10 +170,12 @@ class _ClassMuralViewState extends State<ClassMuralView> {
 
                 if (snapshot.hasData) {
                   final posts = snapshot.data!;
-                  
+
                   final filteredPosts = muralSelectedOption.isEmpty
-                    ? posts
-                    : posts.where((p) => muralSelectedOption.contains(p.type)).toList();
+                      ? posts
+                      : posts
+                          .where((p) => muralSelectedOption.contains(p.type))
+                          .toList();
 
                   if (_refreshingPage && _posts.isEmpty) {
                     return const CircularProgressIndicator();
@@ -192,22 +193,23 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                     itemBuilder: (BuildContext context, int index) {
                       if (filteredPosts[index].type == MuralType.AVISO) {
                         return PostAlertWidget(
-                          classColor: classColor, 
+                          classColor: classColor,
                           post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,
                         );
-                      } else if (filteredPosts[index].type == MuralType.MATERIAL) {
+                      } else if (filteredPosts[index].type ==
+                          MuralType.MATERIAL) {
                         return PostAlertWidget(
-                          classColor: classColor, 
+                          classColor: classColor,
                           post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,
                         );
                       }
 
                       return PostAlertWidget(
-                          classColor: classColor, 
-                          post: filteredPosts[index],
-                          editable: widget.mClassObj.role >= Role.contribuidor,
+                        classColor: classColor,
+                        post: filteredPosts[index],
+                        editable: widget.mClassObj.role >= Role.contribuidor,
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -223,12 +225,17 @@ class _ClassMuralViewState extends State<ClassMuralView> {
           if (_posts.length >= 10 && _canLoadMore)
             Container(
               width: double.maxFinite,
-              padding: const EdgeInsets.symmetric(horizontal: sPadding),
+              padding: const EdgeInsets.only(left: sPadding, right: sPadding, bottom: sPadding),
               child: OutlinedButton(
                 onPressed: () {
                   _fetchMural();
-                }, 
-                child: _refreshingPage ? Container(width: 16, height: 16, child: const CircularProgressIndicator(strokeWidth: 1,)) : const Text("Carregar mais postagens"),
+                },
+                child: _refreshingPage
+                    ? Container(
+                        width: 16,
+                        height: 16,
+                        child: const CircularProgressIndicator(strokeWidth: 1))
+                    : const Text("Carregar mais postagens"),
               ),
             )
         ],

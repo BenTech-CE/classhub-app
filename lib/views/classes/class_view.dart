@@ -29,6 +29,8 @@ class ClassView extends StatefulWidget {
 }
 
 class _ClassViewState extends State<ClassView> {
+  final GlobalKey _sheet = GlobalKey();
+
   int _selectedIndex = 0;
 
   late final List<Widget> widgetOptions;
@@ -95,6 +97,10 @@ class _ClassViewState extends State<ClassView> {
         ),
       );*/
 
+      final RenderBox? renderBox = _sheet.currentContext?.findRenderObject() as RenderBox?;
+      final double? height = renderBox?.size.height;
+      print('Altura do widget: $height');
+
       _fetchClass();
     });
   }
@@ -132,6 +138,7 @@ class _ClassViewState extends State<ClassView> {
       body: Stack(
         children: [
           Scaffold(
+            backgroundColor: classColor.shade900,
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
                 centerTitle: true,
@@ -175,12 +182,12 @@ class _ClassViewState extends State<ClassView> {
                       ),
                 bottom: _selectedIndex == 0
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.24),
+                        preferredSize: Size.fromHeight(200),
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.only(bottom: 24.0),
                           width: double.maxFinite,
-                          height: MediaQuery.of(context).size.height * 0.24,
+                          height: 200,
                           child: CarouselSlider(
                             options: CarouselOptions(
                                 height: 130,
@@ -254,6 +261,12 @@ class _ClassViewState extends State<ClassView> {
                                 widgetModel: ClassWidgetModel(title: "Eventos Próximos", description: ""),
                                 child: Container()
                               ),
+                              BaseClassWidget(
+                                canEdit: widget.mClassObj.role >= Role.viceLider,
+                                classColor: classColor,
+                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "${MediaQuery.of(context).devicePixelRatio}"),
+                                child: Container()
+                              ),
                               if (widget.mClassObj.role >= Role.viceLider)
                                 NewCardWidget(classColor: classColor,)
                             ],
@@ -264,11 +277,12 @@ class _ClassViewState extends State<ClassView> {
           ),
           _selectedIndex == 0
               ? DraggableScrollableSheet(
+                  key: _sheet,
                   expand: true,
                   snap: true,
                   maxChildSize: 0.87,
-                  initialChildSize: 0.64,
-                  minChildSize: 0.64,
+                  initialChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
+                  minChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
                   shouldCloseOnMinExtent: false,
                   builder: (context, scrollController) => Container(
                     decoration: const BoxDecoration(

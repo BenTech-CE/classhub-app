@@ -2,6 +2,11 @@ import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/models/class/subjects/schedule_weekday_model.dart';
 import 'package:flutter/material.dart';
 
+// Considerando que a altura da sheet corresponde a uma função afim que varia de acordo com a DPI do Dispositivo
+// Comparando dois dispositivos diferentes e a altura da sheet para ambos e suas DPIs, obtivemos a expressão
+// Altura = (-56 . DPI + 435) / 450
+double getSheetHeightByDpi (double dpi) => (-56 * dpi + 435)/450;
+
 double remap(
     double value, double min, double max, double targetMin, double targetMax) {
   double clampedValue = value.clamp(min, max);
