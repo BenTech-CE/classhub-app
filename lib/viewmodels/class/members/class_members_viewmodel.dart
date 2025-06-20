@@ -1,3 +1,4 @@
+import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
 import 'package:flutter/material.dart';
 
@@ -23,5 +24,22 @@ class ClassMembersViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<List<ClassMemberModel>> getMembers(String classId) async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return await classMembersService.getMembers(classId);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    return [];
   }
 }
