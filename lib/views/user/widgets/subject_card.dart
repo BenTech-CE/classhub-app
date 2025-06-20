@@ -307,14 +307,17 @@ class _SubjectCardState extends State<SubjectCard> {
                           icon: HugeIcons.strokeRoundedLocation04,
                           color: Colors.black),
                       groupedScheduleLocations.length < 2
-                          ? Text(
-                              groupedScheduleLocations[0]["location"],
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
+                          ? Expanded(
+                            child: Text(
+                                groupedScheduleLocations[0]["location"],
+                                style: const TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.clip,
                               ),
-                            )
+                          )
                           : Expanded(
                               child: Wrap(
                                 spacing: 8.0,
@@ -348,6 +351,7 @@ class _SubjectCardState extends State<SubjectCard> {
                                                       fontWeight:
                                                           FontWeight.w600,
                                                       color: color.shade800),
+                                                  overflow: TextOverflow.clip,
                                                 ),
                                               ),
                                             )

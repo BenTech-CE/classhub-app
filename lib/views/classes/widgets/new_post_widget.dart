@@ -47,14 +47,14 @@ class _NewPostWidgetState extends State<NewPostWidget> {
   void _attach() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: [
-        'pdf', 'doc', 'docx', 'odt', 'txt', 'epub',
-        'ppt', 'pptx', 'odp',
-        'xls', 'xlsx', 'ods', 'csv',
-        'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp',
-        'mp4', 'mov', 'avi',
-        'mp3', 'wav', 'm4a', 'ogg', 'opus'
+      type: Platform.isIOS ? FileType.media : FileType.custom,
+      allowedExtensions: Platform.isIOS ? null : [
+      'pdf', 'doc', 'docx', 'odt', 'txt', 'epub',
+      'ppt', 'pptx', 'odp',
+      'xls', 'xlsx', 'ods', 'csv',
+      'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp',
+      'mp4', 'mov', 'avi',
+      'mp3', 'wav', 'm4a', 'ogg', 'opus'
       ],
     );
 
