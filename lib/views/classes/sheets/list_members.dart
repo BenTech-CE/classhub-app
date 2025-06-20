@@ -35,63 +35,67 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
     final provider = context.watch<ClassMembersViewModel>();
 
     return SafeArea(
-      child: Column(
-        spacing: sSpacing,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: sPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: sSpacing,
-              children: [
-                Text(
-                  "Lista de Colegas",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.copyWith(color: cColorPrimary),
-                  textAlign: TextAlign.center,
-                ),
-                if (!provider.isLoading&&provider.members.isNotEmpty)
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: sSpacing,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: sPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: sSpacing,
+                children: [
                   Text(
-                    "Mostrando ${provider.members.length} colegas em P5 - Informática",
-                    style: const TextStyle(color: cColorText2Azul),
-                    textAlign: TextAlign.left,
-                  )
-              ],
+                    "Lista de Colegas",
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(color: cColorPrimary),
+                    textAlign: TextAlign.center,
+                  ),
+                  if (!provider.isLoading&&provider.members.isNotEmpty)
+                    Text(
+                      "Mostrando ${provider.members.length} colegas em P5 - Informática",
+                      style: const TextStyle(color: cColorText2Azul),
+                      textAlign: TextAlign.left,
+                    )
+                ],
+              ),
             ),
-          ),
-          Consumer<ClassMembersViewModel>(
-            builder: (context, provider, child) {
-              if (provider.isLoading) {
-                return const CircularProgressIndicator();
-
-              } else if (provider.error != null) {
-                return Text(provider.error!); // Exibe a mensagem de erro do provider
-
-              } else if (provider.members.isEmpty) {
-                return const Text('Nenhum membro encontrado');
-              }
-
-              // Se tudo deu certo, use a lista de membros do provider
-              final members = provider.members;
-
-              return Expanded(
-                child: ListView(
-                  children: members
-                      .map(
-                        (member) => MemberCardWidget(
-                          member: member,
-                          color: generateMaterialColor(cColorPrimary), 
-                          myRole: widget.mClassObj.role
-                        ),
-                      )
-                      .toList(),
-                ),
-              );
-            },
-          )
-        ],
+            Consumer<ClassMembersViewModel>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const CircularProgressIndicator();
+        
+                } else if (provider.error != null) {
+                  return Text(provider.error!); // Exibe a mensagem de erro do provider
+        
+                } else if (provider.members.isEmpty) {
+                  return const Text('Nenhum membro encontrado');
+                }
+        
+                // Se tudo deu certo, use a lista de membros do provider
+                final members = provider.members;
+        
+                return ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      children: members
+                          .map(
+                            (member) => MemberCardWidget(
+                              member: member,
+                              color: generateMaterialColor(cColorPrimary), 
+                              myRole: widget.mClassObj.role
+                            ),
+                          )
+                          .toList(),
+                );
+              },
+            ),
+            const SizedBox.shrink()
+          ],
+        ),
       )
     );
   }

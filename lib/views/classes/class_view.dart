@@ -138,7 +138,6 @@ class _ClassViewState extends State<ClassView> {
       body: Stack(
         children: [
           Scaffold(
-            backgroundColor: classColor.shade900,
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
                 centerTitle: true,
@@ -147,7 +146,7 @@ class _ClassViewState extends State<ClassView> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(mClassObj: widget.mClassObj,), showDragHandle: true, useSafeArea: false,);
+                      showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(mClassObj: widget.mClassObj,), showDragHandle: true, isScrollControlled: true);
                     },
                     icon: Icon(HugeIcons.strokeRoundedUserGroup02),
                     color: Colors.white,
