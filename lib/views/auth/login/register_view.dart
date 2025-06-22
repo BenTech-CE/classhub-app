@@ -93,108 +93,109 @@ class _RegisterViewState extends State<RegisterView> {
 
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
-          child: Container(
-            height: height,
-            padding: const EdgeInsets.fromLTRB(
-                sPadding, sPadding + 55, sPadding, sPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                    backgroundImage: AssetImage("assets/logo/logo.jpeg"),
-                    radius: 60),
-                const SizedBox(height: 24),
-                Text(
-                  "Bem-vindo(a)!",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineLarge
-                      ?.copyWith(fontSize: 40),
-                ),
-                const SizedBox(height: 50),
-                Text(
-                  "Nome:",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                TextField(
-                  controller: _nomeTF,
-                  focusNode: _nomeFocus,
-                  textInputAction: TextInputAction.next,
-                  onSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_emailFocus);
-                  },
-                  decoration: const InputDecoration(
-                      border: RoundedInputBorder(),
-                      hintText: "Digite seu nome..."),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "E-mail:",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                TextField(
-                  controller: _emailTF,
-                  keyboardType: TextInputType.emailAddress,
-                  focusNode: _emailFocus,
-                  textInputAction: TextInputAction.next,
-                  onSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(_senhaFocus);
-                  },
-                  decoration: const InputDecoration(
-                      border: RoundedInputBorder(),
-                      hintText: "Digite seu e-mail..."),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  "Senha:",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                TextField(
-                  controller: _senhaTF,
-                  focusNode: _senhaFocus,
-                  textInputAction: TextInputAction.done,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                      border: RoundedInputBorder(),
-                      hintText: "Digite sua senha..."),
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.maxFinite,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () => register(context),
-                    child: loading
-                        ? const LoadingWidget()
-                        : Text("Cadastrar",
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge
-                                ?.copyWith(color: cColorTextWhite)),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(
+                  sPadding, sPadding, sPadding, sPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                      backgroundImage: AssetImage("assets/logo/logo.jpeg"),
+                      radius: 60),
+                  const SizedBox(height: 24),
+                  Text(
+                    "Bem-vindo(a)!",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineLarge
+                        ?.copyWith(fontSize: 40),
                   ),
-                ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Já tem uma conta?",
-                        style: Theme.of(context).textTheme.bodyLarge),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginView()));
-                        },
-                        child: Text("Entrar",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge
-                                ?.copyWith(color: cColorPrimary)))
-                  ],
-                )
-              ],
+                  const SizedBox(height: 50),
+                  Text(
+                    "Nome:",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  TextField(
+                    controller: _nomeTF,
+                    focusNode: _nomeFocus,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(_emailFocus);
+                    },
+                    decoration: const InputDecoration(
+                        border: RoundedInputBorder(),
+                        hintText: "Digite seu nome..."),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "E-mail:",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  TextField(
+                    controller: _emailTF,
+                    keyboardType: TextInputType.emailAddress,
+                    focusNode: _emailFocus,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (_) {
+                      FocusScope.of(context).requestFocus(_senhaFocus);
+                    },
+                    decoration: const InputDecoration(
+                        border: RoundedInputBorder(),
+                        hintText: "Digite seu e-mail..."),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    "Senha:",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  TextField(
+                    controller: _senhaTF,
+                    focusNode: _senhaFocus,
+                    textInputAction: TextInputAction.done,
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                        border: RoundedInputBorder(),
+                        hintText: "Digite sua senha..."),
+                  ),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.maxFinite,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () => register(context),
+                      child: loading
+                          ? const LoadingWidget()
+                          : Text("Cadastrar",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(color: cColorTextWhite)),
+                    ),
+                  ),
+                  //const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Já tem uma conta?",
+                          style: Theme.of(context).textTheme.bodyLarge),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginView()));
+                          },
+                          child: Text("Entrar",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: cColorPrimary)))
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         ));

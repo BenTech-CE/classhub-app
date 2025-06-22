@@ -88,106 +88,107 @@ class _LoginViewState extends State<LoginView> {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
-        child: Container(
-          height: height,
-          padding: const EdgeInsets.fromLTRB(
-              sPadding, sPadding + 55, sPadding, sPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const CircleAvatar(
-                  backgroundImage: AssetImage("assets/logo/logo.jpeg"),
-                  radius: 60),
-              const SizedBox(height: 24),
-              Text(
-                "Bem-vindo(a)\nde volta!",
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineLarge
-                    ?.copyWith(fontSize: 40),
-              ),
-              const SizedBox(height: 50),
-              Text(
-                "E-mail:",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              TextField(
-                controller: _emailTF,
-                keyboardType: TextInputType.emailAddress,
-                focusNode: _emailFocus,
-                textInputAction: TextInputAction.next,
-                onSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_senhaFocus);
-                },
-                decoration: const InputDecoration(
-                    border: RoundedInputBorder(),
-                    hintText: "Digite seu e-mail..."),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                "Senha:",
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              TextField(
-                controller: _senhaTF,
-                focusNode: _senhaFocus,
-                textInputAction: TextInputAction.done,
-                obscureText: true,
-                decoration: const InputDecoration(
-                    border: RoundedInputBorder(),
-                    hintText: "Digite sua senha..."),
-              ),
-              SizedBox(
-                width: double.maxFinite,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const ScrollPhysics(parent: BouncingScrollPhysics()),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(
+                sPadding, sPadding, sPadding, sPadding),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const CircleAvatar(
+                    backgroundImage: AssetImage("assets/logo/logo.jpeg"),
+                    radius: 60),
+                const SizedBox(height: 24),
+                Text(
+                  "Bem-vindo(a)\nde volta!",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(fontSize: 40),
+                ),
+                const SizedBox(height: 50),
+                Text(
+                  "E-mail:",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                TextField(
+                  controller: _emailTF,
+                  keyboardType: TextInputType.emailAddress,
+                  focusNode: _emailFocus,
+                  textInputAction: TextInputAction.next,
+                  onSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(_senhaFocus);
+                  },
+                  decoration: const InputDecoration(
+                      border: RoundedInputBorder(),
+                      hintText: "Digite seu e-mail..."),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  "Senha:",
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+                TextField(
+                  controller: _senhaTF,
+                  focusNode: _senhaFocus,
+                  textInputAction: TextInputAction.done,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                      border: RoundedInputBorder(),
+                      hintText: "Digite sua senha..."),
+                ),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {},
+                          child: Text("Esqueceu a senha?",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(color: cColorText2)))
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.maxFinite,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => login(context),
+                    child: loading
+                        ? const LoadingWidget()
+                        : Text("Entrar",
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelLarge
+                                ?.copyWith(color: cColorTextWhite)),
+                  ),
+                ),
+                //const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Text("Não tem uma conta?",
+                        style: Theme.of(context).textTheme.bodyLarge),
                     TextButton(
-                        onPressed: () {},
-                        child: Text("Esqueceu a senha?",
+                        onPressed: () {
+                          Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              builder: (context) => const RegisterView()));
+                        },
+                        child: Text("Registre-se",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge
-                                ?.copyWith(color: cColorText2)))
+                                ?.copyWith(color: cColorPrimary)))
                   ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.maxFinite,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () => login(context),
-                  child: loading
-                      ? const LoadingWidget()
-                      : Text("Entrar",
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelLarge
-                              ?.copyWith(color: cColorTextWhite)),
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Não tem uma conta?",
-                      style: Theme.of(context).textTheme.bodyLarge),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (context) => const RegisterView()));
-                      },
-                      child: Text("Registre-se",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: cColorPrimary)))
-                ],
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
