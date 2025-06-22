@@ -181,12 +181,12 @@ class _ClassViewState extends State<ClassView> {
                       ),
                 bottom: _selectedIndex == 0
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(200),
+                        preferredSize: Size.fromHeight(getBannerHeightByDpi(MediaQuery.of(context).devicePixelRatio)),
                         child: Container(
                           alignment: Alignment.center,
                           padding: const EdgeInsets.only(bottom: 24.0),
                           width: double.maxFinite,
-                          height: 200,
+                          height: getBannerHeightByDpi(MediaQuery.of(context).devicePixelRatio),
                           child: CarouselSlider(
                             options: CarouselOptions(
                                 height: 130,
