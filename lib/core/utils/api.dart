@@ -13,5 +13,7 @@ class Api {
 
   static const String muralEndpoint = '/mural';
 
+  static const String calendarEndpoint = '/eventos';
+
   static const String dummyImage = 'https://classhub.b-cdn.net/fematec.jpg';
 }

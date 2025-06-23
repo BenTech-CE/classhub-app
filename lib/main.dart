@@ -1,12 +1,14 @@
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:classhub/services/auth/session_service.dart';
+import 'package:classhub/services/class/calendar/class_calendar_service.dart';
 import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
 import 'package:classhub/services/class/mural/class_mural_service.dart';
 import 'package:classhub/services/class/subjects/class_subjects_service.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
+import 'package:classhub/viewmodels/class/calendar/class_calendar_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
     final classMembersService = ClassMembersService(authService);
     final classSubjectsService = ClassSubjectsService(authService);
     final classMuralService = ClassMuralService(authService);
+    final classCalendarService = ClassCalendarService(authService);
 
     return MultiProvider(
       providers: [
@@ -58,6 +61,8 @@ class MyApp extends StatelessWidget {
             create: (_) => ClassMembersViewModel(classMembersService)),
         ChangeNotifierProvider(
             create: (_) => ClassManagementViewModel(classManagementService)),
+        ChangeNotifierProvider(
+            create: (_) => ClassCalendarViewModel(classCalendarService)),
       ],
       child: MaterialApp(
         title: 'Classhub',
