@@ -279,7 +279,7 @@ class _ClassViewState extends State<ClassView> {
                   key: _sheet,
                   expand: true,
                   snap: true,
-                  maxChildSize: 0.87,
+                  maxChildSize: getSheetMaxHeightByDpi(dpi: MediaQuery.of(context).devicePixelRatio, height: MediaQuery.of(context).size.height),
                   initialChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
                   minChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
                   shouldCloseOnMinExtent: false,

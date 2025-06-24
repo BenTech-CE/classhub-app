@@ -7,14 +7,16 @@ import 'package:flutter/material.dart';
 // Altura = (-56 . DPI + 435) / 450
 double getSheetHeightByDpi (double dpi) => (-56 * dpi + 435)/450;
 
-double getBannerHeightByDpi (double dpi) => ((-304/3) * dpi + 466);
+double getBannerHeightByDpi (double dpi) => 8.89 * dpi + 190;
+
+double getSheetMaxHeightByDpi ({required double dpi, required double height}) => ((-56 * dpi + 435)/450) + ((8.89 * dpi + 190) / height) - 0.01;
 
 double remap(
     double value, double min, double max, double targetMin, double targetMax) {
   double clampedValue = value.clamp(min, max);
   return targetMin +
       ((clampedValue - min) / (max - min)) * (targetMax - targetMin);
-}
+} 
 
 MaterialColor generateMaterialColor(Color color) {
   return MaterialColor(color.value, {
