@@ -263,7 +263,7 @@ class _ClassViewState extends State<ClassView> {
                               BaseClassWidget(
                                 canEdit: widget.mClassObj.role >= Role.viceLider,
                                 classColor: classColor,
-                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "${MediaQuery.of(context).devicePixelRatio}"),
+                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "${getBannerHeightByDpi(MediaQuery.of(context).devicePixelRatio)}"),
                                 child: Container()
                               ),
                               if (widget.mClassObj.role >= Role.viceLider)

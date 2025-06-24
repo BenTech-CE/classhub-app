@@ -1,8 +1,10 @@
+import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/widgets/ui/weekly_date_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ClassCalendarView extends StatefulWidget {
   final MinimalClassModel mClassObj;
@@ -15,11 +17,18 @@ class ClassCalendarView extends StatefulWidget {
 
 class _ClassCalendarViewState extends State<ClassCalendarView> {
   DateTime _selectedDay = DateTime.now();
+  
+  final DateFormat _formatter = DateFormat("EEEE, d 'de' MMMM", 'pt-BR');
+
+  @override void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: sSpacing,
       children: [
         WeeklyDatePicker(
           selectedDay: _selectedDay,
@@ -36,11 +45,19 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
           daysInWeek: 7,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8), 
+          padding: EdgeInsets.symmetric(horizontal: sPadding), 
           child: Column(
+            spacing: sSpacing,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Segunda-feira, 16 de junho")
+              Text(
+                _formatter.format(_selectedDay).toCapitalized(),
+                style: const TextStyle(
+                  color: cColorText1,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600
+                ),
+              )
             ],
           ),
         )

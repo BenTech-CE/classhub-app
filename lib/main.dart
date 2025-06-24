@@ -16,6 +16,7 @@ import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart
 import 'package:classhub/views/user/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,8 @@ void main() async {
 
   final rootDir = await MMKV.initialize(); // Inicializando o banco de dados
   print('MMKV for flutter with rootDir = $rootDir');
+
+  await initializeDateFormatting('pt_BR');
 
   runApp(const MyApp());
 }

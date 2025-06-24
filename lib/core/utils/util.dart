@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 // Altura = (-56 . DPI + 435) / 450
 double getSheetHeightByDpi (double dpi) => (-56 * dpi + 435)/450;
 
-double getBannerHeightByDpi (double dpi) => (-48 * dpi + 306) + 10;
+double getBannerHeightByDpi (double dpi) => ((-304/3) * dpi + 466);
 
 double remap(
     double value, double min, double max, double targetMin, double targetMax) {
