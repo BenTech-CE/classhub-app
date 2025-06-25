@@ -35,9 +35,9 @@ class EventModel {
       startTime: json['start_time'] ?? '',
       endTime: json['end_time'] ?? '',
       date: json['date'] ?? '',
-      location: json['location'] ?? '',
+      location: json['location'] ?? 'Local não definido',
       isAllDay: json['is_all_day'] ?? false,
-      icon: json['icon'] ?? '',
+      icon: json['icon'] ?? 'book',
     );
   }
 
