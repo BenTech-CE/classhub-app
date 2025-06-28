@@ -9,6 +9,7 @@ import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/new_post_widget.dart';
 import 'package:classhub/views/classes/widgets/post_alert_widget.dart';
+import 'package:classhub/views/classes/widgets/post_material_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -199,7 +200,7 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                         );
                       } else if (filteredPosts[index].type ==
                           MuralType.MATERIAL) {
-                        return PostAlertWidget(
+                        return PostMaterialWidget(
                           classColor: classColor,
                           post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.contribuidor,

@@ -1,25 +1,27 @@
 import 'package:classhub/core/theme/colors.dart';
+import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
+import 'package:classhub/widgets/ui/triangle_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class PostAlertWidget extends StatefulWidget {
+class PostMaterialWidget extends StatefulWidget {
   final MaterialColor classColor;
   final bool editable;
   final MuralModel post;
 
-  const PostAlertWidget(
+  const PostMaterialWidget(
       {super.key, required this.classColor, required this.post, required this.editable});
 
   @override
-  State<PostAlertWidget> createState() => _PostAlertWidgetState();
+  State<PostMaterialWidget> createState() => _PostMaterialWidgetState();
 }
 
-class _PostAlertWidgetState extends State<PostAlertWidget> {
+class _PostMaterialWidgetState extends State<PostMaterialWidget> {
   final popupMenuItemsLeader = [
     const PopupMenuItem<String>(
       value: 'copy',
@@ -63,7 +65,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
               color: widget.classColor.shade100,
               borderRadius: BorderRadius.circular(12),
@@ -79,7 +81,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
             child: Row(
               spacing: 12,
               children: [
-                CircleAvatar(
+                /*CircleAvatar(
                   radius: 20, // Define o raio do círculo
                   backgroundColor:
                       widget.classColor.shade200, // Define a cor de fundo
@@ -88,19 +90,30 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                     overflow: TextOverflow.clip,
                     style: TextStyle(color: widget.classColor.shade900),
                   ), // Conteúdo dentro do círculo
+                ),*/
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: widget.classColor.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Center(
+                    child: HugeIcon(icon: HugeIcons.strokeRoundedBookOpen01, color: cColorText1)
+                  ),
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: 0,
                   children: [
-                    Text(widget.post.author.name,
-                        style: const TextStyle(color: cColorText1)),
+                    Text(widget.post.subject?.title ?? "Material de Aula",
+                        style: const TextStyle(color: cColorText1, fontSize: 16, fontWeight: FontWeight.w600)),
                     Text(widget.post.formattedCreatedAt,
                         style: const TextStyle(color: cColorText1, fontSize: 12))
                   ],
                 ),
-                Expanded(
+                /*Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -127,7 +140,8 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                       ],
                     ),
                   ),
-                ),
+                ),*/
+                const Spacer(),
                 SizedBox(
                   width: 24,
                   height: 24,
@@ -142,7 +156,7 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                       if (value == 'copy') {
                         _copy();
                       } else if (value == 'delete') {
-                        // Deletar o aviso.
+                        // Deletar o material.
                       }
                     },
                     itemBuilder: (BuildContext context) =>
@@ -161,23 +175,57 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 8,
               children: [
-                MarkdownBody(
-                  data: preprocessMarkdown(widget.post.description),
-                  onTapLink: (text, href, title) async {
-                    if (href != null && await canLaunch(href)) {
-                      await launch(href);
-                    } else {
-                      // Tratamento de erro se não conseguir abrir
-                      debugPrint('Não foi possível abrir o link: $href');
-                    }
-                  },
-                  softLineBreak: true,
-                  styleSheet: MarkdownStyleSheet(
-                    a: const TextStyle(color: Colors.blue),
-                    p: const TextStyle(color: Colors.black87),
-                    strong: const TextStyle(fontWeight: FontWeight.bold),
-                    em: const TextStyle(fontStyle: FontStyle.italic),
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 0,
+                  children: [
+                    CircleAvatar(
+                      radius: 20, // Define o raio do círculo
+                      backgroundColor:
+                          widget.classColor.shade200, // Define a cor de fundo
+                      child: Text(
+                        getNameInitials(widget.post.author.name),
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(color: widget.classColor.shade900),
+                      ), // Conteúdo dentro do círculo
+                    ),
+                    const SizedBox(width: 4,),
+                    TopRightTriangle(size: const Size(12,16), borderRadius: 4, color: widget.classColor.shade50),
+                    Expanded(
+                      child: Container(
+                        constraints: const BoxConstraints(
+                          minHeight: 50
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: widget.classColor.shade50,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(12),
+                            bottomLeft: Radius.circular(12),
+                            bottomRight: Radius.circular(12)
+                          )
+                        ),
+                        child: MarkdownBody(
+                          data: preprocessMarkdown(widget.post.description),
+                          onTapLink: (text, href, title) async {
+                            if (href != null && await canLaunch(href)) {
+                              await launch(href);
+                            } else {
+                              // Tratamento de erro se não conseguir abrir
+                              debugPrint('Não foi possível abrir o link: $href');
+                            }
+                          },
+                          softLineBreak: true,
+                          styleSheet: MarkdownStyleSheet(
+                            a: const TextStyle(color: Colors.blue),
+                            p: const TextStyle(color: Colors.black87),
+                            strong: const TextStyle(fontWeight: FontWeight.bold),
+                            em: const TextStyle(fontStyle: FontStyle.italic),
+                          ),
+                        )
+                      ),
+                    ),
+                  ],
                 ),
                 Wrap(
                   alignment: WrapAlignment.start,

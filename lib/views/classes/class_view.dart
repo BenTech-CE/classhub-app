@@ -42,6 +42,13 @@ class _ClassViewState extends State<ClassView> {
   Future<void> _fetchClass() async {
     final classVM = context.read<ClassManagementViewModel>();
 
+    ClassModel? cachedClass = classVM.getCachedClass(widget.mClassObj.id);
+    if (cachedClass != null && mounted) {
+      setState(() {
+        classObj = cachedClass;
+      });
+    }
+
     ClassModel? cl = await classVM.getClass(widget.mClassObj.id);
 
     if (cl != null && mounted) {
@@ -74,35 +81,9 @@ class _ClassViewState extends State<ClassView> {
       ClassSubjectsView(mClassObj: widget.mClassObj),
     ];
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      /*showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        enableDrag: true,
-        isScrollControlled: true,
-        barrierColor: Colors.transparent,
-        useRootNavigator: true,
-        //backgroundColor: Colors.white,
-        builder: (context) => DraggableScrollableSheet(
-          expand: false,
-          snap: true,
-          maxChildSize: 0.9,
-          initialChildSize: 0.7,
-          minChildSize: 0.7,
-          shouldCloseOnMinExtent: false,
-          builder: (context, scrollController) => SingleChildScrollView(
-            controller: scrollController,
-            child: widgetOptions.elementAt(_selectedIndex),
-          ),
-        ),
-      );*/
-
-      final RenderBox? renderBox = _sheet.currentContext?.findRenderObject() as RenderBox?;
-      final double? height = renderBox?.size.height;
-      print('Altura do widget: $height');
-
-      _fetchClass();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+      _fetchClass()
+    );
   }
 
   @override

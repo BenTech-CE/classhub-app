@@ -40,6 +40,8 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   late SubjectModel idMateria;
 
+  bool createLoading = false;
+
   List<XFile> _selectedAttachments = [];
 
   void _attach() async {
@@ -70,9 +72,11 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   void _createPost() async {
     final cmvm = context.read<ClassMuralViewModel>();
-    print("will create post");
+
     if (_tf.text.isNotEmpty && !cmvm.isLoading) {
-      
+      setState(() {
+        createLoading = true;
+      });
 
       final postModel = CreatePostMuralModel(
         type: dropTipos, 
@@ -83,14 +87,14 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
       
       final result = await cmvm.createPost(widget.classId, postModel);
-      print("result: ");
-      print(result);
+
       if (result != null) {
         widget.onCreated();
 
         setState(() {
           _tf.text = "";
           _selectedAttachments.clear();
+          createLoading = false;
         });
         
 
@@ -102,6 +106,10 @@ class _NewPostWidgetState extends State<NewPostWidget> {
           backgroundColor: cColorSuccess,
         ));
       } else if (cmvm.error != null) {
+        setState(() {
+          createLoading = false;
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             cmvm.error!,
@@ -411,7 +419,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                         ),
                         GestureDetector(
                           onTap: _createPost, 
-                          child: cmvm.isLoading ? 
+                          child: createLoading ? 
                             Container(width: 24, height: 24, padding: EdgeInsets.all(4), child: CircularProgressIndicator(strokeWidth: 1,)) 
                           : SizedBox(
                             width: 24,

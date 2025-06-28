@@ -191,3 +191,10 @@ String getNameInitials(String input) {
   final initials = input.trim().split(' ').map((sobrenome) => sobrenome[0].toCapitalized()).join();
   return initials.length > 2 ? initials.substring(0, 2) : initials;
 }
+
+String preprocessMarkdown(String input) {
+  // Corrige \n visivelmente
+  final processed = input
+      .replaceAll('\\n', '\n'); // Caso venha como '\\n' literal
+  return processed;
+}

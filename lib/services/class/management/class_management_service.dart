@@ -183,4 +183,15 @@ class ClassManagementService {
     }
     return true;
   }
+
+  ClassModel? getCachedClass(String idClass) {
+    final sbjString = authService.mmkv
+        .decodeString("${authService.getUserId()}.class.$idClass");
+
+    if (sbjString == null) return null;
+
+    ClassModel json = ClassModel.fromJson(jsonDecode(sbjString));
+
+    return json;
+  }
 }

@@ -94,4 +94,21 @@ class ClassManagementViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  ClassModel? getCachedClass(String idClass) {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      error = null;
+      return classManagementService.getCachedClass(idClass);
+    } catch (e) {
+      print(e);
+      error = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    return null;
+  }
 }
