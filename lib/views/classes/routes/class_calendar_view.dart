@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:classhub/core/extensions/date.dart';
 import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
@@ -9,7 +8,6 @@ import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/viewmodels/class/calendar/class_calendar_viewmodel.dart';
 import 'package:classhub/views/classes/routes/calendar/create_event_sheet.dart';
 import 'package:classhub/views/classes/widgets/event_card_widget.dart';
-import 'package:classhub/widgets/ui/weekly_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -29,8 +27,6 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
   DateTime _selectedDay = DateTime.now();
   
   final DateFormat _formatter = DateFormat("EEEE, d 'de' MMMM", 'pt-BR');
-
-  List<EventModel> _events = [];
 
   String currentMode = "calendar";
   late String modeText = _formatter.format(_selectedDay).toCapitalized();

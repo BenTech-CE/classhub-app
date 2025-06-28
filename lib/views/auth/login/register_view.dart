@@ -86,8 +86,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-
     final authViewModel = context.watch<AuthViewModel>();
     final loading = authViewModel.isLoading;
 

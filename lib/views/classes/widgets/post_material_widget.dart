@@ -1,9 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:classhub/core/extensions/filename.dart';
-import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
-import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
 import 'package:classhub/widgets/ui/triangle_widget.dart';

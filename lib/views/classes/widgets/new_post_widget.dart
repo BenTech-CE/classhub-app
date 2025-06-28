@@ -151,8 +151,6 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final cmvm = context.watch<ClassMuralViewModel>();
-
     return Container(
       margin: const EdgeInsets.all(16.0),
       padding: const EdgeInsets.all(12.0),

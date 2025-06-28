@@ -17,8 +17,6 @@ class ListMembersSheet extends StatefulWidget {
 }
 
 class _ListMembersSheetState extends State<ListMembersSheet> {
-  int _membersCount = -1;
-
   @override
   void initState() {
     super.initState();
