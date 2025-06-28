@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/role.dart';
@@ -106,7 +107,6 @@ class _SubjectCardState extends State<SubjectCard> {
             borderRadius: BorderRadius.all(Radius.circular(12.0)),
           ),
           child: Row(
-            spacing: 16,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
@@ -120,15 +120,15 @@ class _SubjectCardState extends State<SubjectCard> {
                         color: color.shade800,
                       ),
                       Expanded(
-                        child: Text(
-                              widget.subject.title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                  color: color.shade800,
-                                  height: 0.9
-                              ),
-                                  
+                        child: AutoSizeText(
+                          widget.subject.title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              color: color.shade800,
+                              fontSize: 20
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
                     ],
@@ -187,7 +187,6 @@ class _SubjectCardState extends State<SubjectCard> {
                   ],
                 ),
                 child: Row(
-                  spacing: 16,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
@@ -201,14 +200,15 @@ class _SubjectCardState extends State<SubjectCard> {
                               color: color.shade800,
                             ),
                             Expanded(
-                              child: Text(
+                              child: AutoSizeText(
                                 widget.subject.title,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 20,
                                     color: color.shade800,
-                                    height: 0.9
+                                    fontSize: 20
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
                             ),
                           ],
@@ -243,7 +243,7 @@ class _SubjectCardState extends State<SubjectCard> {
                 spacing: 5.0,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 8.0,
                     children: [
                       const HugeIcon(
@@ -264,6 +264,8 @@ class _SubjectCardState extends State<SubjectCard> {
                                   children: (e["days"] as List<String>)
                                       .map(
                                         (day) => Container(
+                                          alignment: Alignment.center,
+                                          width: 45,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0, vertical: 3.0),
                                           decoration: BoxDecoration(
@@ -285,7 +287,7 @@ class _SubjectCardState extends State<SubjectCard> {
                                       .toList(),
                                 ),
                                 Text(
-                                  "${e["time"]["start_time"]} > ${e["time"]["end_time"]}",
+                                  "${e["time"]["start_time"]} ~ ${e["time"]["end_time"]}",
                                   style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500,
@@ -300,7 +302,7 @@ class _SubjectCardState extends State<SubjectCard> {
                     ],
                   ),
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 8.0,
                     children: [
                       const HugeIcon(
@@ -333,6 +335,8 @@ class _SubjectCardState extends State<SubjectCard> {
                                         children: (e["days"] as List<String>)
                                             .map(
                                               (day) => Container(
+                                                alignment: Alignment.center,
+                                                width: 45,
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 8.0,

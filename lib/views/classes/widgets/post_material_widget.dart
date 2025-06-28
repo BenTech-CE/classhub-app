@@ -1,3 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:classhub/core/extensions/filename.dart';
+import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/util.dart';
@@ -227,70 +231,103 @@ class _PostMaterialWidgetState extends State<PostMaterialWidget> {
                     ),
                   ],
                 ),
-                Wrap(
-                  alignment: WrapAlignment.start,
-                  spacing: 4,
-                  runSpacing: 4,
-                  children: widget.post.attachments.map((att) =>
-                    Material(
-                      borderRadius: BorderRadius.circular(12),
-                      color: widget.classColor.shade50,
-                      child: InkWell(
-                        splashColor: Colors.grey.withAlpha(80),
-                        onTap: () async {
-                          final Uri url = Uri.parse(att.url);
-
-                          try {
-                            // 2. Tenta abrir a URL
-                            // O `launchUrl` retorna um booleano: true se conseguiu, false se não.
-                            if (!await launchUrl(url)) {
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                content: Text(
-                                  "Não foi possível abrir este arquivo",
-                                  style:
-                                      const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 8,
+                    children: widget.post.attachments.map((att) =>
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: 120,
+                            height: 68,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(12),
+                              color: widget.classColor.shade50,
+                              child: InkWell(
+                                splashColor: Colors.grey.withAlpha(80),
+                                onTap: () async {
+                                  final Uri url = Uri.parse(att.url);
+                            
+                                  try {
+                                    // 2. Tenta abrir a URL
+                                    // O `launchUrl` retorna um booleano: true se conseguiu, false se não.
+                                    if (!await launchUrl(url)) {
+                                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                        content: Text(
+                                          "Não foi possível abrir este arquivo",
+                                          style:
+                                              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                        backgroundColor: cColorError,
+                                      ));
+                                    }
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                      content: Text(
+                                        "Erro: $e",
+                                        style:
+                                            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      backgroundColor: cColorError,
+                                    ));
+                                  }
+                                },
+                                borderRadius: BorderRadius.circular(12),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    image: att.url.isImage() ? DecorationImage(
+                                      image: CachedNetworkImageProvider(att.url),
+                                      fit: BoxFit.cover
+                                    ) : null,
+                                    border: Border.all(color: widget.classColor.shade200, width: 2),
+                                  ),
+                                  child: att.url.isImage() ? null : Center(
+                                    child: HugeIcon(
+                                      icon: HugeIcons.strokeRoundedImageNotFound01,
+                                      color: widget.classColor.shade300,
+                                      size: 24,
+                                    ),
+                                  ),
                                 ),
-                                backgroundColor: cColorError,
-                              ));
-                            }
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(
-                                "Erro: $e",
-                                style:
-                                    const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                               ),
-                              backgroundColor: cColorError,
-                            ));
-                          }
-                        },
-                        borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: widget.classColor.shade200, width: 2),
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            spacing: 4,
-                            children: [
-                              HugeIcon(icon: HugeIcons.strokeRoundedDocumentAttachment, color: widget.classColor.shade900, size: 20,),
-                              Flexible(
-                                child: Text(att.filename, style: const TextStyle(
-                                  color: cColorText1,
-                                  fontSize: 16,
-                                  
-                                ), overflow: TextOverflow.ellipsis, maxLines: 1,),
-                              )
-                            ],
+                          SizedBox(
+                            width: 120,
+                            height: 24,
+                            child: Row(
+                              spacing: 2,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                HugeIcon(
+                                  icon: HugeIcons.strokeRoundedAttachment,
+                                  color: widget.classColor.shade900,
+                                  size: 16,
+                                ),
+                                Flexible(
+                                  child: AutoSizeText(
+                                    att.filename.shortenFilename(visibleEnd: 1, visibleStart: 6),
+                                    style: const TextStyle(
+                                      color: cColorText1,
+                                      fontSize: 14,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    minFontSize: 6,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ),
-                  ).toList(),
+                    ).toList(),
+                  ),
                 )
               ],
             ),

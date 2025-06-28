@@ -7,15 +7,25 @@ class ClassCalendarViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? error;
 
+  List<EventModel> events = [];
+  List<EventModel> upcomingEvents = [];
+
   ClassCalendarViewModel(this.classCalendarService);
 
-  Future<List<EventModel>> getEvents(String classId, String? upcoming) async {
+  Future<void> getEvents(String classId, String? upcoming) async {
     isLoading = true;
     notifyListeners();
 
     try {
       error = null;
-      return await classCalendarService.getEvents(classId, upcoming);
+      final res = await classCalendarService.getEvents(classId, upcoming);
+      if (upcoming != null) {
+        upcomingEvents = res;
+      } else {
+        events = res;
+      } 
+      notifyListeners();
+      return;
     } catch (e) {
       print(e);
       error = e.toString();
@@ -23,7 +33,9 @@ class ClassCalendarViewModel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
-    return [];
+    
+    events.clear();
+    return;
   }
 
   Future<EventModel?> createEvent(String idClass, EventModel eventModel) async {

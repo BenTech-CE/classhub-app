@@ -135,11 +135,11 @@ class _WeekdayCardState extends State<WeekdayCard> {
                       onTap: () => _showStartTimePicker(),
                       readOnly: true,
                       decoration: InputDecoration(
-                        border: RoundedColoredInputBorder(),
-                        enabledBorder: RoundedColoredInputBorder(),
-                        suffixIcon: HugeIcon(icon: HugeIcons.strokeRoundedAlarmClock, color: cColorPrimary),
+                        border: const RoundedColoredInputBorder(),
+                        enabledBorder: const RoundedColoredInputBorder(),
+                        suffixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedAlarmClock, color: cColorPrimary),
                         hintText: widget.subject.schedule[widget.weekday]!.startTime.isEmpty ? "Início": widget.subject.schedule[widget.weekday]!.startTime,
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             fontFamily: "Onest",
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,
@@ -155,11 +155,11 @@ class _WeekdayCardState extends State<WeekdayCard> {
                       onTap: () => _showEndTimePicker(),
                       readOnly: true,
                       decoration: InputDecoration(
-                        border: RoundedColoredInputBorder(),
-                        enabledBorder: RoundedColoredInputBorder(),
-                        suffixIcon: HugeIcon(icon: HugeIcons.strokeRoundedAlarmClock, color: cColorPrimary),
+                        border: const RoundedColoredInputBorder(),
+                        enabledBorder: const RoundedColoredInputBorder(),
+                        suffixIcon: const HugeIcon(icon: HugeIcons.strokeRoundedAlarmClock, color: cColorPrimary),
                         hintText: widget.subject.schedule[widget.weekday]!.endTime.isEmpty ? "Fim": widget.subject.schedule[widget.weekday]!.endTime,
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                             fontFamily: "Onest",
                             fontWeight: FontWeight.w400,
                             fontSize: 16.0,

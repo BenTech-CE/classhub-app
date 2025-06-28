@@ -11,7 +11,7 @@ class AppTheme {
     primarySwatch: Colors.indigo,
     scaffoldBackgroundColor: cBackground,
     colorScheme: const ColorScheme.light()
-        .copyWith(primary: cColorPrimary, shadow: Colors.transparent),
+        .copyWith(primary: cColorPrimary, shadow: Colors.transparent, outline: cColorPrimary),
     primaryColor: cColorPrimary,
     // fontFamily: 'EuclidSquare',
     fontFamily: 'Onest',

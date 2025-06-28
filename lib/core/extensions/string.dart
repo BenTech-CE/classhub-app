@@ -1,6 +1,8 @@
 import 'package:classhub/core/extensions/date.dart';
 import 'package:flutter/material.dart';
 
+
+
 extension StringExtensions on String {
   String toCapitalized() {
     if (isEmpty) {
@@ -9,6 +11,9 @@ extension StringExtensions on String {
     
     return '${this[0].toUpperCase()}${substring(1)}';
   }
+
+  
+
 
   DateTime? toDate() {
     try {

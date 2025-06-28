@@ -15,4 +15,20 @@ extension DateTimeComparison on DateTime {
     
     return '$hour:$minute';
   }
+
+  String formattedHHmmSS() {
+    // padLeft(2, '0') adiciona um zero à esquerda se o número for menor que 10.
+    final String hour = this.hour.toString().padLeft(2, '0');
+    final String minute = this.minute.toString().padLeft(2, '0');
+    final String second = this.second.toString().padLeft(2, '0');
+    
+    return '$hour:$minute:$second';
+  }
+
+  String formattedDDmmYYYY() {
+    final String dayStr = day.toString().padLeft(2, '0');
+    final String monthStr = month.toString().padLeft(2, '0');
+    final String yearStr = year.toString();
+    return '$dayStr/$monthStr/$yearStr';
+  }
 }

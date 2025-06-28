@@ -162,6 +162,26 @@ String timeOfDayToString(TimeOfDay time) {
   return '$hour:$minute';
 }
 
+String timeOfDayWithSecondsToString(TimeOfDay time) {
+  final String hour = time.hour.toString().padLeft(2, '0');
+  final String minute = time.minute.toString().padLeft(2, '0');
+  
+  return '$hour:$minute:00';
+}
+
+DateTime timeOfDayToUtc(TimeOfDay time) {
+  final now = DateTime.now();
+  final localDateTime = DateTime(
+    now.year,
+    now.month,
+    now.day,
+    time.hour,
+    time.minute,
+  );
+
+  return localDateTime.toUtc();
+}
+
 TimeOfDay? stringToTimeOfDay(String timeString) {
   try {
     final parts = timeString.split(':');
