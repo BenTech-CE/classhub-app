@@ -251,24 +251,6 @@ class _ClassViewState extends State<ClassView> {
                                 widgetModel: ClassWidgetModel(title: "Eventos Próximos", description: ""),
                                 child: Container()
                               ),
-                              BaseClassWidget(
-                                canEdit: widget.mClassObj.role >= Role.viceLider,
-                                classColor: classColor,
-                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "dpr: ${MediaQuery.of(context).devicePixelRatio}\nsh: ${getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio)}\nshmax: ${getSheetMaxHeightByDpi(dpi: MediaQuery.of(context).devicePixelRatio, height: MediaQuery.of(context).size.height)}"),
-                                child: Container()
-                              ),
-                              BaseClassWidget(
-                                canEdit: widget.mClassObj.role >= Role.viceLider,
-                                classColor: classColor,
-                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "height: ${screenHeight}\nbanner height: ${getBannerHeightByDpi(mediaQuery.devicePixelRatio)}"),
-                                child: Container()
-                              ),
-                              BaseClassWidget(
-                                canEdit: widget.mClassObj.role >= Role.viceLider,
-                                classColor: classColor,
-                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "safe: ${safeAreaVertical}"),
-                                child: Container()
-                              ),
                               if (widget.mClassObj.role >= Role.viceLider)
                                 NewCardWidget(classColor: classColor,)
                             ],
