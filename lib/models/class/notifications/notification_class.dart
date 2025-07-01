@@ -11,8 +11,8 @@ class NotificationClass {
 
   Map<String, String> toJson() {
     return {
-      'notification-type': notificationType.name,
-      'fcm-token': fcmToken,
+      'notification_type': notificationType.name,
+      'fcm_token': fcmToken,
     };
   }
 }
