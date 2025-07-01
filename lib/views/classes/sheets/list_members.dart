@@ -54,7 +54,7 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
                   ),
                   if (!provider.isLoading&&provider.members.isNotEmpty)
                     Text(
-                      "Mostrando ${provider.members.length} colegas em P5 - Informática",
+                      "Mostrando ${provider.members.length} colegas em ${widget.mClassObj.name}",
                       style: const TextStyle(color: cColorText2Azul),
                       textAlign: TextAlign.left,
                     )

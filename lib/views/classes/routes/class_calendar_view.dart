@@ -2,6 +2,7 @@ import 'package:classhub/core/extensions/date.dart';
 import 'package:classhub/core/extensions/string.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/calendar/event_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
@@ -168,67 +169,68 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          modeText,
-                          style: const TextStyle(
-                            color: cColorText1,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(width: 4,),
-                        SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: PopupMenuButton<String>(
-                            shadowColor: Colors.grey,
-                            menuPadding: EdgeInsets.zero,
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                            icon: const Icon(Icons.arrow_drop_down_rounded,
-                                size: 24.0, color: cColorText2),
-                            onSelected: (String value) async {
-                              setState(() {
-                                currentMode = value;
+                        PopupMenuButton<String>(
+                          shadowColor: Colors.grey,
+                          menuPadding: EdgeInsets.zero,
+                          padding: EdgeInsets.zero,
+                          onSelected: (String value) async {
+                            setState(() {
+                              currentMode = value;
 
-                                switch (currentMode) {
-                                  case 'calendar':
-                                    modeText = _formatter.format(_selectedDay).toCapitalized();
-                                    break;
-                                  case 'upcoming7':
-                                    modeText = "Próximos 7 dias";
-                                    cevm.getEvents(widget.mClassObj.id, "7");
-                                    break;
-                                  case 'upcoming30':
-                                    modeText = "Próximos 30 dias";
-                                    cevm.getEvents(widget.mClassObj.id, "30");
-                                    break;
-                                  default:
-                                    modeText = _formatter.format(_selectedDay).toCapitalized();
-                                }
-                              });
-                            },
-                            itemBuilder: (BuildContext context) => [
-                              PopupMenuItem<String>(
-                                value: 'calendar',
-                                child: Text(_formatter.format(_selectedDay).toCapitalized()),
+                              switch (currentMode) {
+                                case 'calendar':
+                                  modeText = _formatter.format(_selectedDay).toCapitalized();
+                                  break;
+                                case 'upcoming7':
+                                  modeText = "Próximos 7 dias";
+                                  cevm.getEvents(widget.mClassObj.id, "7");
+                                  break;
+                                case 'upcoming30':
+                                  modeText = "Próximos 30 dias";
+                                  cevm.getEvents(widget.mClassObj.id, "30");
+                                  break;
+                                default:
+                                  modeText = _formatter.format(_selectedDay).toCapitalized();
+                              }
+                            });
+                          },
+                          itemBuilder: (BuildContext context) => [
+                            PopupMenuItem<String>(
+                              value: 'calendar',
+                              child: Text(_formatter.format(_selectedDay).toCapitalized()),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'upcoming7',
+                              child: Text("Próximos 7 dias"),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'upcoming30',
+                              child: Text("Próximos 30 dias"),
+                            ),
+                          ],
+                          // atention: Offset de onde irá aparecer o menu (x, y)
+                          offset: const Offset(0, 24),
+                          child: Row(
+                            children: [
+                              Text(
+                                modeText,
+                                style: const TextStyle(
+                                  color: cColorText1,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              const PopupMenuItem<String>(
-                                value: 'upcoming7',
-                                child: Text("Próximos 7 dias"),
-                              ),
-                              const PopupMenuItem<String>(
-                                value: 'upcoming30',
-                                child: Text("Próximos 30 dias"),
-                              ),
+                              const SizedBox(width: 4,),
+                              const Icon(Icons.arrow_drop_down_rounded,
+                                size: 24.0, color: cColorText2
+                              )
                             ],
-                            // atention: Offset de onde irá aparecer o menu (x, y)
-                            offset: const Offset(-16, 16),
                           ),
                         ),
                         const Spacer(),
+                        if (widget.mClassObj.role >= Role.viceLider)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [SizedBox(

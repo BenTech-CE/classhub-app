@@ -272,19 +272,19 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   menuPadding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
-                                  offset: Offset(0, 28),
+                                  offset: const Offset(0, 28),
                                   itemBuilder: (context) {
                                     return tiposPost.map((str) {
                                       return PopupMenuItem(
                                         value: str,
                                         height: 24,
-                                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: widget.classColor.shade200,
                                             borderRadius: BorderRadius.circular(999)
                                           ),
-                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment: MainAxisAlignment.center,
@@ -310,7 +310,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       color: widget.classColor.shade200,
                                       borderRadius: BorderRadius.circular(999)
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -329,7 +329,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   menuPadding: const EdgeInsets.all(0),
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
-                                  offset: Offset(0, 28),
+                                  offset: const Offset(0, 28),
                                   itemBuilder: (context) {    
                                     return materias.map((mt) {
                                       final matColor = generateMaterialColor(Color(mt.color!));
@@ -337,13 +337,13 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       return PopupMenuItem(
                                         value: mt,
                                         height: 24,
-                                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                                         child: Container(
                                           decoration: BoxDecoration(
                                             color: matColor.shade200,
                                             borderRadius: BorderRadius.circular(999)
                                           ),
-                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             mainAxisAlignment: MainAxisAlignment.center,
@@ -372,7 +372,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                           color: matColor.shade200,
                                           borderRadius: BorderRadius.circular(999)
                                         ),
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           mainAxisAlignment: MainAxisAlignment.center,
@@ -395,7 +395,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       color: widget.classColor.shade200,
                                       borderRadius: BorderRadius.circular(999)
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       spacing: 4,
@@ -418,7 +418,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                         GestureDetector(
                           onTap: _createPost, 
                           child: createLoading ? 
-                            Container(width: 24, height: 24, padding: EdgeInsets.all(4), child: CircularProgressIndicator(strokeWidth: 1,)) 
+                            Container(width: 24, height: 24, padding: const EdgeInsets.all(4), child: const CircularProgressIndicator(strokeWidth: 1,)) 
                           : SizedBox(
                             width: 24,
                             height: 24,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/utils/role.dart';
@@ -88,6 +90,14 @@ class _ClassViewState extends State<ClassView> {
 
   @override
   Widget build(BuildContext context) {
+      // 1. Obter as dimensões da tela e o padding (área segura)
+    final mediaQuery = MediaQuery.of(context);
+    final bannerHeight = getBannerHeightByDpi(mediaQuery.devicePixelRatio);
+    final screenHeight = mediaQuery.size.height;
+    final safeAreaVertical = mediaQuery.padding.top + mediaQuery.padding.bottom;
+    final sheetHeight = (screenHeight - bannerHeight - safeAreaVertical - kToolbarHeight) / screenHeight;
+    final sheetMaxHeight = (screenHeight - safeAreaVertical - kToolbarHeight - 8) / screenHeight;
+
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
@@ -129,7 +139,7 @@ class _ClassViewState extends State<ClassView> {
                     onPressed: () {
                       showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(mClassObj: widget.mClassObj,), showDragHandle: true, isScrollControlled: true);
                     },
-                    icon: Icon(HugeIcons.strokeRoundedUserGroup02),
+                    icon: const Icon(HugeIcons.strokeRoundedUserGroup02),
                     color: Colors.white,
                   )
                 ],
@@ -244,7 +254,19 @@ class _ClassViewState extends State<ClassView> {
                               BaseClassWidget(
                                 canEdit: widget.mClassObj.role >= Role.viceLider,
                                 classColor: classColor,
-                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "${getBannerHeightByDpi(MediaQuery.of(context).devicePixelRatio)}"),
+                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "dpr: ${MediaQuery.of(context).devicePixelRatio}\nsh: ${getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio)}\nshmax: ${getSheetMaxHeightByDpi(dpi: MediaQuery.of(context).devicePixelRatio, height: MediaQuery.of(context).size.height)}"),
+                                child: Container()
+                              ),
+                              BaseClassWidget(
+                                canEdit: widget.mClassObj.role >= Role.viceLider,
+                                classColor: classColor,
+                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "height: ${screenHeight}\nbanner height: ${getBannerHeightByDpi(mediaQuery.devicePixelRatio)}"),
+                                child: Container()
+                              ),
+                              BaseClassWidget(
+                                canEdit: widget.mClassObj.role >= Role.viceLider,
+                                classColor: classColor,
+                                widgetModel: ClassWidgetModel(title: "Tamanho da tela", description: "safe: ${safeAreaVertical}"),
                                 child: Container()
                               ),
                               if (widget.mClassObj.role >= Role.viceLider)
@@ -260,9 +282,9 @@ class _ClassViewState extends State<ClassView> {
                   key: _sheet,
                   expand: true,
                   snap: true,
-                  maxChildSize: getSheetMaxHeightByDpi(dpi: MediaQuery.of(context).devicePixelRatio, height: MediaQuery.of(context).size.height),
-                  initialChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
-                  minChildSize: getSheetHeightByDpi(MediaQuery.of(context).devicePixelRatio),
+                  maxChildSize: sheetMaxHeight,
+                  initialChildSize: sheetHeight,
+                  minChildSize: sheetHeight,
                   shouldCloseOnMinExtent: false,
                   builder: (context, scrollController) => Container(
                     decoration: const BoxDecoration(
