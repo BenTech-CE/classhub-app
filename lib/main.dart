@@ -5,6 +5,8 @@ import 'package:classhub/services/class/calendar/class_calendar_service.dart';
 import 'package:classhub/services/class/management/class_management_service.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
 import 'package:classhub/services/class/mural/class_mural_service.dart';
+import 'package:classhub/services/class/notifications/class_notifications_service.dart';
+import 'package:classhub/services/class/notifications/notification_service.dart';
 import 'package:classhub/services/class/subjects/class_subjects_service.dart';
 import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
@@ -14,11 +16,15 @@ import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/user/splash_view.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:provider/provider.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -34,6 +40,15 @@ void main() async {
   print('MMKV for flutter with rootDir = $rootDir');
 
   await initializeDateFormatting('pt_BR');
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final NotificationService notificationService = NotificationService();
+  await notificationService.initFCM();
+
+  FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
   runApp(const MyApp());
 }
@@ -75,4 +90,8 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> handleBackgroundMessage(RemoteMessage message) async {
+  print('Handling a background message: ${message.data}');
 }
