@@ -100,7 +100,6 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   void _createPost() async {
     final cmvm = context.read<ClassMuralViewModel>();
-    final cnvm = context.read<ClassNotificationsViewModel>();
 
     if (_tf.text.isNotEmpty && !cmvm.isLoading) {
       setState(() {
@@ -117,8 +116,6 @@ class _NewPostWidgetState extends State<NewPostWidget> {
       final result = await cmvm.createPost(widget.classId, postModel);
 
       if (result != null) {
-        await cnvm.subscribe(NotificationType.new_alert, widget.classId);
-
         widget.onCreated();
 
         setState(() {

@@ -6,6 +6,7 @@ import 'package:classhub/core/theme/textfields.dart';
 import 'package:classhub/core/theme/texts.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/services/class/notifications/notification_service.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/views/classes/class_view.dart';
@@ -54,11 +55,15 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
     final userViewModel = ctx.read<UserViewModel>();
     final classManagementViewModel = ctx.read<ClassManagementViewModel>();
 
+    final NotificationService notificationService = NotificationService();
+    final fcmToken = await notificationService.getFcmToken();
+
     final classModel = ClassModel(
       name: _titleTF.text,
       school: _schoolTF.text,
       color: currentColor.toARGB32(),
       banner: selectedBannerFile,
+      fcmToken: fcmToken,
     );
 
     final MinimalClassModel? classCreated =
@@ -66,15 +71,6 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
 
     if (classCreated != null) {
       await userViewModel.fetchUser();
-      // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      //   content: Text(
-      //     "Turma criada com sucesso!",
-      //     style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-      //   ),
-      //   backgroundColor: cColorSuccess,
-      // ));
-      
-
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ClassView(mClassObj: classCreated)));

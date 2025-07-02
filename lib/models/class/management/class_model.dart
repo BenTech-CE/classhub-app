@@ -10,6 +10,7 @@ class ClassModel {
   final XFile? banner;
   final String school;
   final ClassOwnerModel? owner;
+  final String? fcmToken;
 
   ClassModel({
     this.id,
@@ -20,6 +21,7 @@ class ClassModel {
     this.banner,
     required this.school,
     this.owner,
+    this.fcmToken,
   });
 
   factory ClassModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class ClassModel {
       'name': name,
       if (color != null) 'color': color.toString(),
       'school': school,
+      if (fcmToken != null) 'fcm_token': fcmToken.toString(),
     };
   }
 }

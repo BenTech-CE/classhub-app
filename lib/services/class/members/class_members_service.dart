@@ -3,16 +3,21 @@ import 'dart:convert';
 import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
+import 'package:classhub/services/class/notifications/notification_service.dart';
 import 'package:http/http.dart' as http;
 
 class ClassMembersService {
   final AuthService authService;
+  final NotificationService notificationService = NotificationService();
 
   ClassMembersService(this.authService);
 
   Future<bool> deleteMember(String idClass, String idUser) async {
     final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
+
+    final fcmToken = await notificationService.getFcmToken();
+    if (fcmToken == null) throw Exception('FCM Token não encontrado');
 
     final response = await http.delete(
       Uri.parse(
@@ -21,6 +26,7 @@ class ClassMembersService {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token"
       },
+      body: jsonEncode({"fcm_token": fcmToken}),
     );
 
     print(response.statusCode);

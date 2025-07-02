@@ -5,11 +5,12 @@ import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
+import 'package:classhub/services/class/notifications/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mmkv/mmkv.dart';
 
 class ClassManagementService {
-  // final http = Client();
+  final NotificationService notificationService = NotificationService();
   final AuthService authService;
   var mmkv = MMKV.defaultMMKV();
 
@@ -133,13 +134,16 @@ class ClassManagementService {
     final token = authService.getToken();
     if (token == null) throw Exception('Token não encontrado');
 
+    final fcmToken = await notificationService.getFcmToken();
+    if (fcmToken == null) throw Exception('FCM Token não encontrado');
+
     final response = await http.post(
         Uri.parse("${Api.baseUrl}${Api.classEndpoint}${Api.joinClassEndpoint}"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body: jsonEncode({"invite_code": idClass}));
+        body: jsonEncode({"invite_code": idClass, "fcm_token": fcmToken}));
 
     print(response.statusCode);
     print(response.body);
