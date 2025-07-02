@@ -6,6 +6,7 @@ import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
+import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/new_post_widget.dart';
 import 'package:classhub/views/classes/widgets/post_alert_widget.dart';
@@ -30,6 +31,8 @@ class _ClassMuralViewState extends State<ClassMuralView> {
   bool _refreshingPage = false;
 
   late MaterialColor classColor;
+
+  late String userId;
 
   final _muralController = StreamController<List<MuralModel>>();
   final List<MuralModel> _posts = [];
@@ -83,6 +86,9 @@ class _ClassMuralViewState extends State<ClassMuralView> {
   @override
   void initState() {
     super.initState();
+
+    final uvm = context.read<UserViewModel>();
+    userId = uvm.user!.id;
 
     classColor = generateMaterialColor(Color(widget.mClassObj.color));
 
@@ -196,21 +202,21 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                         return PostAlertWidget(
                           classColor: classColor,
                           post: filteredPosts[index],
-                          editable: widget.mClassObj.role >= Role.contribuidor,
+                          editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
                         );
                       } else if (filteredPosts[index].type ==
                           MuralType.MATERIAL) {
                         return PostMaterialWidget(
                           classColor: classColor,
                           post: filteredPosts[index],
-                          editable: widget.mClassObj.role >= Role.contribuidor,
+                          editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
                         );
                       }
 
                       return PostAlertWidget(
                         classColor: classColor,
                         post: filteredPosts[index],
-                        editable: widget.mClassObj.role >= Role.contribuidor,
+                        editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {

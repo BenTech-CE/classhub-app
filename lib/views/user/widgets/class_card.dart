@@ -184,7 +184,7 @@ class _ClassCardState extends State<ClassCard> {
                           }
                         },
                         itemBuilder: (BuildContext context) =>
-                            turma.role >= Role.lider
+                            turma.role >= Role.criador
                                 ? popupMenuItemsOwner
                                 : popupMenuItemsMember,
                         // atention: Offset de onde irá aparecer o menu (x, y)

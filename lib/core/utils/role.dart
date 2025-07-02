@@ -1,8 +1,8 @@
 enum Role {
   colega(0),
+  criador(10),
   lider(5),
-  viceLider(4),
-  contribuidor(3);
+  viceLider(4);
 
   final int value;
   const Role(this.value);
@@ -20,7 +20,7 @@ enum Role {
       0 => "Colega",
       5 => "Líder",
       4 => "Vice-líder",
-      3 => "Contribuidor",
+      10 => "Criador da Turma",
       _ => "Colega",
     };
   }
