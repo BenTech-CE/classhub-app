@@ -14,6 +14,7 @@ import 'package:classhub/viewmodels/class/calendar/class_calendar_viewmodel.dart
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
+import 'package:classhub/viewmodels/class/notifications/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/user/splash_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
     final classSubjectsService = ClassSubjectsService(authService);
     final classMuralService = ClassMuralService(authService);
     final classCalendarService = ClassCalendarService(authService);
+    final classNotificationsService = ClassNotificationsService(authService);
 
     return MultiProvider(
       providers: [
@@ -79,6 +81,9 @@ class MyApp extends StatelessWidget {
             create: (_) => ClassMembersViewModel(classMembersService)),
         ChangeNotifierProvider(
             create: (_) => ClassManagementViewModel(classManagementService)),
+        ChangeNotifierProvider(
+            create: (_) =>
+                ClassNotificationsViewModel(classNotificationsService)),
         ChangeNotifierProvider(
             create: (_) => ClassCalendarViewModel(classCalendarService)),
       ],

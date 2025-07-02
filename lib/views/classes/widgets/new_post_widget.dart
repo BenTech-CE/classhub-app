@@ -97,6 +97,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
           createLoading = false;
         });
         
+        
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(

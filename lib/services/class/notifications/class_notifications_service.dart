@@ -71,7 +71,7 @@ class ClassNotificationsService {
       return true;
     } else {
       throw Exception(
-          "Erro ao enviar a notificação $notificationType: ${jsonResponse["error"]}");
+          "Erro ao unsubscribe a notificação $notificationType: ${jsonResponse["error"]}");
     }
   }
 }
