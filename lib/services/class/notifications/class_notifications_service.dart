@@ -24,15 +24,16 @@ class ClassNotificationsService {
     if (fcmToken == null) throw Exception('FCM Token não encontrado');
 
     final response = await http.post(
-        Uri.parse("${Api.baseUrl}${Api.classEndpoint}$classId/subscribe"),
+        Uri.parse("${Api.baseUrl}${Api.classEndpoint}/$classId/subscribe"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body: NotificationClass(
+        body: jsonEncode(NotificationClass(
                 notificationType: notificationType, fcmToken: fcmToken)
-            .toJson());
+            .toJson()));
 
+    print("Response from subscribe notification:");
     print(response.statusCode);
     print(response.body);
 
@@ -54,14 +55,14 @@ class ClassNotificationsService {
     if (fcmToken == null) throw Exception('FCM Token não encontrado');
 
     final response = await http.post(
-        Uri.parse("${Api.baseUrl}${Api.classEndpoint}$classId/unsubscribe"),
+        Uri.parse("${Api.baseUrl}${Api.classEndpoint}/$classId/unsubscribe"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body: NotificationClass(
+        body: jsonEncode(NotificationClass(
                 notificationType: notificationType, fcmToken: fcmToken)
-            .toJson());
+            .toJson()));
 
     print(response.statusCode);
     print(response.body);

@@ -5,9 +5,11 @@ import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/utils/mural_type.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/create_post_mural_model.dart';
+import 'package:classhub/models/class/notifications/notification_type.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
+import 'package:classhub/viewmodels/class/notifications/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
@@ -21,7 +23,11 @@ class NewPostWidget extends StatefulWidget {
   final String classId;
   final VoidCallback onCreated;
 
-  const NewPostWidget({super.key, required this.classColor, required this.classId, required this.onCreated});
+  const NewPostWidget(
+      {super.key,
+      required this.classColor,
+      required this.classId,
+      required this.onCreated});
 
   @override
   State<NewPostWidget> createState() => _NewPostWidgetState();
@@ -48,14 +54,37 @@ class _NewPostWidgetState extends State<NewPostWidget> {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: Platform.isIOS ? FileType.media : FileType.custom,
-      allowedExtensions: Platform.isIOS ? null : [
-      'pdf', 'doc', 'docx', 'odt', 'txt', 'epub',
-      'ppt', 'pptx', 'odp',
-      'xls', 'xlsx', 'ods', 'csv',
-      'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp',
-      'mp4', 'mov', 'avi',
-      'mp3', 'wav', 'm4a', 'ogg', 'opus'
-      ],
+      allowedExtensions: Platform.isIOS
+          ? null
+          : [
+              'pdf',
+              'doc',
+              'docx',
+              'odt',
+              'txt',
+              'epub',
+              'ppt',
+              'pptx',
+              'odp',
+              'xls',
+              'xlsx',
+              'ods',
+              'csv',
+              'jpg',
+              'jpeg',
+              'png',
+              'gif',
+              'svg',
+              'webp',
+              'mp4',
+              'mov',
+              'avi',
+              'mp3',
+              'wav',
+              'm4a',
+              'ogg',
+              'opus'
+            ],
     );
 
     if (result != null) {
@@ -64,7 +93,6 @@ class _NewPostWidgetState extends State<NewPostWidget> {
       setState(() {
         _selectedAttachments = files;
       });
-      
     } else {
       print("Canceled file picker.");
     }
@@ -72,6 +100,7 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
   void _createPost() async {
     final cmvm = context.read<ClassMuralViewModel>();
+    final cnvm = context.read<ClassNotificationsViewModel>();
 
     if (_tf.text.isNotEmpty && !cmvm.isLoading) {
       setState(() {
@@ -79,16 +108,17 @@ class _NewPostWidgetState extends State<NewPostWidget> {
       });
 
       final postModel = CreatePostMuralModel(
-        type: dropTipos, 
-        description: _tf.text,
-        subjectId: idMateria.id != "not-selected-subject" ? idMateria.id : null,
-        attachments: _selectedAttachments
-      );
+          type: dropTipos,
+          description: _tf.text,
+          subjectId:
+              idMateria.id != "not-selected-subject" ? idMateria.id : null,
+          attachments: _selectedAttachments);
 
-      
       final result = await cmvm.createPost(widget.classId, postModel);
 
       if (result != null) {
+        await cnvm.subscribe(NotificationType.new_alert, widget.classId);
+
         widget.onCreated();
 
         setState(() {
@@ -96,8 +126,6 @@ class _NewPostWidgetState extends State<NewPostWidget> {
           _selectedAttachments.clear();
           createLoading = false;
         });
-        
-        
 
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
@@ -114,8 +142,8 @@ class _NewPostWidgetState extends State<NewPostWidget> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
             cmvm.error!,
-            style:
-                const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
           backgroundColor: cColorError,
         ));
@@ -135,18 +163,21 @@ class _NewPostWidgetState extends State<NewPostWidget> {
 
     materias = [
       SubjectModel(
-        id: "not-selected-subject",
-        title: "Não associar",
-        schedule: {},
-        color: widget.classColor.toARGB32()
-      ),
+          id: "not-selected-subject",
+          title: "Não associar",
+          schedule: {},
+          color: widget.classColor.toARGB32()),
       ...materias
     ];
 
     if (materias.isNotEmpty) {
       idMateria = materias.first;
     } else {
-      idMateria = SubjectModel(id: "not-selected-subject", title: "Matéria", schedule: {}, color: widget.classColor.toARGB32());
+      idMateria = SubjectModel(
+          id: "not-selected-subject",
+          title: "Matéria",
+          schedule: {},
+          color: widget.classColor.toARGB32());
     }
   }
 
@@ -174,18 +205,20 @@ class _NewPostWidgetState extends State<NewPostWidget> {
         children: [
           CircleAvatar(
             radius: 20, // Define o raio do círculo
-            backgroundColor: widget.classColor.shade200, // Define a cor de fundo
-            child: Text(
-                getNameInitials(uname),
+            backgroundColor:
+                widget.classColor.shade200, // Define a cor de fundo
+            child: Text(getNameInitials(uname),
                 overflow: TextOverflow.clip,
                 style: TextStyle(
-                    color: widget.classColor.shade900)), // Conteúdo dentro do círculo
+                    color: widget
+                        .classColor.shade900)), // Conteúdo dentro do círculo
           ),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: widget.classColor.shade100, width: 2)),
+                  border:
+                      Border.all(color: widget.classColor.shade100, width: 2)),
               child: Column(
                 children: [
                   Padding(
@@ -206,27 +239,38 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                               hintStyle:
                                   TextStyle(color: cColorText3, fontSize: 16)),
                         ),
-                        ..._selectedAttachments.mapIndexed((index, file) =>
-                          Container(
+                        ..._selectedAttachments.mapIndexed(
+                          (index, file) => Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
                               color: widget.classColor.shade50,
-                              border: Border.all(color: widget.classColor.shade200, width: 2),
+                              border: Border.all(
+                                  color: widget.classColor.shade200, width: 2),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               spacing: 4,
                               children: [
-                                HugeIcon(icon: HugeIcons.strokeRoundedDocumentAttachment, color: widget.classColor.shade900, size: 20,),
+                                HugeIcon(
+                                  icon:
+                                      HugeIcons.strokeRoundedDocumentAttachment,
+                                  color: widget.classColor.shade900,
+                                  size: 20,
+                                ),
                                 Flexible(
-                                  child: Text(file.name, style: const TextStyle(
-                                    color: cColorText1,
-                                    fontSize: 16,
-                                    
-                                  ), overflow: TextOverflow.ellipsis, maxLines: 1,),
+                                  child: Text(
+                                    file.name,
+                                    style: const TextStyle(
+                                      color: cColorText1,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 24,
@@ -234,11 +278,11 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   child: IconButton(
                                     onPressed: () {
                                       // Remover anexo
-                                      
+
                                       setState(() {
                                         _selectedAttachments.removeAt(index);
                                       });
-                                    }, 
+                                    },
                                     icon: const Icon(Icons.close),
                                     padding: EdgeInsets.zero,
                                     constraints: const BoxConstraints(),
@@ -256,7 +300,8 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                     thickness: 2,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                    padding:
+                        const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                     child: Row(
                       spacing: 8,
                       mainAxisSize: MainAxisSize.max,
@@ -271,7 +316,8 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                 PopupMenuButton<MuralType>(
                                   padding: const EdgeInsets.all(0),
                                   menuPadding: const EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
                                   offset: const Offset(0, 28),
                                   itemBuilder: (context) {
@@ -279,21 +325,28 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       return PopupMenuItem(
                                         value: str,
                                         height: 24,
-                                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4, vertical: 4),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: widget.classColor.shade200,
-                                            borderRadius: BorderRadius.circular(999)
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                              color: widget.classColor.shade200,
+                                              borderRadius:
+                                                  BorderRadius.circular(999)),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 2),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Text(str.type.toCapitalized(), style: TextStyle(
-                                                color: widget.classColor.shade900,
-                                                fontSize: 14
-                                              ), textAlign: TextAlign.end,),
+                                              Text(
+                                                str.type.toCapitalized(),
+                                                style: TextStyle(
+                                                    color: widget
+                                                        .classColor.shade900,
+                                                    fontSize: 14),
+                                                textAlign: TextAlign.end,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -308,19 +361,26 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: widget.classColor.shade200,
-                                      borderRadius: BorderRadius.circular(999)
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                        color: widget.classColor.shade200,
+                                        borderRadius:
+                                            BorderRadius.circular(999)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 2),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Text(dropTipos.type.toCapitalized(), style: TextStyle(
-                                          color: widget.classColor.shade900,
-                                          fontSize: 14
-                                        ), textAlign: TextAlign.end,),
-                                        Icon(Icons.arrow_drop_down, color: widget.classColor.shade900, size: 16),
+                                        Text(
+                                          dropTipos.type.toCapitalized(),
+                                          style: TextStyle(
+                                              color: widget.classColor.shade900,
+                                              fontSize: 14),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Icon(Icons.arrow_drop_down,
+                                            color: widget.classColor.shade900,
+                                            size: 16),
                                       ],
                                     ),
                                   ),
@@ -328,31 +388,39 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                 PopupMenuButton<SubjectModel>(
                                   padding: const EdgeInsets.all(0),
                                   menuPadding: const EdgeInsets.all(0),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12)),
                                   shadowColor: Colors.grey,
                                   offset: const Offset(0, 28),
-                                  itemBuilder: (context) {    
+                                  itemBuilder: (context) {
                                     return materias.map((mt) {
-                                      final matColor = generateMaterialColor(Color(mt.color!));
-                                
+                                      final matColor = generateMaterialColor(
+                                          Color(mt.color!));
+
                                       return PopupMenuItem(
                                         value: mt,
                                         height: 24,
-                                        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4, vertical: 4),
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: matColor.shade200,
-                                            borderRadius: BorderRadius.circular(999)
-                                          ),
-                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                              color: matColor.shade200,
+                                              borderRadius:
+                                                  BorderRadius.circular(999)),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 2),
                                           child: Row(
                                             mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Text(mt.title, style: TextStyle(
-                                                color: matColor.shade900,
-                                                fontSize: 14
-                                              ), textAlign: TextAlign.end,),
+                                              Text(
+                                                mt.title,
+                                                style: TextStyle(
+                                                    color: matColor.shade900,
+                                                    fontSize: 14),
+                                                textAlign: TextAlign.end,
+                                              ),
                                             ],
                                           ),
                                         ),
@@ -365,67 +433,92 @@ class _NewPostWidgetState extends State<NewPostWidget> {
                                       idMateria = value;
                                     });
                                   },
-                                  child: Builder(
-                                    builder: (context) {
-                                      final matColor = generateMaterialColor(Color(idMateria.color!));
-                                      return Container(
-                                        decoration: BoxDecoration(
+                                  child: Builder(builder: (context) {
+                                    final matColor = generateMaterialColor(
+                                        Color(idMateria.color!));
+                                    return Container(
+                                      decoration: BoxDecoration(
                                           color: matColor.shade200,
-                                          borderRadius: BorderRadius.circular(999)
-                                        ),
-                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: <Widget>[
-                                          Text(idMateria.id == "not-selected-subject" ? "Matéria" : idMateria.title, style: TextStyle(
-                                            color: matColor.shade900,
-                                            fontSize: 14
-                                          ), textAlign: TextAlign.end, overflow: TextOverflow.ellipsis,),
-                                          Icon(Icons.arrow_drop_down, color: matColor.shade900, size: 16),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                  ),
+                                          borderRadius:
+                                              BorderRadius.circular(999)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 2),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            idMateria.id ==
+                                                    "not-selected-subject"
+                                                ? "Matéria"
+                                                : idMateria.title,
+                                            style: TextStyle(
+                                                color: matColor.shade900,
+                                                fontSize: 14),
+                                            textAlign: TextAlign.end,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Icon(Icons.arrow_drop_down,
+                                              color: matColor.shade900,
+                                              size: 16),
+                                        ],
+                                      ),
+                                    );
+                                  }),
                                 ),
                                 GestureDetector(
                                   onTap: _attach,
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: widget.classColor.shade200,
-                                      borderRadius: BorderRadius.circular(999)
-                                    ),
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                        color: widget.classColor.shade200,
+                                        borderRadius:
+                                            BorderRadius.circular(999)),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 2),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       spacing: 4,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
-                                        HugeIcon(icon: HugeIcons.strokeRoundedAttachment, color: widget.classColor.shade900, size: 16),
-                                        Text("Anexo", style: TextStyle(
-                                          color: widget.classColor.shade900,
-                                          fontSize: 14
-                                        ), textAlign: TextAlign.end,),
+                                        HugeIcon(
+                                            icon: HugeIcons
+                                                .strokeRoundedAttachment,
+                                            color: widget.classColor.shade900,
+                                            size: 16),
+                                        Text(
+                                          "Anexo",
+                                          style: TextStyle(
+                                              color: widget.classColor.shade900,
+                                              fontSize: 14),
+                                          textAlign: TextAlign.end,
+                                        ),
                                       ],
                                     ),
                                   ),
-                                
                                 ),
                               ],
                             ),
                           ),
                         ),
                         GestureDetector(
-                          onTap: _createPost, 
-                          child: createLoading ? 
-                            Container(width: 24, height: 24, padding: const EdgeInsets.all(4), child: const CircularProgressIndicator(strokeWidth: 1,)) 
-                          : SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: HugeIcon(icon: HugeIcons.strokeRoundedArrowRight02, color: widget.classColor.shade900,)
-                          )
-                        )
+                            onTap: _createPost,
+                            child: createLoading
+                                ? Container(
+                                    width: 24,
+                                    height: 24,
+                                    padding: const EdgeInsets.all(4),
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 1,
+                                    ))
+                                : SizedBox(
+                                    width: 24,
+                                    height: 24,
+                                    child: HugeIcon(
+                                      icon: HugeIcons.strokeRoundedArrowRight02,
+                                      color: widget.classColor.shade900,
+                                    )))
                       ],
                     ),
                   ),
