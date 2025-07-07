@@ -12,6 +12,7 @@ import 'package:classhub/views/classes/routes/class_calendar_view.dart';
 import 'package:classhub/views/classes/routes/class_mural_view.dart';
 import 'package:classhub/views/classes/routes/class_subjects_view.dart';
 import 'package:classhub/views/classes/sheets/list_members.dart';
+import 'package:classhub/views/classes/sheets/notifications_config.dart';
 import 'package:classhub/views/classes/widgets/base_class_widget.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:classhub/views/classes/widgets/new_card_widget.dart';
@@ -135,6 +136,13 @@ class _ClassViewState extends State<ClassView> {
                 title: Text(widget.mClassObj.name),
                 backgroundColor: Colors.transparent,
                 actions: [
+                  IconButton(
+                    onPressed: () {
+                      showModalBottomSheet(context: context, builder: (context) => NotificationsConfig(), showDragHandle: true, isScrollControlled: true);
+                    },
+                    icon: const Icon(HugeIcons.strokeRoundedNotification01),
+                    color: Colors.white,
+                  ),
                   IconButton(
                     onPressed: () {
                       showModalBottomSheet(context: context, builder: (context) => ListMembersSheet(mClassObj: widget.mClassObj,), showDragHandle: true, isScrollControlled: true);
