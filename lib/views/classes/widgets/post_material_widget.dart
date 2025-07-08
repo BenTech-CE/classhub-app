@@ -4,20 +4,24 @@ import 'package:classhub/core/extensions/filename.dart';
 import 'package:classhub/core/theme/colors.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/mural/mural_model.dart';
+import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/widgets/ui/triangle_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PostMaterialWidget extends StatefulWidget {
   final MaterialColor classColor;
+  final String classId;
   final bool editable;
   final MuralModel post;
+  final VoidCallback onDelete;
 
   const PostMaterialWidget(
-      {super.key, required this.classColor, required this.post, required this.editable});
+      {super.key, required this.classId, required this.classColor, required this.post, required this.editable, required this.onDelete});
 
   @override
   State<PostMaterialWidget> createState() => _PostMaterialWidgetState();
@@ -56,6 +60,34 @@ class _PostMaterialWidgetState extends State<PostMaterialWidget> {
       backgroundColor: cColorSuccess,
     ));
     // copied successfully
+  }
+
+  void _delete() async {
+    final cmvm = context.read<ClassMuralViewModel>();
+    
+    final result = await cmvm.deletePost(widget.classId, widget.post.id);
+
+    if (result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Postagem deletada com sucesso!",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorSuccess,
+      ));
+
+      widget.onDelete();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível apagar a postagem.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    }
   }
 
   @override
@@ -158,7 +190,7 @@ class _PostMaterialWidgetState extends State<PostMaterialWidget> {
                       if (value == 'copy') {
                         _copy();
                       } else if (value == 'delete') {
-                        // Deletar o material.
+                        _delete();
                       }
                     },
                     itemBuilder: (BuildContext context) =>

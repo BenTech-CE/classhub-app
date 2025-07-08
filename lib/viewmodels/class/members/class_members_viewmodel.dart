@@ -34,6 +34,7 @@ class ClassMembersViewModel extends ChangeNotifier {
 
   Future<void> getMembers(String classId) async {
     _isLoading = true;
+    _members.clear();
     notifyListeners();
 
     try {

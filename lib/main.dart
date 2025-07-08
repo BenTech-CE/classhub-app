@@ -14,7 +14,7 @@ import 'package:classhub/viewmodels/class/calendar/class_calendar_viewmodel.dart
 import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
-import 'package:classhub/viewmodels/class/notifications/class_members_viewmodel.dart';
+import 'package:classhub/viewmodels/class/notifications/class_notifications_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:classhub/views/user/splash_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -61,13 +61,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();
+    final classNotificationsService = ClassNotificationsService(authService);
     final sessionService = SessionService(authService);
-    final classManagementService = ClassManagementService(authService);
+    final classManagementService = ClassManagementService(authService, classNotificationsService);
     final classMembersService = ClassMembersService(authService);
     final classSubjectsService = ClassSubjectsService(authService);
     final classMuralService = ClassMuralService(authService);
     final classCalendarService = ClassCalendarService(authService);
-    final classNotificationsService = ClassNotificationsService(authService);
+    
 
     return MultiProvider(
       providers: [
@@ -80,10 +81,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (_) => ClassMembersViewModel(classMembersService)),
         ChangeNotifierProvider(
-            create: (_) => ClassManagementViewModel(classManagementService)),
+            create: (_) => ClassNotificationsViewModel(classNotificationsService)),
         ChangeNotifierProvider(
-            create: (_) =>
-                ClassNotificationsViewModel(classNotificationsService)),
+            create: (_) => ClassManagementViewModel(classManagementService)),
         ChangeNotifierProvider(
             create: (_) => ClassCalendarViewModel(classCalendarService)),
       ],

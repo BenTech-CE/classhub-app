@@ -37,6 +37,16 @@ class _ClassMuralViewState extends State<ClassMuralView> {
   final _muralController = StreamController<List<MuralModel>>();
   final List<MuralModel> _posts = [];
 
+  void _onPostDeleted() {
+    setState(() {
+      _posts.clear();
+      _currentPage = 1;
+      _canLoadMore = false;
+    });
+
+    _fetchMural();
+  }
+
   Future<void> _fetchMural() async {
     //final cmvm = context.read<ClassMuralViewModel>();
 
@@ -200,23 +210,29 @@ class _ClassMuralViewState extends State<ClassMuralView> {
                     itemBuilder: (BuildContext context, int index) {
                       if (filteredPosts[index].type == MuralType.AVISO) {
                         return PostAlertWidget(
+                          classId: widget.mClassObj.id,
                           classColor: classColor,
                           post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
+                          onDelete: _onPostDeleted,
                         );
                       } else if (filteredPosts[index].type ==
                           MuralType.MATERIAL) {
                         return PostMaterialWidget(
+                          classId: widget.mClassObj.id,
                           classColor: classColor,
                           post: filteredPosts[index],
                           editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
+                          onDelete: _onPostDeleted,
                         );
                       }
 
                       return PostAlertWidget(
+                        classId: widget.mClassObj.id,
                         classColor: classColor,
                         post: filteredPosts[index],
                         editable: widget.mClassObj.role >= Role.viceLider || filteredPosts[index].author.id == userId,
+                        onDelete: _onPostDeleted,
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {

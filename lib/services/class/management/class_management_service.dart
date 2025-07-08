@@ -5,16 +5,18 @@ import 'package:classhub/core/utils/api.dart';
 import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
+import 'package:classhub/services/class/notifications/class_notifications_service.dart';
 import 'package:classhub/services/class/notifications/notification_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:mmkv/mmkv.dart';
 
 class ClassManagementService {
   final NotificationService notificationService = NotificationService();
+  final ClassNotificationsService classNotificationsService;
   final AuthService authService;
   var mmkv = MMKV.defaultMMKV();
 
-  ClassManagementService(this.authService);
+  ClassManagementService(this.authService, this.classNotificationsService);
 
   Future<MinimalClassModel> createClass(ClassModel classModel) async {
     final token = authService.getToken();
@@ -52,6 +54,8 @@ class ClassManagementService {
       authService.mmkv.encodeString(
           "${authService.getUserId()}.minimalclass.${jsonResponse["id"]}",
           respStr);
+
+      classNotificationsService.subscribeDefaults(jsonResponse["id"]);
 
       return MinimalClassModel.fromJson(jsonResponse);
     } else {
@@ -153,6 +157,8 @@ class ClassManagementService {
       authService.mmkv.encodeString(
           "${authService.getUserId()}.minimalclass.${jsonResponse["id"]}",
           response.body);
+
+      classNotificationsService.subscribeDefaults(jsonResponse["id"]);
 
       return MinimalClassModel.fromJson(jsonResponse);
     } else {

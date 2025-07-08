@@ -39,6 +39,9 @@ class ClassNotificationsService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
+
+      mmkv.encodeBool("notifications.$classId.${notificationType.name}", true);
+
       return true;
     } else {
       throw Exception(
@@ -69,10 +72,30 @@ class ClassNotificationsService {
 
     Map<String, dynamic> jsonResponse = jsonDecode(response.body);
     if (response.statusCode == 200) {
+      mmkv.encodeBool("notifications.$classId.${notificationType.name}", false);
+
       return true;
     } else {
       throw Exception(
           "Erro ao unsubscribe a notificação $notificationType: ${jsonResponse["error"]}");
     }
+  }
+
+  bool isSubscribedTo(NotificationType notificationType, String classId) {
+    final key = "notifications.$classId.${notificationType.name}";
+
+    if (mmkv.containsKey(key)) {
+      return mmkv.decodeBool(key);
+    } else {
+      return false;
+    }
+  }
+
+  void subscribeDefaults(String classId) {
+    mmkv.encodeBool("notifications.$classId.${NotificationType.new_alert.name}", true);
+
+    mmkv.encodeBool("notifications.$classId.${NotificationType.new_material.name}", true);
+
+    mmkv.encodeBool("notifications.$classId.${NotificationType.event_created.name}", true);
   }
 }

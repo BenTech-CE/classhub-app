@@ -9,7 +9,7 @@ import 'package:classhub/models/class/notifications/notification_type.dart';
 import 'package:classhub/models/class/subjects/subject_model.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
-import 'package:classhub/viewmodels/class/notifications/class_members_viewmodel.dart';
+import 'package:classhub/viewmodels/class/notifications/class_notifications_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';

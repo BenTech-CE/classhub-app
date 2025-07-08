@@ -20,7 +20,7 @@ enum Role {
       0 => "Colega",
       5 => "Líder",
       4 => "Vice-líder",
-      10 => "Criador da Turma",
+      10 => "Criador(a) da Turma",
       _ => "Colega",
     };
   }

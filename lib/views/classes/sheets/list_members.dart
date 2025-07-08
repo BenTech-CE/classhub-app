@@ -1,6 +1,9 @@
 import 'package:classhub/core/theme/sizes.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
+import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/models/class/management/minimal_class_model.dart';
+import 'package:classhub/viewmodels/class/management/class_management_viewmodel.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/views/classes/widgets/member_card_widget.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +20,20 @@ class ListMembersSheet extends StatefulWidget {
 }
 
 class _ListMembersSheetState extends State<ListMembersSheet> {
+
+  void _onChangedMember(BuildContext context) {
+    /*ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text(
+        "Colega expulso com sucesso!",
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+      backgroundColor: cColorSuccess,
+    ));*/
+
+    Provider.of<ClassMembersViewModel>(context, listen: false).getMembers(widget.mClassObj.id);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +42,8 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
       // Use 'listen: false' porque estamos apenas disparando uma ação,
       // não precisamos 'ouvir' mudanças dentro do initState.
       Provider.of<ClassMembersViewModel>(context, listen: false).getMembers(widget.mClassObj.id);
+
+      //_classModel = Provider.of<ClassManagementViewModel>(context, listen: false).getCachedClass(widget.mClassObj.id);
     });
   }
 
@@ -84,7 +103,11 @@ class _ListMembersSheetState extends State<ListMembersSheet> {
                             (member) => MemberCardWidget(
                               member: member,
                               color: generateMaterialColor(cColorPrimary), 
-                              myRole: widget.mClassObj.role
+                              classId: widget.mClassObj.id,
+                              myRole: widget.mClassObj.role,
+                              onChanged: () {
+                                _onChangedMember(context);
+                              },
                             ),
                           )
                           .toList(),

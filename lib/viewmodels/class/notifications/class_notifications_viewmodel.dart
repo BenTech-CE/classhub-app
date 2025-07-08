@@ -47,4 +47,12 @@ class ClassNotificationsViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  bool isSubscribedTo(NotificationType notificationType, String classId) {
+    return classNotificationsService.isSubscribedTo(notificationType, classId);
+  }
+
+  void subscribeDefaults(String classId) {
+    classNotificationsService.subscribeDefaults(classId);
+  }
 }

@@ -138,7 +138,7 @@ class _ClassViewState extends State<ClassView> {
                 actions: [
                   IconButton(
                     onPressed: () {
-                      showModalBottomSheet(context: context, builder: (context) => NotificationsConfig(), showDragHandle: true, isScrollControlled: true);
+                      showModalBottomSheet(context: context, builder: (context) => NotificationsConfig(classId: widget.mClassObj.id,), showDragHandle: true, isScrollControlled: true);
                     },
                     icon: const Icon(HugeIcons.strokeRoundedNotification01),
                     color: Colors.white,

@@ -3,18 +3,25 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
+import 'package:classhub/models/class/management/class_model.dart';
+import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MemberCardWidget extends StatefulWidget {
   final ClassMemberModel member;
+  final String classId;
   final MaterialColor color;
   final Role myRole;
+  final VoidCallback onChanged;
 
   const MemberCardWidget({
     super.key,
     required this.member,
     required this.color,
-    required this.myRole
+    required this.classId,
+    required this.myRole,
+    required this.onChanged
   });
 
   @override
@@ -22,7 +29,7 @@ class MemberCardWidget extends StatefulWidget {
 }
 
 class _MemberCardWidgetState extends State<MemberCardWidget> {
-  final popupMenuItemsLeader = [
+  final popupMenuItemsOwner = [
     const PopupMenuItem<String>(
       value: 'promo_lider',
       child: Text('Promover a Líder'),
@@ -33,9 +40,54 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
     ),
     const PopupMenuItem<String>(
       value: 'remove',
-      child: Text('Remover'),
+      child: Text('Expulsar'),
     )
   ];
+
+  final popupMenuItemsLeader = [
+    const PopupMenuItem<String>(
+      value: 'promo_vice',
+      child: Text('Promover a Vice-Líder'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'remove',
+      child: Text('Expulsar'),
+    )
+  ];
+
+  final popupMenuItemsVice = [
+    const PopupMenuItem<String>(
+      value: 'remove',
+      child: Text('Expulsar'),
+    )
+  ];
+
+  void _kick() async {
+    final cmvm = context.read<ClassMembersViewModel>();
+
+    final result = await cmvm.deleteMember(widget.classId, widget.member.id);
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível expulsar este colega.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    } else {
+      widget.onChanged();
+    }
+  }
+
+  void _promoLider() {
+
+  }
+
+  void _promoVice() {
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +142,25 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
                 icon: const Icon(Icons.more_vert, size: 24.0, color: Colors.black),
                 onSelected: (String value) async {
                   if (value == 'promo_lider') {
-                    //Função de Promover a Líder
+                    _promoLider();
                   } else if (value == 'promo_vice') {
-                    //Função de Promover a Vice-Líder
+                    _promoVice();
                   } else if (value == 'remove') {
-                    //Função de Remover da Turma
+                    _kick();
                   }
                 },
-                itemBuilder: (BuildContext context) => popupMenuItemsLeader,
+                itemBuilder: (BuildContext context) {
+                  switch (widget.myRole) {
+                    case Role.criador:
+                      return popupMenuItemsOwner;
+                    case Role.lider:
+                      return popupMenuItemsLeader;
+                    case Role.viceLider:
+                      return popupMenuItemsVice;
+                    default:
+                      return [];
+                  }
+                },
                 // atention: Offset de onde irá aparecer o menu (x, y)
                 offset: const Offset(-16, 16),
               ),
