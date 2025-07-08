@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:classhub/core/utils/api.dart';
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:classhub/services/class/notifications/notification_service.dart';
@@ -68,6 +69,34 @@ class ClassMembersService {
     } else {
       throw Exception(
           "Erro ao tentar acessar os membros da turma: ${jsonResponse["error"]}");
+    }
+  }
+
+  Future<bool> promoteOrDemoteMember(
+      String classId, String userId, Role role) async {
+    final token = authService.getToken();
+    if (token == null) throw Exception('Token não encontrado');
+
+    final response = await http.patch(
+      Uri.parse(
+          "${Api.baseUrl}${Api.classEndpoint}/$classId${Api.membersClassEndpoint}/$userId"),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+      body: jsonEncode({"role": role.value}),
+    );
+
+    print(response.statusCode);
+    print(response.body);
+
+    Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      throw Exception(
+          "Erro ao tentar promover ou despromover o membro da turma: ${jsonResponse["error"]}");
     }
   }
 }

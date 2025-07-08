@@ -1,3 +1,4 @@
+import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
 import 'package:classhub/services/class/members/class_members_service.dart';
 import 'package:flutter/material.dart';
@@ -48,5 +49,24 @@ class ClassMembersViewModel extends ChangeNotifier {
       notifyListeners();
     }
     return;
+  }
+
+  Future<bool> promoteOrDemoteMember(
+      String classId, String userId, Role role) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      _error = null;
+      return await classMembersService.promoteOrDemoteMember(
+          classId, userId, role);
+    } catch (e) {
+      print(e);
+      _error = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }
