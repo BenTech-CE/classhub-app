@@ -196,7 +196,7 @@ class _ClassViewState extends State<ClassView> {
                                 enableInfiniteScroll: false),
                             items: [
                               BaseClassWidget(
-                                canEdit: widget.mClassObj.role >= Role.viceLider,
+                                canEdit: false,
                                 classColor: classColor,
                                 child: Column(
                                   children: [
@@ -253,14 +253,14 @@ class _ClassViewState extends State<ClassView> {
                                   ],
                                 ),
                               ),
-                              BaseClassWidget(
-                                canEdit: widget.mClassObj.role >= Role.viceLider,
+                              /*BaseClassWidget(
+                                canEdit: false, //widget.mClassObj.role >= Role.viceLider,
                                 classColor: classColor,
                                 widgetModel: ClassWidgetModel(title: "Eventos Próximos", description: ""),
                                 child: Container()
-                              ),
-                              if (widget.mClassObj.role >= Role.viceLider)
-                                NewCardWidget(classColor: classColor,)
+                              ),*/
+                              /*if (widget.mClassObj.role >= Role.viceLider)
+                                NewCardWidget(classColor: classColor,)*/
                             ],
                           ),
                         ),

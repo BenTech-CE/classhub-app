@@ -3,7 +3,6 @@ import 'package:classhub/core/theme/sizes.dart';
 import 'package:classhub/core/utils/role.dart';
 import 'package:classhub/core/utils/util.dart';
 import 'package:classhub/models/class/management/class_member_model.dart';
-import 'package:classhub/models/class/management/class_model.dart';
 import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,7 @@ class MemberCardWidget extends StatefulWidget {
 }
 
 class _MemberCardWidgetState extends State<MemberCardWidget> {
-  final popupMenuItemsOwner = [
+  final popupMenuItemsOwnerColega = [
     const PopupMenuItem<String>(
       value: 'promo_lider',
       child: Text('Promover a Líder'),
@@ -44,7 +43,37 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
     )
   ];
 
-  final popupMenuItemsLeader = [
+  final popupMenuItemsOwnerLeader = [
+    const PopupMenuItem<String>(
+      value: 'demote_vice',
+      child: Text('Rebaixar a Vice-Líder'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'demote_colega',
+      child: Text('Rebaixar a Colega'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'remove',
+      child: Text('Expulsar'),
+    )
+  ];
+
+  final popupMenuItemsOwnerVice = [
+    const PopupMenuItem<String>(
+      value: 'promo_lider',
+      child: Text('Promover a Líder'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'demote_colega',
+      child: Text('Rebaixar a Colega'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'remove',
+      child: Text('Expulsar'),
+    )
+  ];
+
+  final popupMenuItemsLeaderColega = [
     const PopupMenuItem<String>(
       value: 'promo_vice',
       child: Text('Promover a Vice-Líder'),
@@ -55,7 +84,18 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
     )
   ];
 
-  final popupMenuItemsVice = [
+  final popupMenuItemsLeaderVice = [
+    const PopupMenuItem<String>(
+      value: 'demote_colega',
+      child: Text('Rebaixar a Colega'),
+    ),
+    const PopupMenuItem<String>(
+      value: 'remove',
+      child: Text('Expulsar'),
+    )
+  ];
+
+  final popupMenuItemsViceColega = [
     const PopupMenuItem<String>(
       value: 'remove',
       child: Text('Expulsar'),
@@ -81,12 +121,80 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
     }
   }
 
-  void _promoLider() {
+  void _promoLider() async {
+    final cmvm = context.read<ClassMembersViewModel>();
 
+    final result = await cmvm.promoteOrDemoteMember(widget.classId, widget.member.id, Role.lider);
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível modificar este colega.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    } else {
+      widget.onChanged();
+    }
   }
 
-  void _promoVice() {
+  void _promoVice() async {
+    final cmvm = context.read<ClassMembersViewModel>();
 
+    final result = await cmvm.promoteOrDemoteMember(widget.classId, widget.member.id, Role.viceLider);
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível modificar este colega.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    } else {
+      widget.onChanged();
+    }
+  }
+
+    void _demoteVice() async {
+    final cmvm = context.read<ClassMembersViewModel>();
+
+    final result = await cmvm.promoteOrDemoteMember(widget.classId, widget.member.id, Role.viceLider);
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível modificar este colega.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    } else {
+      widget.onChanged();
+    }
+  }
+
+  void _demoteColega() async {
+    final cmvm = context.read<ClassMembersViewModel>();
+
+    final result = await cmvm.promoteOrDemoteMember(widget.classId, widget.member.id, Role.colega);
+
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+          "Não foi possível modificar este colega.",
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: cColorError,
+      ));
+    } else {
+      widget.onChanged();
+    }
   }
 
   @override
@@ -145,21 +253,25 @@ class _MemberCardWidgetState extends State<MemberCardWidget> {
                     _promoLider();
                   } else if (value == 'promo_vice') {
                     _promoVice();
+                  } else if (value == 'demote_vice') {
+                    _demoteVice();
+                  } else if (value == 'demote_colega') {
+                    _demoteColega();
                   } else if (value == 'remove') {
                     _kick();
                   }
                 },
                 itemBuilder: (BuildContext context) {
-                  switch (widget.myRole) {
-                    case Role.criador:
-                      return popupMenuItemsOwner;
-                    case Role.lider:
-                      return popupMenuItemsLeader;
-                    case Role.viceLider:
-                      return popupMenuItemsVice;
-                    default:
-                      return [];
-                  }
+                  if (widget.myRole == Role.criador && widget.member.role == Role.lider) return popupMenuItemsOwnerLeader;
+                  if (widget.myRole == Role.criador && widget.member.role == Role.viceLider) return popupMenuItemsOwnerVice;
+                  if (widget.myRole == Role.criador && widget.member.role == Role.colega) return popupMenuItemsOwnerColega;
+
+                  if (widget.myRole == Role.lider && widget.member.role == Role.viceLider) return popupMenuItemsLeaderVice;
+                  if (widget.myRole == Role.lider && widget.member.role == Role.colega) return popupMenuItemsLeaderColega;
+
+                  if (widget.myRole == Role.viceLider && widget.member.role == Role.colega) return popupMenuItemsViceColega;
+
+                  return [];
                 },
                 // atention: Offset de onde irá aparecer o menu (x, y)
                 offset: const Offset(-16, 16),

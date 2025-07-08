@@ -31,6 +31,7 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
 
   String currentMode = "calendar";
   late String modeText = _formatter.format(_selectedDay).toCapitalized();
+  //late String modeText = "Todos os eventos";
 
   void _sheetCreateEvent() {
     showModalBottomSheet<void>(
@@ -41,7 +42,7 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
     );
   }
 
-  void _fetchEvents() async {
+  Future<void> _fetchEvents() async {
     final cevm = context.read<ClassCalendarViewModel>();
 
     await cevm.getEvents(widget.mClassObj.id, null);
@@ -49,7 +50,7 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
     if(cevm.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text(
-          "Erro ao procurar eventos",
+          "Não foi possível acessar os eventos da turma.",
           style:
               const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -58,6 +59,8 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
 
       print(cevm.error);
     }
+
+    return;
   }
 
   List<EventModel> _getCalendarEventsForDay(DateTime day) {
@@ -73,7 +76,15 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
   @override void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => _fetchEvents());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _fetchEvents();
+
+      /*setState(() {
+        currentMode = "upcoming365";
+        modeText = "Todos os eventos";
+      });*/
+    });
+
   }
 
 
@@ -189,6 +200,10 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
                                   modeText = "Próximos 30 dias";
                                   cevm.getEvents(widget.mClassObj.id, "30");
                                   break;
+                                case 'upcoming365':
+                                  modeText = "Todos os eventos";
+                                  cevm.getEvents(widget.mClassObj.id, "365");
+                                  break;
                                 default:
                                   modeText = _formatter.format(_selectedDay).toCapitalized();
                               }
@@ -206,6 +221,10 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
                             const PopupMenuItem<String>(
                               value: 'upcoming30',
                               child: Text("Próximos 30 dias"),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'upcoming365',
+                              child: Text("Todos os eventos"),
                             ),
                           ],
                           // atention: Offset de onde irá aparecer o menu (x, y)
@@ -257,7 +276,7 @@ class _ClassCalendarViewState extends State<ClassCalendarView> {
                         children: [Text("Nenhum evento programado.")],
                       )
                     else
-                      ...eventsForSelectedDay.map((ev) => EventCardWidget(event: ev, showDate: currentMode != 'calendar')).toList(),
+                      ...eventsForSelectedDay.map((ev) => EventCardWidget(canEdit: widget.mClassObj.role >= Role.viceLider, classId: widget.mClassObj.id, event: ev, showDate: currentMode != 'calendar')).toList(),
                   ],
                 ),
               )

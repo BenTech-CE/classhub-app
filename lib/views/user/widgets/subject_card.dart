@@ -433,7 +433,7 @@ class _SubjectCardState extends State<SubjectCard> {
                           : Container()
                     ],
                   ),
-                  const SizedBox(
+                  /*const SizedBox(
                     height: 5,
                   ),
                   SizedBox(
@@ -468,7 +468,7 @@ class _SubjectCardState extends State<SubjectCard> {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),

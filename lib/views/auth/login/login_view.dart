@@ -97,6 +97,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 const CircleAvatar(
                     backgroundImage: AssetImage("assets/logo/logo.jpeg"),
+                    backgroundColor: Colors.transparent,
                     radius: 60),
                 const SizedBox(height: 24),
                 Text(

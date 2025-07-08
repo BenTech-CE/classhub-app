@@ -95,14 +95,12 @@ class _MyAppState extends State<MyApp> {
         // Garante que você está na tela inicial antes de empurrar outra
         _navigatorKey.currentState?.popUntil((route) => route.isFirst);
 
-        Future.delayed(Duration(seconds: 1), () {
-          showModalBottomSheet<void>(
-            context: context,
-            showDragHandle: true,
-            isScrollControlled: true,
-            builder: (BuildContext context) => JoinClassSheet(code: codeFound),
-          );
-        });
+        showModalBottomSheet<void>(
+          context: _navigatorKey.currentContext!, // <- CORRECTED LINE
+          showDragHandle: true,
+          isScrollControlled: true,
+          builder: (BuildContext context) => JoinClassSheet(code: codeFound),
+        );
       }
     }
   }
