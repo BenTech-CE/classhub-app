@@ -58,7 +58,7 @@ class _RegisterViewState extends State<RegisterView> {
 
       // navegando para a tela de início (a que aparece as turmas do usuário)
       Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeView()));
+          MaterialPageRoute(builder: (context) => const HomeView(code: null,)));
     } else if (authViewModel.error != null) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(

@@ -4,13 +4,16 @@ import 'package:classhub/viewmodels/auth/auth_viewmodel.dart';
 import 'package:classhub/viewmodels/auth/user_viewmodel.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/classes/sheets/create_or_join_sheet.dart';
+import 'package:classhub/views/classes/sheets/join_class_sheet.dart';
 import 'package:classhub/views/user/widgets/class_card.dart';
 import 'package:classhub/widgets/ui/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  final String? code; // nao uitilizado
+
+  const HomeView({super.key, this.code});
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -40,11 +43,24 @@ class _HomeViewState extends State<HomeView> {
         builder: (BuildContext context) => const CreateOrJoinSheet());
   }
 
+  /*void _checkCode() {
+    if (widget.code != null) {
+      showModalBottomSheet<void>(
+        context: context,
+        showDragHandle: true,
+        isScrollControlled: true,
+        builder: (BuildContext context) => JoinClassSheet(code: widget.code));
+    }
+  }*/
+
   @override
   void initState() {
     super.initState();
 
+   
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //_checkCode();
       await _userInfo(context);
     });
   }

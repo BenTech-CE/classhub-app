@@ -11,7 +11,9 @@ import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class JoinClassSheet extends StatefulWidget {
-  const JoinClassSheet({super.key});
+  final String? code;
+
+  const JoinClassSheet({super.key, this.code});
 
   @override
   State<JoinClassSheet> createState() => _JoinClassSheetState();
@@ -58,6 +60,16 @@ class _JoinClassSheetState extends State<JoinClassSheet> {
         Navigator.popUntil(context, (route) => route.isFirst);
       }
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.code != null) _inviteCodeTF.text = widget.code!;
+      setState(() {});
+    });
   }
 
   @override

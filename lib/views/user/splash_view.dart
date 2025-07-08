@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:classhub/views/auth/login/login_view.dart';
 import 'package:classhub/views/user/home_view.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,9 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+
   @override
   void initState() {
-    super.initState();
-
     WidgetsBinding.instance.addPostFrameCallback((_) => _checkLogin());
   }
 
@@ -24,7 +24,7 @@ class _SplashViewState extends State<SplashView> {
     if (token != null && token.isNotEmpty) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeView()),
+        MaterialPageRoute(builder: (_) => const HomeView(code: null)),
       );
     } else {
       Navigator.pushReplacement(

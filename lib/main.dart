@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/services/auth/auth_service.dart';
 import 'package:classhub/services/auth/session_service.dart';
@@ -16,6 +17,9 @@ import 'package:classhub/viewmodels/class/members/class_members_viewmodel.dart';
 import 'package:classhub/viewmodels/class/mural/class_mural_viewmodel.dart';
 import 'package:classhub/viewmodels/class/notifications/class_notifications_viewmodel.dart';
 import 'package:classhub/viewmodels/class/subjects/class_subjects_viewmodel.dart';
+import 'package:classhub/views/auth/login/login_view.dart';
+import 'package:classhub/views/classes/sheets/join_class_sheet.dart';
+import 'package:classhub/views/user/home_view.dart';
 import 'package:classhub/views/user/splash_view.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -54,10 +58,64 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final AppLinks _appLinks = AppLinks();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  String? code;
+  String? token;
+
+  void _listenDeepLinks() async {
+    // Links que abriram o app (frio)
+    final initialLink = await _appLinks.getInitialLink();
+    _handleLink(initialLink);
+
+    // Links enquanto o app está rodando
+    _appLinks.uriLinkStream.listen(_handleLink);
+  }
+
+  void _handleLink(Uri? uri) {
+    if (uri == null) return;
+
+    final pathSegments = uri.pathSegments;
+    if (pathSegments.length == 1 && pathSegments.first.length == 6) {
+      final codeFound = pathSegments.first;
+      final userToken = MMKV.defaultMMKV().decodeString("classhub-user-token");
+
+      if (userToken != null && userToken.isNotEmpty) {
+        code = codeFound;
+
+        // Garante que você está na tela inicial antes de empurrar outra
+        _navigatorKey.currentState?.popUntil((route) => route.isFirst);
+
+        Future.delayed(Duration(seconds: 1), () {
+          showModalBottomSheet<void>(
+            context: context,
+            showDragHandle: true,
+            isScrollControlled: true,
+            builder: (BuildContext context) => JoinClassSheet(code: codeFound),
+          );
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _listenDeepLinks();
+
+    token = MMKV.defaultMMKV().decodeString("classhub-user-token");
+  }
+  
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();
@@ -88,10 +146,11 @@ class MyApp extends StatelessWidget {
             create: (_) => ClassCalendarViewModel(classCalendarService)),
       ],
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
         title: 'Classhub',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.theme,
-        home: const SplashView(),
+        home: token == null ? const LoginView() : const HomeView(code: null),
       ),
     );
   }
