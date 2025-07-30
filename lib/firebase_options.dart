@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAa5N75DOA3Uf2qVWUWZVOQSOHw8qX9ARk',
-    appId: '1:462977223945:android:ffe03cdc32b9fd6322d7d8',
+    appId: '1:462977223945:android:0edec1fb9e1a4e8022d7d8',
     messagingSenderId: '462977223945',
     projectId: 'classhub-app',
     storageBucket: 'classhub-app.firebasestorage.app',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDo6SrRhGRHIVOpvxv7ZAVzJdoeZeGL-lc',
-    appId: '1:462977223945:ios:df705831329d43b622d7d8',
+    appId: '1:462977223945:ios:b27a3485e34efcf222d7d8',
     messagingSenderId: '462977223945',
     projectId: 'classhub-app',
     storageBucket: 'classhub-app.firebasestorage.app',
-    iosBundleId: 'com.example.classhub',
+    iosBundleId: 'space.classhub.app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '462977223945',
     projectId: 'classhub-app',
     storageBucket: 'classhub-app.firebasestorage.app',
-    iosBundleId: 'com.example.classhub',
+    iosBundleId: 'space.classhub.app',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
