@@ -18,7 +18,13 @@ class SubjectCard extends StatefulWidget {
   final Function(SubjectModel) onEdited;
   final VoidCallback onDeleted;
 
-  const SubjectCard({Key? key, required this.mClassObj, required this.subject, required this.onEdited, required this.onDeleted});
+  const SubjectCard({
+    Key? key,
+    required this.subject,
+    required this.mClassObj,
+    required this.onEdited,
+    required this.onDeleted,
+  }) : super(key: key);
 
   @override
   _SubjectCardState createState() => _SubjectCardState();
@@ -125,10 +131,11 @@ class _SubjectCardState extends State<SubjectCard> {
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               color: color.shade800,
-                              fontSize: 20
+                              fontSize: 20,
+                              height: 1
                           ),
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
+                          maxLines: 2,
                         ),
                       ),
                     ],
@@ -153,7 +160,7 @@ class _SubjectCardState extends State<SubjectCard> {
                       // atention: Offset de onde irá aparecer o menu (x, y)
                       offset: const Offset(-24, 24),
                     )
-                  : Container()
+                  : const SizedBox.square(dimension: 24,)
             ],
           ),
         ),
@@ -205,10 +212,11 @@ class _SubjectCardState extends State<SubjectCard> {
                                 style: TextStyle(
                                     fontWeight: FontWeight.w500,
                                     color: color.shade800,
-                                    fontSize: 20
+                                    fontSize: 20,
+                                    height: 1
                                 ),
                                 overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
+                                maxLines: 2,
                               ),
                             ),
                           ],
@@ -231,7 +239,7 @@ class _SubjectCardState extends State<SubjectCard> {
                             // atention: Offset de onde irá aparecer o menu (x, y)
                             offset: const Offset(-24, 24),
                           )
-                        : Container()
+                        : const SizedBox.square(dimension: 24,)
                   ],
                 ),
               ),
@@ -265,7 +273,6 @@ class _SubjectCardState extends State<SubjectCard> {
                                       .map(
                                         (day) => Container(
                                           alignment: Alignment.center,
-                                          width: 45,
                                           padding: const EdgeInsets.symmetric(
                                               horizontal: 8.0, vertical: 3.0),
                                           decoration: BoxDecoration(
@@ -287,7 +294,7 @@ class _SubjectCardState extends State<SubjectCard> {
                                       .toList(),
                                 ),
                                 Text(
-                                  "${e["time"]["start_time"]} ~ ${e["time"]["end_time"]}",
+                                  "${e["time"]["start_time"]}-${e["time"]["end_time"]}",
                                   style: const TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500,
@@ -327,6 +334,7 @@ class _SubjectCardState extends State<SubjectCard> {
                                 children: groupedScheduleLocations.map((e) {
                                   return Row(
                                     spacing: 8.0,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Row(
@@ -336,7 +344,6 @@ class _SubjectCardState extends State<SubjectCard> {
                                             .map(
                                               (day) => Container(
                                                 alignment: Alignment.center,
-                                                width: 45,
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 8.0,
@@ -361,12 +368,14 @@ class _SubjectCardState extends State<SubjectCard> {
                                             )
                                             .toList(),
                                       ),
-                                      Text(
-                                        "${e["location"]}",
-                                        style: const TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.black,
+                                      Expanded(
+                                        child: Text(
+                                          "${e["location"]}",
+                                          style: const TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black,
+                                          ),
                                         ),
                                       ),
                                     ],

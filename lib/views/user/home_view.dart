@@ -111,9 +111,21 @@ class _HomeViewState extends State<HomeView> {
                 (userViewModel.user != null)
                     ? Column(
                         spacing: sSpacing,
-                        children: userViewModel.user!.classes.map((turma) {
-                          return ClassCard(turma: turma);
-                        }).toList())
+                        children: [
+                          if (userViewModel.user!.classes.isNotEmpty)
+                            ...userViewModel.user!.classes.map((turma) {
+                              return ClassCard(turma: turma);
+                            }).toList(),
+                          
+                          if (userViewModel.user!.classes.isEmpty)
+                            Text("Você ainda não está em nenhuma turma.\n\nCrie sua primeira turma ou entre em uma turma existente clicando no botão +!",
+                              style: Theme.of(context).textTheme.titleMedium),
+                          
+                          const SizedBox(
+                            height: 56,
+                          )
+                        ]
+                      )
                     : Column(
                         spacing: sSpacing,
                         children: [

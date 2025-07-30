@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_links/app_links.dart';
 import 'package:classhub/core/theme/theme.dart';
 import 'package:classhub/services/auth/auth_service.dart';
@@ -25,6 +27,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:lehttp_overrides/lehttp_overrides.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +57,10 @@ void main() async {
   await notificationService.initFCM();
 
   FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+
+  if (Platform.isAndroid) {
+    HttpOverrides.global = LEHttpOverrides();
+  }
 
   runApp(const MyApp());
 }

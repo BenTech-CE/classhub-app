@@ -21,6 +21,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ClassView extends StatefulWidget {
   final MinimalClassModel mClassObj;
@@ -215,17 +216,18 @@ class _ClassViewState extends State<ClassView> {
                                           classObj != null
                                               ? InkWell(
                                                 onTap: () async {
-                                                  print("copying..");
-                                                  await Clipboard.setData(ClipboardData(text: classObj!.inviteCode.toString()));
-                                                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                                    content: Text(
-                                                      "Copiado com sucesso!",
-                                                      style:
-                                                          const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                                                    ),
-                                                    backgroundColor: cColorSuccess,
-                                                  ));
-                                                  // copied successfully
+                                                  // Garante que o objeto e o código de convite não são nulos
+                                                  if (classObj?.inviteCode != null) {
+                                                    // 1. Monta a URL completa que será compartilhada
+                                                    final String url = "https://classhub.space/${classObj!.inviteCode}";
+                                                    
+                                                    // 2. Chama a função de compartilhamento nativa do celular
+                                                    await SharePlus.instance.share(
+                                                      ShareParams(
+                                                        uri: Uri.parse(url),
+                                                      )
+                                                    );
+                                                  }
                                                 },
                                                 child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -241,7 +243,7 @@ class _ClassViewState extends State<ClassView> {
                                                             color: classColor
                                                                 .shade900),
                                                       ),
-                                                      HugeIcon(icon: HugeIcons.strokeRoundedLink04, color: classColor.shade900),
+                                                      HugeIcon(icon: HugeIcons.strokeRoundedShare01, color: classColor.shade900, size: 24),
                                                     ],
                                                   ),
                                               )

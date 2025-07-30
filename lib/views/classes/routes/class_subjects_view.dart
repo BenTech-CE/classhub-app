@@ -26,8 +26,6 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
 
   List<SubjectModel> subjects = [];
 
-  bool _loading = false;
-
   void _sheetCreateSubject(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
@@ -37,32 +35,27 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
     );
   }
 
-  void _handleEdit(SubjectModel sbj) async {
-    /*int idx = subjects.indexWhere((s) => s.id == sbj.id);
+  void _handleEdit(SubjectModel sbj) {
+    int idx = subjects.indexWhere((s) => s.id == sbj.id);
 
-    if (idx != -1) {
-      subjects[idx] = sbj;
+    if (idx != -1 && mounted) {
+      setState(() {
+        subjects[idx] = sbj;
+      });
+      
     }
 
-    print("updated subject: ${sbj.title}");*/
-    _loading = true;
-
-    final subjectViewModel = context.read<ClassSubjectsViewModel>();
-
-    final fetched = await subjectViewModel.getSubjects(widget.mClassObj.id, changeLoadingState: true);
-    fetched.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
-    
-    setState(() {
-      subjects = fetched;
-      _loading = false;
-    });
+    print("updated subject: ${sbj.title}");
   }
 
   void _handleDel(String id) {
     int idx = subjects.indexWhere((s) => s.id == id);
 
-    if (idx != -1) {
-      subjects.removeAt(idx);
+    if (idx != -1 && mounted) {
+      setState(() {
+        subjects.removeAt(idx);
+      });
+      
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(
         content: Text(
@@ -74,35 +67,24 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
         backgroundColor: cColorSuccess,
       ));
     }
-
-    setState(() {
-      
-    });
   }
 
   Future<void> _fetchSubjects(BuildContext context) async {
-    setState(() {
-      _loading = true;
-    });
-
     final subjectViewModel = context.read<ClassSubjectsViewModel>();
 
     final cached = subjectViewModel.getCachedSubjects(widget.mClassObj.id);
     cached.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
 
-    setState(() {
-      subjects = cached;
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        subjects = cached;
+      });
+    }
 
     final fetched = await subjectViewModel.getSubjects(widget.mClassObj.id, changeLoadingState: false);
     fetched.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
 
     if (mounted) {
-      setState(() {
-        subjects.clear();
-      });
-
       setState(() {
         subjects = fetched;
       });
@@ -121,7 +103,7 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
 
   @override
   Widget build(BuildContext context) {
-    //final subjectViewModel = context.watch<ClassSubjectsViewModel>();
+    final subjectViewModel = context.watch<ClassSubjectsViewModel>();
 
     return Stack(
         children: [
@@ -132,46 +114,22 @@ class _ClassSubjectsViewState extends State<ClassSubjectsView> {
                 Container(
                   width: double.maxFinite,
                   padding: EdgeInsets.all(sPadding),
-                  child: _loading
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: sSpacing,
-                        children: [
-                          Text(
-                            "Aguarde enquanto carregamos as matérias...",
-                            style: Theme.of(context).textTheme.titleMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: sSpacing),
+                  child: Column(
+                    spacing: sSpacing,
+                    children: subjectViewModel.isLoading ? [
+                          Text("Aguarde enquanto carregamos as matérias...",
+                              style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,),
                           const LoadingWidget(
                             color: cColorPrimary,
                           ),
-                        ],
-                      )
-                    : Column(
-                      children: [
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(), 
-                          separatorBuilder: (context, index) => const SizedBox(height: sSpacing),
-                          itemCount: subjects.length,
-                          itemBuilder: (context, index) {
-                            final sbj = subjects[index];
-                            return SubjectCard(
-                              key: ValueKey(sbj.id),
-                              mClassObj: widget.mClassObj,
-                              subject: sbj,
-                              onEdited: _handleEdit,
-                              onDeleted: () => _handleDel(sbj.id),
-                            );
-                          },
-                        ),
-                        if (widget.mClassObj.role >= Role.viceLider)
+                    ] : [
+                      ...subjects.map((sbj) => SubjectCard(key: ValueKey(sbj.hashCode), mClassObj: widget.mClassObj, subject: sbj, onEdited: _handleEdit, onDeleted: () => _handleDel(sbj.id) )),
+                      if (widget.mClassObj.role >= Role.viceLider)
                           const SizedBox(
-                            height: 64,
+                            height: 56,
                           )
-                      ],
-                    ),
+                    ],
+                  ),
                 ),
               ],
             ),

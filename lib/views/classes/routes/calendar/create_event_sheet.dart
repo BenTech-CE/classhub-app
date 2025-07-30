@@ -43,7 +43,7 @@ class _CreateEventSheetState extends State<CreateEventSheet> {
   void _showStartTimePicker() async {
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: TimeOfDay(hour: TimeOfDay.now().hour, minute: 0),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -62,7 +62,7 @@ class _CreateEventSheetState extends State<CreateEventSheet> {
   void _showEndTimePicker() async {
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: TimeOfDay(hour: TimeOfDay.now().hour, minute: 0),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),

@@ -124,22 +124,26 @@ class _PostAlertWidgetState extends State<PostAlertWidget> {
                     style: TextStyle(color: widget.classColor.shade900),
                   ), // Conteúdo dentro do círculo
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 0,
-                  children: [
-                    Text(widget.post.author.name,
-                        style: const TextStyle(color: cColorText1)),
-                    Text(widget.post.formattedCreatedAt,
-                        style: const TextStyle(color: cColorText1, fontSize: 12))
-                  ],
-                ),
+                
                 Expanded(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 0,
+                            children: [
+                              Text(widget.post.author.name,
+                                  style: const TextStyle(color: cColorText1)),
+                              Text(widget.post.formattedCreatedAt,
+                                  style: const TextStyle(color: cColorText1, fontSize: 12))
+                            ],
+                          ),
+                          SizedBox(
+                            width: 12,
+                          ),
                           if (widget.post.subject != null)
                             Builder(
                               builder: (context) {

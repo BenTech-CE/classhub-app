@@ -207,10 +207,13 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                                   icon: HugeIcons.strokeRoundedIdea01,
                                   color: cColorPrimary),
                               const SizedBox(width: 5.0),
-                              Expanded(
+                              const Expanded(
                                 child: Text(
-                                  "Dica: Clique no botão ao lado para selecionar a foto da turma!",
-                                  style: AppTextTheme.placeholder,
+                                  "Clique no botão ao lado para selecionar a foto da turma!",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: cColorText1
+                                  ),
                                   softWrap: true,
                                   overflow: TextOverflow.visible,
                                 ),
@@ -243,10 +246,39 @@ class _CreateClassSheetState extends State<CreateClassSheet> {
                                               ),
                                             ),
                                           )
-                                        : const HugeIcon(
-                                            icon:
-                                                HugeIcons.strokeRoundedAlbum02,
-                                            color: cColorPrimary),
+                                        : const Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  HugeIcon(
+                                                      icon: HugeIcons
+                                                          .strokeRoundedAlbum02,
+                                                      color: cColorPrimary),
+                                                  SizedBox(height: 4,),
+                                                  Text(
+                                                    "Tamanho máximo: 20MB",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: cColorPrimary
+                                                    ),
+                                                    softWrap: true,
+                                                    overflow: TextOverflow.visible,
+                                                  ),
+                                                  Text(
+                                                    "Usar proporção 16:9 ou 2:1",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: cColorPrimary
+                                                    ),
+                                                    softWrap: true,
+                                                    overflow: TextOverflow.visible,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                        ),
                                   ),
                                 ),
                               )

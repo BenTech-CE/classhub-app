@@ -28,7 +28,7 @@ class _WeekdayCardState extends State<WeekdayCard> {
   void _showStartTimePicker() async {
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: widget.subject.schedule[widget.weekday]!.startTime.isEmpty ? TimeOfDay.now() : (stringToTimeOfDay(widget.subject.schedule[widget.weekday]!.startTime) ?? TimeOfDay.now()),
+      initialTime: widget.subject.schedule[widget.weekday]!.startTime.isEmpty ? TimeOfDay(hour: TimeOfDay.now().hour, minute: 0) : (stringToTimeOfDay(widget.subject.schedule[widget.weekday]!.startTime) ?? TimeOfDay.now()),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
@@ -49,7 +49,7 @@ class _WeekdayCardState extends State<WeekdayCard> {
   void _showEndTimePicker() async {
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
-      initialTime: widget.subject.schedule[widget.weekday]!.endTime.isEmpty ? TimeOfDay.now() : (stringToTimeOfDay(widget.subject.schedule[widget.weekday]!.endTime) ?? TimeOfDay.now()),
+      initialTime: widget.subject.schedule[widget.weekday]!.endTime.isEmpty ? TimeOfDay(hour: TimeOfDay.now().hour, minute: 0) : (stringToTimeOfDay(widget.subject.schedule[widget.weekday]!.endTime) ?? TimeOfDay.now()),
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
